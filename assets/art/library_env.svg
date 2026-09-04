@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+ <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d7d0bf"/><stop offset="1" stop-color="#b7aa90"/></linearGradient>
+ <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#574638"/><stop offset=".5" stop-color="#7b6650"/><stop offset="1" stop-color="#46382e"/></linearGradient>
+ <filter id="grain"><feTurbulence baseFrequency=".8" numOctaves="2" seed="12" type="fractalNoise"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0"/></filter>
+ <filter id="blur"><feGaussianBlur stdDeviation="16"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/>
+<rect y="760" width="1600" height="140" fill="#8b765f"/>
+<rect x="0" y="0" width="400" height="900" fill="#2e3a3a" opacity=".12"/>
+<!-- window and light -->
+<rect x="1145" y="55" width="370" height="400" rx="8" fill="#536968" stroke="#443c33" stroke-width="18"/>
+<g fill="#c8d9d2" opacity=".85"><rect x="1170" y="80" width="150" height="340"/><rect x="1338" y="80" width="150" height="340"/></g>
+<g stroke="#f6e9c5" stroke-width="13" opacity=".32"><path d="M1190 90l110 290"/><path d="M1360 88l100 292"/></g>
+<path d="M1080 420 L1540 525 L1410 900 L870 900 Z" fill="#f5deb2" opacity=".16" filter="url(#blur)"/>
+<!-- shelves -->
+<g stroke="#49392e" stroke-width="16" fill="url(#wood)">
+ <rect x="85" y="85" width="940" height="195" rx="4"/>
+ <rect x="85" y="325" width="940" height="195" rx="4"/>
+ <rect x="85" y="565" width="940" height="195" rx="4"/>
+</g>
+<g fill="#1d2222" opacity=".22"><rect x="112" y="114" width="884" height="138"/><rect x="112" y="354" width="884" height="138"/><rect x="112" y="594" width="884" height="138"/></g>
+<!-- books -->
+<g stroke="#4d4237" stroke-width="3">
+<rect x="128" y="120" width="34" height="122" fill="#798479"/><rect x="166" y="128" width="42" height="114" fill="#8c6d5e"/><rect x="214" y="116" width="25" height="126" fill="#657b82"/><rect x="244" y="134" width="49" height="108" fill="#9b8b68"/><rect x="300" y="118" width="29" height="124" fill="#746981"/><rect x="335" y="124" width="51" height="118" fill="#768a72"/><rect x="393" y="116" width="33" height="126" fill="#9c7a6c"/><rect x="432" y="132" width="44" height="110" fill="#6c7c78"/><rect x="482" y="121" width="29" height="121" fill="#9f9273"/><rect x="517" y="115" width="39" height="127" fill="#7f6a78"/><rect x="563" y="130" width="30" height="112" fill="#6d8378"/><rect x="599" y="117" width="48" height="125" fill="#8d7566"/><rect x="654" y="126" width="37" height="116" fill="#637985"/><rect x="697" y="117" width="51" height="125" fill="#90826a"/><rect x="754" y="130" width="27" height="112" fill="#7f7389"/><rect x="788" y="116" width="53" height="126" fill="#75886e"/><rect x="849" y="125" width="34" height="117" fill="#9b7366"/><rect x="889" y="117" width="49" height="125" fill="#6b7f85"/><rect x="944" y="130" width="35" height="112" fill="#978c6f"/>
+<use href="#none"/>
+</g>
+<g transform="translate(0 240)" stroke="#4d4237" stroke-width="3"><rect x="128" y="120" width="44" height="122" fill="#7c8271"/><rect x="178" y="126" width="31" height="116" fill="#9c7663"/><rect x="215" y="118" width="47" height="124" fill="#647b84"/><rect x="269" y="130" width="34" height="112" fill="#93846b"/><rect x="310" y="116" width="42" height="126" fill="#746983"/><rect x="359" y="123" width="27" height="119" fill="#718d74"/><rect x="392" y="117" width="50" height="125" fill="#977568"/><rect x="449" y="131" width="42" height="111" fill="#6b7d7b"/><rect x="498" y="120" width="29" height="122" fill="#9b9276"/><rect x="533" y="116" width="51" height="126" fill="#7b6e7c"/><rect x="591" y="128" width="39" height="114" fill="#688277"/><rect x="636" y="117" width="31" height="125" fill="#8c7469"/><rect x="674" y="126" width="47" height="116" fill="#607b86"/><rect x="728" y="118" width="36" height="124" fill="#92816a"/><rect x="770" y="130" width="52" height="112" fill="#7d7188"/><rect x="829" y="116" width="29" height="126" fill="#74886e"/><rect x="865" y="123" width="49" height="119" fill="#9a7465"/><rect x="921" y="117" width="57" height="125" fill="#6d7e82"/></g>
+<g transform="translate(0 480)" stroke="#4d4237" stroke-width="3"><rect x="128" y="120" width="39" height="122" fill="#788170"/><rect x="173" y="128" width="45" height="114" fill="#8e7061"/><rect x="224" y="116" width="29" height="126" fill="#637b83"/><rect x="260" y="134" width="48" height="108" fill="#9b8b6a"/><rect x="315" y="118" width="33" height="124" fill="#726880"/><rect x="355" y="124" width="53" height="118" fill="#748a73"/><rect x="415" y="116" width="31" height="126" fill="#9b796a"/><rect x="452" y="132" width="43" height="110" fill="#687b77"/><rect x="502" y="121" width="30" height="121" fill="#9d9070"/><rect x="539" y="115" width="41" height="127" fill="#806b78"/><rect x="587" y="130" width="32" height="112" fill="#6c8378"/><rect x="626" y="117" width="50" height="125" fill="#8c7565"/><rect x="683" y="126" width="40" height="116" fill="#617984"/><rect x="730" y="117" width="52" height="125" fill="#90816a"/><rect x="789" y="130" width="28" height="112" fill="#7e7386"/><rect x="824" y="116" width="54" height="126" fill="#76896e"/><rect x="886" y="125" width="35" height="117" fill="#9b7567"/><rect x="928" y="117" width="50" height="125" fill="#6c7f83"/></g>
+<!-- table and card -->
+<ellipse cx="1280" cy="705" rx="260" ry="82" fill="#4a3b31" opacity=".25"/>
+<path d="M1080 660h440l-58 150h-330z" fill="#725943" stroke="#47382e" stroke-width="12"/>
+<rect x="1160" y="590" width="230" height="96" transform="rotate(-4 1275 638)" fill="#e7deca" stroke="#66594c" stroke-width="6"/>
+<text x="1182" y="625" font-size="24" fill="#554d43">借阅编号 495.4 / Z17</text><text x="1182" y="658" font-size="18" fill="#776c5e">植物学 · 图鉴</text>
+<rect width="1600" height="900" filter="url(#grain)" opacity=".8"/>
+</svg>

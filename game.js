@@ -1,0 +1,285 @@
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const SAVE='huayu-save-v2', LEGACY_SAVE='huayu-save-v1', META='huayu-meta-v1';
+const defaultState={
+  chapter:0, scene:'prologue', step:0, checkpoint:'prologue', flags:{}, inventory:[], inspected:[], puzzles:{}, dialogueFlags:{}, audioFlags:{}, memoryFlags:{}, endingFlags:{},
+  settings:{music:.52,sfx:.78,textSpeed:1,reduceMotion:false}, started:false, completed:false
+};
+let state=load();
+document.documentElement.classList.toggle('reduce-motion',!!state.settings.reduceMotion);
+let dialogueQueue=[], dialogueResolve=null, typingTimer=null;
+let audioCtx=null, masterGain=null, ambientNodes=[], ambienceAudio=null, ambienceKind='', endingMusicAudio=null, objectCleanup=null, lastFocus=null;
+const sfxBuffers=new Map(), sfxLoads=new Map();
+const ENDING_TRACK=''; // Authorized ending track is optional at runtime; empty means seamless ambience fallback.
+const el={
+  title:$('#titleScreen'),game:$('#game'),sceneArt:$('#sceneArt'),hotspots:$('#hotspotLayer'),chapter:$('#chapterLabel'),scene:$('#sceneLabel'),
+  dialogue:$('#dialogue'),speaker:$('#speaker'),line:$('#line'),next:$('#dialogueNext'),action:$('#contextAction'),toast:$('#toast'),
+  object:$('#objectOverlay'),objectContent:$('#objectContent'),side:$('#sidePanel'),sideContent:$('#sideContent'),settings:$('#settingsPanel'),memory:$('#memoryVignette')
+};
+const chapterNames=['序章','第一章','第二章','第三章','第四章','第五章','终章'];
+const scenes={
+ prologue:{title:'九年后的高三七班',art:'assets/art/prologue.jpg',alt:'九年后的高三七班旧教室，阳光照过旧课桌和黑板'},
+ photo:{title:'四人照片',art:'assets/art/group.jpg',alt:'四名高中生在教室里留下的合照'},
+ ch1class:{title:'高二教室',art:'assets/art/classroom_warm.jpg',alt:'六月阳光下的高二教室'},
+ cafeteria:{title:'学校食堂',art:'assets/art/cafeteria.jpg',alt:'真实校园食堂里四名学生围桌吃鸡米花'},
+ sunset:{title:'操场夕阳',art:'assets/art/sunset_env.svg',alt:'傍晚的校园看台、远山与夕阳'},
+ night:{title:'晚自习',art:'assets/art/night.jpg',alt:'夜色中的高中教室'},
+ library:{title:'图书馆',art:'assets/art/library_env.svg',alt:'旧高中图书馆的植物分类书架与借阅卡'},
+ festival:{title:'校园艺术节',art:'assets/art/festival.jpg',alt:'真实校园艺术节，人群、摊位和摄影展板交错'},
+ radio:{title:'广播站',art:'assets/art/radio_girl.jpg',alt:'校内广播站里戴耳机整理磁带的学生'},
+ high3:{title:'高三教室',art:'assets/art/high3.jpg',alt:'临近毕业的高三教室'},
+ notebook:{title:'植物观察册',art:'assets/art/notebook_real.jpg',alt:'旧课桌上摊开的植物观察册与纸页'},
+ blackboard:{title:'毕业日重构',art:'assets/blackboard.svg',alt:'贴满证据的黑板'},
+ plant:{title:'毕业日 · 植物角',art:'assets/art/graduation.jpg',alt:'毕业日的人群中，学生把桔梗花藏在身后'},
+ gate:{title:'校门',art:'assets/art/chase.jpg',alt:'雨后校门外，完整绘制的高中生向前奔跑'},
+ road:{title:'九年后 · 校门外',art:'assets/art/road_env.svg',alt:'夜色中九年后的校门外道路'},
+ windowcg:{title:'靠窗第三排',art:'assets/art/window.jpg',alt:'窗边女孩与玻璃倒影中的男生短暂对视'},
+ peacecg:{title:'和平谈判物资',art:'assets/art/chicken.jpg',alt:'夕阳下桌面上的一盒鸡米花'},
+ conflictcg:{title:'我们不是别人',art:'assets/art/conflict.jpg',alt:'高三教室里四名学生关系紧张的时刻'},
+ gradcg:{title:'毕业日 · 没说出口的话',art:'assets/art/graduation.jpg',alt:'毕业日人群里，女孩把一束桔梗藏在身后'},
+ page33cg:{title:'第33页',art:'assets/art/page33.jpg',alt:'阳光下写满字迹的作文第33页'},
+ radiocg:{title:'广播站 · 真相',art:'assets/art/radio.jpg',alt:'旧磁带、节目单和17点43分15秒的时间标记'},
+ festivalcg:{title:'艺术节 · 快门',art:'assets/art/festival_close.jpg',alt:'夕阳艺术节上女孩举起相机对着同学'},
+ phonecg:{title:'成年 · 收到消息',art:'assets/art/adult_phone.jpg',alt:'成年后手机屏幕上收到高中同学的消息'},
+ presscg:{title:'最后一页',art:'assets/art/pressflower.jpg',alt:'夕光下，一朵紫色桔梗被放进泛黄的纸页之间'}
+};
+const ART_PRELOAD=['assets/art/group.jpg','assets/art/cafeteria.jpg','assets/art/window.jpg','assets/art/festival.jpg','assets/art/festival_close.jpg','assets/art/radio_girl.jpg','assets/art/radio.jpg','assets/art/conflict.jpg','assets/art/graduation.jpg','assets/art/page33.jpg','assets/art/chase.jpg','assets/art/adult_phone.jpg'];
+const preloadArt=()=>ART_PRELOAD.forEach(src=>{const i=new Image();i.decoding='async';i.src=src});
+if('requestIdleCallback' in window)requestIdleCallback(preloadArt,{timeout:1800});else setTimeout(preloadArt,600);
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function load(){
+ try{
+  const modern=localStorage.getItem(SAVE), legacy=!modern&&localStorage.getItem(LEGACY_SAVE);
+  const raw=modern||legacy, x=raw?JSON.parse(raw):null;
+  if(!x)return clone(defaultState);
+  const merged={...clone(defaultState),...x,settings:{...defaultState.settings,...(x.settings||{})}};
+  if(!x.checkpoint)merged.checkpoint=null;
+  return merged;
+ }catch{return clone(defaultState)}
+}
+function save(){try{localStorage.setItem(SAVE,JSON.stringify(state))}catch{} updateContinue();}
+function updateContinue(){const b=$('#continueBtn');b.disabled=!state.started;b.style.opacity=state.started?1:.45;}
+function reset(){try{localStorage.removeItem(SAVE);localStorage.removeItem(LEGACY_SAVE);localStorage.removeItem(META)}catch{}state=clone(defaultState);location.reload();}
+function setFlag(k,v=true){state.flags[k]=v;save();}
+function hasFlag(k){return !!state.flags[k]}
+function setCheckpoint(cp){state.checkpoint=cp;save();}
+function addItem(name){if(!state.inventory.includes(name)){state.inventory.push(name);toast('获得物品：'+name);save();}}
+function markInspected(id){if(!state.inspected.includes(id)){state.inspected.push(id);save();}}
+function inspected(id){return state.inspected.includes(id)}
+function toast(t){el.toast.textContent=t;el.toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.toast.classList.remove('show'),1600)}
+function legacyCheckpoint(){
+ const p=state.puzzles||{};
+ if(state.completed)return 'complete';
+ if(p.pz9){if(!state.endingFlags?.chaseDone)return 'graduationReplay';if(!state.endingFlags?.sent)return 'adult';if(!state.endingFlags?.notificationSeen)return 'finalRoad';return 'ending'}
+ if(state.chapter===6)return 'blackboard';
+ if(state.chapter===5)return p.pz8?'returnPresent':'chapter5';
+ if(state.chapter===4)return p.pz7?'conflict':'chapter4';
+ if(state.chapter===3)return p.pz6?'postTape':'radio';
+ if(state.chapter===2){if(!p.pz4)return 'chapter2';if(!p.pz5)return 'seat';return 'library'}
+ if(state.chapter===1){if(!p.pz2)return 'ch1class';if(!p.pz3)return 'cafeteria';return 'cafeteriaAfter'}
+ if(p.pz1)return 'transitionPast';return 'prologue';
+}
+function renderScene(key,opts={}){
+ state.scene=key;save();const sc=scenes[key];if(!sc)return;document.body.dataset.scene=key;el.sceneArt.src=sc.art;el.sceneArt.alt=sc.alt;el.scene.textContent=sc.title;el.chapter.textContent=chapterNames[Math.min(state.chapter,6)]||'尾声';el.hotspots.innerHTML='';el.action.hidden=true;el.memory.classList.toggle('on',!!opts.memory);el.sceneArt.classList.toggle('cinematic',!!opts.cinematic);if(!state.settings.reduceMotion){el.sceneArt.classList.add('zoom');setTimeout(()=>el.sceneArt.classList.remove('zoom'),1200)}
+}
+function setHotspots(items){el.hotspots.innerHTML='';items.forEach(h=>{const b=document.createElement('button');b.className='hotspot'+(h.done?.()?' done':'');b.dataset.label=h.label;b.setAttribute('aria-label',h.label);Object.assign(b.style,{left:h.x+'%',top:h.y+'%',width:h.w+'%',height:h.h+'%'});b.onclick=async()=>{playSfx('paper');await h.onClick(b);if(h.id)markInspected(h.id);if(h.done?.())b.classList.add('done')};el.hotspots.appendChild(b)})}
+function setAction(label,fn){el.action.textContent=label;el.action.hidden=false;el.action.onclick=fn}
+function sleep(ms){return new Promise(r=>setTimeout(r,state.settings.reduceMotion?Math.min(ms,140):ms))}
+async function showCG(src,alt,ms=1250){const oldSrc=el.sceneArt.getAttribute('src'),oldAlt=el.sceneArt.alt;el.hotspots.style.pointerEvents='none';el.sceneArt.classList.add('cinematic');el.sceneArt.src=src;el.sceneArt.alt=alt;await sleep(ms);el.sceneArt.src=oldSrc;el.sceneArt.alt=oldAlt;el.sceneArt.classList.remove('cinematic');el.hotspots.style.pointerEvents=''}
+async function say(lines){dialogueQueue=[...lines];el.dialogue.hidden=false;return new Promise(resolve=>{dialogueResolve=resolve;showNextLine()})}
+function showNextLine(){if(typingTimer){clearInterval(typingTimer);typingTimer=null;el.line.textContent=el.line.dataset.full||el.line.textContent;return}const d=dialogueQueue.shift();if(!d){el.dialogue.hidden=true;const r=dialogueResolve;dialogueResolve=null;r&&r();return}el.speaker.textContent=d.s||'';el.line.textContent='';el.line.dataset.full=d.t;const chars=[...d.t];let i=0,ms=Math.max(9,28/state.settings.textSpeed);typingTimer=setInterval(()=>{el.line.textContent+=chars[i++]||'';if(i>=chars.length){clearInterval(typingTimer);typingTimer=null}},ms)}
+el.next.onclick=showNextLine;el.dialogue.onclick=e=>{if(e.target===el.dialogue||e.target===el.line)showNextLine()};
+function openObject(html,onReady,closable=true){if(objectCleanup){try{objectCleanup()}catch{}objectCleanup=null}lastFocus=document.activeElement;el.objectContent.innerHTML=html;el.object.dataset.closable=closable?'1':'0';$('#objectClose').hidden=!closable;el.object.hidden=false;const cleanup=onReady&&onReady();if(typeof cleanup==='function')objectCleanup=cleanup;requestAnimationFrame(()=>{const f=el.objectContent.querySelector('button:not([hidden]),input:not([hidden])');f?.focus({preventScroll:true})})}
+function closeObject(force=false){if(!force&&el.object.dataset.closable==='0')return;if(objectCleanup){try{objectCleanup()}catch{}objectCleanup=null}el.object.hidden=true;el.objectContent.innerHTML='';el.object.dataset.closable='1';$('#objectClose').hidden=false;lastFocus?.focus?.({preventScroll:true});lastFocus=null}
+$('#objectClose').onclick=()=>closeObject();$('#sideClose').onclick=()=>el.side.hidden=true;$('#settingsClose').onclick=()=>el.settings.hidden=true;
+function showSide(html){el.sideContent.innerHTML=html;el.side.hidden=false}
+function hint(){const p=state.puzzles;let t='先看一遍场景里有名字的物件。';
+ if(state.scene==='prologue'&&!p.pz1)t=(!inspected('blackboard')||!inspected('duty')||!inspected('gradphoto'))?'储物柜不是靠常识开的。黑板、值日表和毕业照片都给了同一件事的时间关系。':'把日期写成四位数字，密码轮需要从上到下对应。';
+ else if(state.scene==='ch1class'&&!p.pz2)t='植物观察不是答百科题：先把五个观察点都亲手看完，再填写观察册。';
+ else if(state.scene==='cafeteria'&&!p.pz3)t='先把当前盒里的鸡米花数完并称重，再比较小票。周野的手也值得看。';
+ else if(state.scene==='night'&&!p.pz4)t='作文不是靠文字选答案，要把五张有撕裂边缘的纸片拼回原位。';
+ else if(!p.pz5&&state.chapter===2)t='“靠窗第三排”只描述位置。先认清窗户在哪一侧，再按排数定位。';
+ else if(state.scene==='radio'&&!p.pz6)t='节目单说17:40开始点歌。后台那句话在开始后约3分15秒，而且不是音乐所在声道。';
+ else if(state.scene==='high3'&&!p.pz7)t='留言的判断依据早就在对话里：感叹号、字小规整、句末少标点、涂改。';
+ else if(state.chapter===5&&!p.pz8)t='第33页要排除三种错误纸张，再去找“最不显眼但最可能夹纸”的旧课本。';
+ else if(state.scene==='blackboard'&&!p.pz9)t='最终推理不需要猜新信息：先证明“她准备说”，再证明“他也准备说”，最后解释为什么两个人都没说。';
+ showSide(`<h2>一片花瓣</h2><p>${t}</p><p style="color:#706657;font-size:13px">提示不会替你自动完成谜题。</p>`)}
+$('#hintBtn').onclick=hint;
+$('#inventoryBtn').onclick=()=>showSide(`<h2>旧帆布笔袋</h2><div class="inventory-list">${state.inventory.length?state.inventory.map(x=>`<div class="inv-item">${x}</div>`).join(''):'<p>现在还是空的。</p>'}</div>`);
+$('#notebookBtn').onclick=()=>showSide(`<h2>植物观察册</h2><img src="assets/notebook.svg" alt="植物观察册" style="width:100%;border:1px solid #8e8069"><p>${state.puzzles.pz8?'第33页已经回到册子旁边。桔梗页仍然留着一块空白。':state.puzzles.pz2?'第一页已经完成。后面的页角有许多被翻过的痕迹。':'封面旧得发软，里面还没有重新整理。'}</p>`);
+$('#settingsBtn').onclick=()=>{const s=state.settings;$('#musicRange').value=s.music;$('#sfxRange').value=s.sfx;$('#textRange').value=s.textSpeed;$('#motionCheck').checked=s.reduceMotion;el.settings.hidden=false};
+$('#musicRange').oninput=e=>{state.settings.music=+e.target.value;save();updateAudioGain();if(state.settings.music<=0){if(ambienceAudio){try{ambienceAudio.pause()}catch{}}}else if(ambienceKind&&!endingMusicAudio){ambient(ambienceKind)}if(endingMusicAudio)endingMusicAudio.volume=Math.min(.78,state.settings.music*.86)};
+$('#sfxRange').oninput=e=>{state.settings.sfx=+e.target.value;save()};
+$('#textRange').oninput=e=>{state.settings.textSpeed=+e.target.value;save()};
+$('#motionCheck').onchange=e=>{state.settings.reduceMotion=e.target.checked;document.documentElement.classList.toggle('reduce-motion',state.settings.reduceMotion);save()};$('#resetBtn').onclick=()=>{if(confirm('确认清除《花语》的本机存档？'))reset()};
+
+// Local ambience and foley: no network dependency. A single ambience media element is reused to avoid WebMediaPlayer leaks.
+const AUDIO={amb:{room:'amb_room.mp3',night:'amb_night.mp3',outdoor:'amb_outdoor.mp3',cafeteria:'amb_cafeteria.mp3',library:'amb_library.mp3',festival:'amb_festival.mp3',road:'amb_road.mp3'},sfx:{paper:'sfx_paper.mp3',click:'sfx_click.mp3',keys:'sfx_keys.mp3',basket:'sfx_basket.mp3',door:'sfx_door.mp3',bell:'sfx_bell.mp3',shutter:'sfx_shutter.mp3',tray:'sfx_tray.mp3',tape:'sfx_tape.mp3',step:'sfx_step.mp3',phone:'sfx_phone.mp3'}};
+function ensureAudio(){if(audioCtx)return;try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.connect(audioCtx.destination);updateAudioGain()}catch{}}
+function updateAudioGain(){if(masterGain)masterGain.gain.value=Math.max(.001,state.settings.music*.28);if(ambienceAudio)ambienceAudio.volume=Math.min(.55,state.settings.music*.55);if(endingMusicAudio)endingMusicAudio.volume=Math.min(.78,state.settings.music*.86)}
+function stopAmbient(){ambientNodes.forEach(n=>{try{n.stop?.()}catch{}try{n.disconnect?.()}catch{}});ambientNodes=[];ambienceKind='';if(ambienceAudio){try{ambienceAudio.pause();ambienceAudio.currentTime=0}catch{}}}
+function ambientFallback(kind='room'){ensureAudio();if(!audioCtx)return;const buffer=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.12;const src=audioCtx.createBufferSource();src.buffer=buffer;src.loop=true;const filter=audioCtx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=kind==='night'?420:kind==='outdoor'?1100:700;const g=audioCtx.createGain();g.gain.value=.07;src.connect(filter).connect(g).connect(masterGain);src.start();ambientNodes.push(src,filter,g)}
+function ambient(kind='room'){
+ const file=AUDIO.amb[kind]||AUDIO.amb.room;
+ ambienceKind=kind;
+ if(state.settings.music<=0){ambientNodes.forEach(n=>{try{n.stop?.()}catch{}try{n.disconnect?.()}catch{}});ambientNodes=[];if(ambienceAudio){try{ambienceAudio.pause()}catch{}}return}
+ if(ambienceAudio&&!ambienceAudio.paused&&ambienceAudio.dataset.kind===kind){updateAudioGain();return}
+ ambientNodes.forEach(n=>{try{n.stop?.()}catch{}try{n.disconnect?.()}catch{}});ambientNodes=[];
+ try{
+  if(!ambienceAudio){ambienceAudio=new Audio();ambienceAudio.loop=true;ambienceAudio.preload='auto'}
+  ambienceAudio.pause();ambienceAudio.src='assets/audio/'+file;ambienceAudio.dataset.kind=kind;ambienceAudio.currentTime=0;ambienceAudio.volume=Math.min(.55,state.settings.music*.55);
+  const pr=ambienceAudio.play();pr?.catch?.(()=>{if(ambienceKind===kind)ambientFallback(kind)});
+ }catch{ambientFallback(kind)}
+}
+async function loadSfxBuffer(kind){
+ ensureAudio();if(!audioCtx)return null;if(sfxBuffers.has(kind))return sfxBuffers.get(kind);if(sfxLoads.has(kind))return sfxLoads.get(kind);
+ const file=AUDIO.sfx[kind];if(!file)return null;
+ const task=fetch('assets/audio/'+file).then(r=>{if(!r.ok)throw new Error('sfx '+kind);return r.arrayBuffer()}).then(b=>audioCtx.decodeAudioData(b)).then(buf=>{sfxBuffers.set(kind,buf);sfxLoads.delete(kind);return buf}).catch(()=>{sfxLoads.delete(kind);return null});
+ sfxLoads.set(kind,task);return task
+}
+function fallbackTone(kind){ensureAudio();if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();g.gain.setValueAtTime(Math.max(.001,state.settings.sfx*.045),audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.08);o.frequency.value=kind==='bell'?660:kind==='basket'?90:420;o.connect(g).connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.09)}
+function playSfx(kind){
+ if(state.settings.sfx<=0)return;ensureAudio();if(!audioCtx){fallbackTone(kind);return}
+ const cached=sfxBuffers.get(kind);
+ if(cached){const src=audioCtx.createBufferSource(),g=audioCtx.createGain();src.buffer=cached;g.gain.value=Math.min(1,state.settings.sfx*.9);src.connect(g).connect(audioCtx.destination);src.start();return}
+ loadSfxBuffer(kind).then(buf=>{if(!buf)return fallbackTone(kind);const src=audioCtx.createBufferSource(),g=audioCtx.createGain();src.buffer=buf;g.gain.value=Math.min(1,state.settings.sfx*.9);src.connect(g).connect(audioCtx.destination);src.start()})
+}
+function stopEndingMusic(){if(!endingMusicAudio)return;const a=endingMusicAudio;endingMusicAudio=null;try{a.pause();a.currentTime=0;a.removeAttribute('src');a.load?.()}catch{}}
+function playEndingMusic(){
+ stopAmbient();stopEndingMusic();
+ if(!ENDING_TRACK){ambient('road');return}
+ try{const a=new Audio(ENDING_TRACK);a.preload='auto';a.loop=false;a.volume=Math.min(.78,state.settings.music*.86);endingMusicAudio=a;const fail=()=>{if(endingMusicAudio!==a)return;stopEndingMusic();ambient('road')};a.onerror=fail;const pr=a.play();pr?.catch?.(fail)}catch{ambient('road')}
+}
+async function prologueSoundscape(){ambient('outdoor');await sleep(330);playSfx('basket');await sleep(310);playSfx('basket');await sleep(420);playSfx('keys');await sleep(410);playSfx('click');await sleep(260);playSfx('door');await sleep(520);ambient('room')}
+
+// PETALS
+const cv=$('#petals'),ctx=cv.getContext('2d');let petals=[];
+function resize(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+addEventListener('resize',resize);resize();
+function petalColor(){return state.chapter>=6?'rgba(118,112,142,.52)':state.chapter>=4?'rgba(172,146,111,.34)':'rgba(211,190,122,.38)'}
+function seedPetals(n=22){petals=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,s:3+Math.random()*6,v:.18+Math.random()*.42,w:.2+Math.random()*.35,a:Math.random()*6}))}
+seedPetals();
+(function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);if(!state.settings.reduceMotion){ctx.fillStyle=petalColor();petals.forEach(p=>{p.y+=p.v;p.x+=Math.sin(p.a+=.015)*p.w;p.a+=.005;if(p.y>innerHeight+15){p.y=-15;p.x=Math.random()*innerWidth}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.beginPath();ctx.ellipse(0,0,p.s,p.s*.45,.2,0,Math.PI*2);ctx.fill();ctx.restore()})}requestAnimationFrame(draw)})();
+
+// PUZZLES
+function puzzle1(){
+ const clues=[['黑板',inspected('blackboard')?'“距高考 2 天”':'还没仔细看'],['值日表',inspected('duty')?'6月5日':'还没仔细看'],['毕业照标签',inspected('gradphoto')?'拍摄：6月7日':'还没仔细看']];
+ openObject(`<div class="physical"><h2>储物柜 · 四位机械锁</h2><div class="clue-board">${clues.map((c,i)=>`<div class="clue-card" style="--r:${[-1.3,.8,-.5][i]}deg"><strong>${c[0]}</strong>${c[1]}</div>`).join('')}</div><div class="lock">${[0,0,0,0].map((n,i)=>`<div class="wheel" data-i="${i}"><button class="up">⌃</button><span class="num">0</span><button class="down">⌄</button></div>`).join('')}</div><div class="status-line" id="lockStatus"></div><div style="text-align:center"><button class="metal-btn" id="tryLock">转动把手</button></div></div>`,()=>{
+  $$('.wheel').forEach(w=>{let n=0,startY=null,lastStep=0;const render=()=>{w.querySelector('.num').textContent=n;w.dataset.v=n};const turn=d=>{n=(n+d+10)%10;render();playSfx('click')};w.querySelector('.up').onclick=()=>turn(1);w.querySelector('.down').onclick=()=>turn(-1);w.onwheel=e=>{e.preventDefault();turn(e.deltaY<0?1:-1)};w.onpointerdown=e=>{startY=e.clientY;lastStep=0;w.setPointerCapture?.(e.pointerId)};w.onpointermove=e=>{if(startY===null)return;const step=Math.trunc((startY-e.clientY)/24);if(step!==lastStep){turn(step>lastStep?1:-1);lastStep=step}};w.onpointerup=w.onpointercancel=()=>{startY=null;lastStep=0};render()});
+  $('#tryLock').onclick=async()=>{const okClues=['blackboard','duty','gradphoto'].every(inspected);const code=$$('.wheel').map(w=>w.dataset.v||'0').join('');const st=$('#lockStatus');if(!okClues){st.className='status-line error';st.textContent='把手没有动。你还没有足够证据确定这个日期。';return}if(code!=='0607'){st.className='status-line error';st.textContent='金属锁舌没有弹开。';return}st.className='status-line success';st.textContent='咔哒。';state.puzzles.pz1=true;addItem('植物观察册');addItem('四人照片');addItem('旧课本');addItem('毕业日期');addItem('毕业照');setCheckpoint('transitionPast');playSfx('bell');await sleep(500);closeObject();await transitionToPast()}
+ });
+}
+async function transitionToPast(){setCheckpoint('transitionPast');renderScene('photo',{memory:true,cinematic:true});await say([{t:'照片里的阳光，比现在亮得多。'},{s:'周野',t:'快点快点，再拍一张！'},{s:'唐梨',t:'你已经拍十六张了。'},{s:'沈知夏',t:'林屿你不要每次都闭眼。'}]);state.chapter=1;setCheckpoint('ch1class');renderScene('ch1class',{memory:true});ambient('room');await say([{t:'第一章 · 鸡米花应该算一道菜吗'},{s:'老师',t:'四人一组。沈知夏记录，唐梨拍照，林屿整理文字。'},{s:'周野',t:'我可以负责战略统筹。'},{s:'老师',t:'你负责搬花盆。'},{s:'唐梨',t:'……挺适合你的。'}]);setupCh1Class();}
+function puzzle2(){
+ const pts=[['花瓣',45,20],['叶片',28,43],['茎',49,53],['光照方向',75,18],['花盆标签',52,79]];
+ openObject(`<div class="physical plant-board"><div class="plant-visual"><svg viewBox="0 0 520 440" aria-label="植物观察对象"><rect width="520" height="440" fill="#bcc9bd"/><rect y="350" width="520" height="90" fill="#9b8569"/><path d="M260 360 C250 300 270 250 258 175 C245 120 270 75 250 38" stroke="#53745a" stroke-width="12" fill="none"/><path d="M254 210 C200 180 170 180 132 145 C195 145 238 165 260 195 M260 275 C315 245 350 230 388 195 C330 195 290 215 260 250" stroke="#628164" stroke-width="15" fill="none"/><path d="M250 45 c-45 -35 -85 10 -62 52 c-49 7 -44 64 2 73 c-17 47 40 70 68 31 c34 35 84 4 69 -38 c49 -10 45 -65 -3 -74 c12 -46 -39 -74 -74 -44z" fill="#b6a565" stroke="#625c42" stroke-width="7"/><rect x="190" y="330" width="140" height="70" fill="#8c6f55" stroke="#5e4939" stroke-width="6"/><rect x="225" y="357" width="70" height="28" fill="#d9ccb1"/><text x="238" y="378" font-size="18" fill="#5a5144">B-17</text><path d="M380 60 L480 20" stroke="#e6d5a1" stroke-width="35" opacity=".32"/></svg>${pts.map(([n,x,y])=>`<button class="plant-point" data-name="${n}" style="left:${x}%;top:${y}%" aria-label="观察${n}"></button>`).join('')}</div><div class="plant-notes"><h2>植物观察</h2><p id="observeCount">已观察 0 / 5</p><div class="slots"><div class="slot" data-answer="5枚花瓣">花瓣：<span></span></div><div class="slot" data-answer="披针形">叶片：<span></span></div><div class="slot" data-answer="直立">茎：<span></span></div><div class="slot" data-answer="右上方">光照：<span></span></div><div class="slot" data-answer="B-17">标签：<span></span></div><div class="slot" data-answer="6月12日">日期：<span></span></div></div><div class="chips">${['右上方','B-17','披针形','5枚花瓣','直立','6月12日'].map(x=>`<div class="chip" draggable="true">${x}</div>`).join('')}</div><button class="puzzle-btn" id="finishPlant">完成第一页</button><div id="plantStatus" class="status-line"></div></div></div>`,()=>{
+  let seen=new Set();$$('.plant-point').forEach(p=>p.onclick=()=>{seen.add(p.dataset.name);p.classList.add('seen');$('#observeCount').textContent=`已观察 ${seen.size} / 5`;playSfx('paper')});
+  let drag='';$$('.chip').forEach(c=>{c.ondragstart=()=>{drag=c.textContent;c.classList.add('dragging')};c.ondragend=()=>c.classList.remove('dragging');c.onclick=()=>{drag=c.textContent;toast('已拿起：'+drag)}});$$('.slot').forEach(s=>{s.ondragover=e=>e.preventDefault();const put=()=>{if(!drag)return;s.querySelector('span').textContent=drag;s.dataset.value=drag;s.classList.add('filled');drag=''};s.ondrop=e=>{e.preventDefault();put()};s.onclick=put});
+  $('#finishPlant').onclick=async()=>{const ok=seen.size===5 && $$('.slot').every(s=>s.dataset.value===s.dataset.answer);if(!ok){$('#plantStatus').textContent=seen.size<5?'先把植物本身完整观察一遍。':'有几项记录和你刚才看到的不一致。';return}state.puzzles.pz2=true;setCheckpoint('cafeteria');closeObject();await say([{s:'沈知夏',t:'还行。'},{s:'周野',t:'什么叫还行？这是团队智慧。'},{s:'唐梨',t:'你搬了三个花盆。'},{s:'周野',t:'体力劳动也是劳动。'}]);renderScene('cafeteria');setupCafeteria()}
+ });
+}
+function puzzle3(){
+ if(!hasFlag('boughtFoodForZhixia')){toast('先去窗口替沈知夏买一份。');return}
+ let count=0, weighed=false;const narrow=innerWidth<=760;const positions=Array.from({length:17},(_,i)=>narrow?({l:7+(i%4)*23,t:7+Math.floor(i/4)*20,r:(i*11)%21-10}):({l:8+(i%5)*18+(i%2)*3,t:10+Math.floor(i/5)*21,r:(i*23)%55-25}));
+ openObject(`<div class="physical"><h2>鸡米花调查</h2><div class="food-stage"><div><div class="food-tray">${positions.map((p,i)=>`<button class="kernel" aria-label="鸡米花${i+1}" style="left:${p.l}%;top:${p.t}%;--rot:${p.r}deg"></button>`).join('')}</div><p>已数：<strong id="kernelCount">0</strong> 块</p></div><div><div class="scale"><div><div class="display" id="scaleDisplay">--- g</div><button class="puzzle-btn light" id="weigh">把餐盘放上去</button></div></div><div class="receipts"><div class="receipt">前日：20块 / 180g</div><div class="receipt">昨日：20块 / 180g</div><div class="receipt">今天窗口标签：20块</div></div><div class="answers"><button class="puzzle-btn light ans" data-a="18">18g</button><button class="puzzle-btn light ans" data-a="27">27g</button><button class="puzzle-btn light ans" data-a="36">36g</button></div><div id="foodStatus" class="status-line"></div></div></div></div>`,()=>{
+  $$('.kernel').forEach(k=>k.onclick=()=>{if(k.classList.contains('counted'))return;k.classList.add('counted');count++;$('#kernelCount').textContent=count;playSfx('paper')});
+  $('#weigh').onclick=()=>{weighed=true;$('#scaleDisplay').textContent='153 g';playSfx('tray')};
+  $$('.ans').forEach(b=>b.onclick=async()=>{if(count<17||!weighed){$('#foodStatus').textContent='先把当前数量数清楚，也别忘了电子秤。';return}if(b.dataset.a!=='27'){ $('#foodStatus').textContent='再对比前两日的总重量。';return}$('#foodStatus').textContent='少了27g。';await sleep(450);await showCG('assets/art/chicken.jpg','阳光下的鸡米花纸盒与餐桌',1100);await say([{s:'唐梨',t:'周野。你刚刚是不是吃了？'},{s:'周野',t:'没有。'},{s:'沈知夏',t:'27克。'},{s:'周野',t:'什么？'},{s:'沈知夏',t:'你吃掉的重量。'},{s:'林屿',t:'嫌疑人当场销毁证据。'},{s:'周野',t:'科学实验允许合理损耗。'}]);state.puzzles.pz3=true;addItem('鸡米花小票');setCheckpoint('cafeteriaAfter');closeObject();setupCafeteriaAfter()})
+ });
+}
+function puzzle4(){
+ const slots=[{x:12,y:12,w:32,h:33},{x:43,y:12,w:39,h:33},{x:18,y:44,w:28,h:32},{x:45,y:44,w:32,h:32},{x:65,y:67,w:25,h:25}];
+ const texts=['如果有一天真的离开这里……','我大概会先记得风扇。\n第三档总是会晃。','然后是窗边的光，\n下午会照到课桌右角。','靠窗第三排有人困得睁不开眼，','还坚持说自己没有睡着。'];
+ const slotHtml=slots.map(s=>`<div class="paper-slot" style="left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}%"></div>`).join('');
+ const startPos=[[2,2],[55,4],[4,56],[37,60],[72,56]];
+ const fragHtml=texts.map((t,i)=>`<div class="fragment" role="button" tabindex="0" data-i="${i}" style="left:${startPos[i][0]}%;top:${startPos[i][1]}%;width:${slots[i].w}%;height:${slots[i].h}%">${t.replace(/\n/g,'<br>')}</div>`).join('');
+ openObject(`<div class="physical"><h2>作文碎片</h2><p>把五块真实纸片拼回缺失的结尾。正确邻接只会有很轻的纸张声。</p><div class="paper-puzzle" id="paperBoard">${slotHtml}${fragHtml}</div><div id="paperStatus" class="status-line"></div></div>`,()=>{
+  const board=$('#paperBoard'),ctrl=new AbortController(),locked=new Set();
+  $$('.fragment').forEach(f=>{let ox=0,oy=0,drag=false,pid=null;f.onpointerdown=e=>{if(f.classList.contains('locked'))return;drag=true;pid=e.pointerId;f.setPointerCapture?.(pid);const fr=f.getBoundingClientRect();ox=e.clientX-fr.left;oy=e.clientY-fr.top;e.preventDefault()};document.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==pid||f.classList.contains('locked'))return;const r=board.getBoundingClientRect();f.style.left=((e.clientX-r.left-ox)/r.width*100)+'%';f.style.top=((e.clientY-r.top-oy)/r.height*100)+'%'},{signal:ctrl.signal});const up=e=>{if(!drag||e.pointerId!==pid)return;drag=false;const i=+f.dataset.i,r=board.getBoundingClientRect(),fr=f.getBoundingClientRect(),cx=(fr.left-r.left+fr.width/2)/r.width*100,cy=(fr.top-r.top+fr.height/2)/r.height*100,slt=slots[i],sx=slt.x+slt.w/2,sy=slt.y+slt.h/2;const tolX=Math.max(8,slt.w*.28),tolY=Math.max(8,slt.h*.28);if(Math.abs(cx-sx)<tolX&&Math.abs(cy-sy)<tolY){Object.assign(f.style,{left:slt.x+'%',top:slt.y+'%',width:slt.w+'%',height:slt.h+'%'});f.classList.add('locked');locked.add(i);playSfx('paper');if(locked.size===5){state.puzzles.pz4=true;addItem('作文残页');setCheckpoint('seat');$('#paperStatus').textContent='纸片重新连成了一段完整的文字。';setTimeout(()=>{closeObject();setupSeatPuzzleScene()},520)}}};document.addEventListener('pointerup',up,{signal:ctrl.signal});document.addEventListener('pointercancel',up,{signal:ctrl.signal})});return()=>ctrl.abort();
+ });
+}
+function puzzle5(){
+ const names=[['周野','韩宁','顾川','白婷','许宁'],['赵琪','唐梨','陈曦','林屿','郑方'],['宋嘉','程安','叶可','梁一','沈知夏'],['吴明','范秋','张可','李熙','何远']];
+ openObject(`<div class="physical"><h2>靠窗第三排是谁</h2><p>座位表按教室前方向后排列。窗户在右侧。</p><div class="seat-grid"><div></div>${[1,2,3,4,5].map(i=>`<div class="seat">第${i}列</div>`).join('')}${names.map((row,r)=>`<div class="seat">第${r+1}排</div>${row.map((n,c)=>`<button class="seat ${r===2&&c===4?'target':''}" data-name="${n}">${n}</button>`).join('')}`).join('')}<div></div><div class="window-mark" style="grid-column:6">窗</div></div><div id="seatStatus" class="status-line"></div></div>`,()=>{$$('.seat[data-name]').forEach(b=>b.onclick=async()=>{if(b.dataset.name!=='沈知夏'){ $('#seatStatus').textContent='位置对不上。再从“靠窗”和“第三排”两个条件一起看。';return}state.puzzles.pz5=true;setCheckpoint('library');$('#seatStatus').textContent='沈知夏。';await sleep(450);closeObject();await say([{s:'林屿',t:'……'}]);renderScene('library');setupLibrary()})});
+}
+function puzzle6(){
+ openObject(`<div class="physical radio-console"><h2>广播磁带</h2><div class="radio-display" id="radioTime">17:40:00</div><div class="tape-window"><i></i><i></i><span>校园广播留档 · A面</span></div><input class="tape-slider" id="tape" type="range" min="0" max="600" step="1" value="0" aria-label="磁带位置"><div class="transport"><button class="puzzle-btn" id="playTape">播放</button><button class="puzzle-btn" data-d="-15">倒带 15s</button><button class="puzzle-btn" data-d="15">快进 15s</button></div><div class="channel-row"><button class="channel" data-ch="L">左声道</button><button class="channel active" data-ch="R">右声道</button></div><div class="transcript" id="transcript">右声道只有点歌节目的音乐与主持词。</div><button class="puzzle-btn" id="confirmTape">确认这段录音</button><div id="radioStatus" class="status-line"></div></div>`,()=>{
+  let ch='R',playing=false,timer=null;const tape=$('#tape'),fmt=v=>{v=+v;const m=Math.floor(v/60),sec=v%60;return`17:${String(40+m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`};const render=()=>{$('#radioTime').textContent=fmt(tape.value);const v=+tape.value;$('#transcript').textContent=ch==='R'?'右声道只有节目音乐与主持词。':(Math.abs(v-195)<=5?'……后台有人压低声音说话。':'左声道大多是设备底噪、翻纸和远处脚步。')};const stop=()=>{playing=false;clearInterval(timer);timer=null;const b=$('#playTape');if(b)b.textContent='播放'};
+  $('#playTape').onclick=()=>{playSfx('tape');if(playing){stop();return}playing=true;$('#playTape').textContent='暂停';timer=setInterval(()=>{if(!document.body.contains(tape)){stop();return}tape.value=Math.min(600,+tape.value+1);render();if(+tape.value>=600)stop()},220)};tape.oninput=render;$$('[data-d]').forEach(b=>b.onclick=()=>{tape.value=Math.max(0,Math.min(600,+tape.value+(+b.dataset.d)));render();playSfx('tape')});$$('.channel').forEach(b=>b.onclick=()=>{ch=b.dataset.ch;$$('.channel').forEach(x=>x.classList.toggle('active',x===b));render();playSfx('click')});
+  $('#confirmTape').onclick=async()=>{if(ch!=='L'||Math.abs(+tape.value-195)>5){$('#radioStatus').textContent='这段并不是你要找的后台录音。';return}stop();$('#transcript').innerHTML='唐梨：“那你问他。”<br>沈知夏：“不问。”<br>唐梨：“为什么？”<br><br>沈知夏：“问了以后，可能连现在都没有了。”';state.puzzles.pz6=true;setFlag('confirmedZhixiaLikesLinyu');addItem('广播录音时间');setCheckpoint('tapeReveal');closeObject();await tapeRevealSequence()};return stop;
+ });
+}
+async function tapeRevealSequence(){setCheckpoint('tapeReveal');renderScene('radiocg',{memory:true,cinematic:true});ambient('room');await say([{s:'唐梨',t:'那你问他。'},{s:'沈知夏',t:'不问。'},{s:'唐梨',t:'为什么？'},{s:'沈知夏',t:'问了以后，可能连现在都没有了。'}]);setCheckpoint('postTape');await postTapeSequence()}
+async function postTapeSequence(){setCheckpoint('postTape');renderScene('radio',{memory:true});ambient('room');await say([{s:'周野',t:'根据牛顿第三定律……'},{s:'林屿',t:'你最好不要继续。'},{s:'周野',t:'你喜欢她，她理论上也应该喜欢你。'},{s:'林屿',t:'牛顿会报警。'},{s:'唐梨',t:'他物理37。'},{s:'周野',t:'停止人身攻击。'}]);startChapter4()}
+function puzzle7(){
+ const authors=['林屿','沈知夏','周野','唐梨'];
+ const notes=[['如果以后不联系了，也别觉得是谁的错。人本来就会去很多地方。但你们回来找我的时候，我肯定认识。','周野'],['希望知夏以后勇敢一点。希望林屿以后聪明一点。考虑到后者难度较大，主要祝前者成功。','唐梨'],['以后记得给植物浇水','沈知夏'],['以后——算了。\n不对，还是祝大家毕业快乐。','林屿']];
+ openObject(`<div class="physical"><h2>无署名毕业留言</h2><p>别靠头像。看字迹、用笔、标点习惯、口头禅与纸张来源。点击纸条下方的署名章轮换判断。</p><div class="note-match">${notes.map((n,i)=>`<div class="note-card" style="--r:${[-1.2,.7,-.4,1.1][i]}deg"><p>${n[0].replace(/\n/g,'<br>')}</p><button class="author-stamp" data-answer="${n[1]}" data-i="-1">盖署名章</button></div>`).join('')}</div><button id="checkNotes" class="puzzle-btn">核对四张留言</button><div id="noteStatus" class="status-line"></div></div>`,()=>{$$('.author-stamp').forEach(b=>b.onclick=()=>{const i=(+b.dataset.i+1)%authors.length;b.dataset.i=i;b.dataset.value=authors[i];b.textContent='作者：'+authors[i];playSfx('paper')});$('#checkNotes').onclick=async()=>{if(!inspected('handwriting')){$('#noteStatus').textContent='先找一组四个人都有署名的笔迹样本。';return}const ok=$$('.author-stamp').every(b=>b.dataset.value===b.dataset.answer);if(!ok){$('#noteStatus').textContent='至少有一张不对。想想谁总爱用感叹号，谁几乎不用句末标点，谁会反复涂改。';return}state.puzzles.pz7=true;addItem('留言');setCheckpoint('addressReveal');closeObject();await addressRevealSequence()}})
+}
+async function addressRevealSequence(){setCheckpoint('addressReveal');renderScene('high3',{memory:true});ambient('room');if(!inspected('addressdoc'))markInspected('addressdoc');await say([{t:'周野把最后一张纸翻回桌面时，压在下面的住址资料露了出来。'},{t:'沈知夏父亲的新工作地点、家庭住址变更、搬家日期。'},{t:'她会正常毕业，只是毕业后全家搬走。'}]);setCheckpoint('conflict');await conflictSequence()}
+function puzzle8(){
+ const samples=[['作文本纸','横线间距不对；边缘不是同一方向撕裂'],['校刊纸','纸张太薄，纤维密度不同'],['照片背纸','有涂层，不会留下这种毛边'],['植物册原页','尺寸一致，但照片里第33页露出的纸角颜色更白']];
+ openObject(`<div class="physical"><h2>植物册缺页 · 第33页</h2><p>31、32、34。第33页被撕走了。先把几种“看起来都像”的纸排除。</p><div class="sample-grid">${samples.map((s,i)=>`<button class="sample" data-i="${i}"><strong>${s[0]}</strong><span hidden>${s[1]}</span></button>`).join('')}</div><div id="sampleText" class="status-line">逐一检查纸张。</div><div class="book-search" id="bookSearch" hidden><button class="book">校刊合订本</button><button class="book">植物图鉴</button><button class="book" data-correct="1">旧课本夹层</button></div></div>`,()=>{let seen=new Set();$$('.sample').forEach(b=>b.onclick=()=>{seen.add(b.dataset.i);b.classList.add('examined');const sp=b.querySelector('span');sp.hidden=false;$('#sampleText').textContent=sp.textContent;if(seen.size===4)$('#bookSearch').hidden=false});$$('.book').forEach(b=>b.onclick=async()=>{if(!b.dataset.correct){toast('没有找到。');return}state.puzzles.pz8=true;addItem('作文第33页');setCheckpoint('page33Reveal');closeObject();await page33RevealSequence()})})
+}
+async function page33RevealSequence(){setCheckpoint('page33Reveal');renderScene('page33cg',{memory:true,cinematic:true});ambient('room');await say([{t:'《十八岁的某一天》真正的结尾。'},{t:'其实我也不知道以后会去哪。\n但如果毕业以后还有联系，应该挺好的。\n如果她也愿意的话。'},{t:'最后一句被反复涂黑。放大后还能认出来：'},{t:'“我好像有点喜欢她。”'}]);setCheckpoint('returnPresent');returnToPresent()}
+function puzzle9(){
+ const ev=['花店订单','桔梗记录','作文残页','毕业日期','广播录音时间','毕业照','植物观察册','留言','车票','鸡米花小票','四人照片'].filter(x=>state.inventory.includes(x));
+ openObject(`<div class="physical final-board"><h2>毕业日重构</h2><p>把证据从桌面拖到两个圆形磁铁位。手机也可以点一下证据，再点空位。</p><div class="evidence-workspace"><div class="evidence-tray">${ev.map(x=>`<button class="evidence" draggable="true" data-e="${x}">${x}<i></i></button>`).join('')}</div><div class="magnet-board"><div class="magnet-slot" data-slot="0"><span>证据 A</span></div><div class="magnet-slot" data-slot="1"><span>证据 B</span></div></div></div><div class="question-box"><strong id="qText">1. 沈知夏是什么时候决定说出口的？</strong><p id="qHint">放入两项证据。</p><div id="finalChoices" class="choice-grid" hidden><button class="choice" data-c="A">A. 有第三个人出现</button><button class="choice" data-c="B">B. 沈知夏临时改变心意</button><button class="choice" data-c="C">C. 两个人错过见面</button><button class="choice" data-c="D">D. 两个人都在等对方先证明自己在乎</button></div><button id="submitEvidence" class="puzzle-btn">确认黑板上的证据</button><div id="evStatus" class="status-line"></div></div></div>`,()=>{
+  let q=1,slots=[null,null],drag=null,armed=null;const renderSlots=()=>{$$('.magnet-slot').forEach((slot,i)=>{const val=slots[i];slot.classList.toggle('filled',!!val);slot.innerHTML=val?`<b>${val}</b><small>点击取下</small>`:`<span>证据 ${i?'B':'A'}</span>`});$$('.evidence').forEach(b=>b.classList.toggle('selected',slots.includes(b.dataset.e)))};const place=(e,i)=>{const old=slots.indexOf(e);if(old>=0)slots[old]=null;if(slots[i]&&slots[i]!==e)return;slots[i]=e;playSfx('paper');renderSlots()};
+  $$('.evidence').forEach(b=>{b.ondragstart=()=>{drag=b.dataset.e};b.ondragend=()=>drag=null;b.onclick=()=>{const e=b.dataset.e;if(slots.includes(e)){slots[slots.indexOf(e)]=null;armed=null}else{armed=e;const empty=slots.indexOf(null);if(empty>=0)place(e,empty)}renderSlots()}});$$('.magnet-slot').forEach(slot=>{slot.ondragover=e=>e.preventDefault();slot.ondrop=e=>{e.preventDefault();if(drag)place(drag,+slot.dataset.slot)};slot.onclick=()=>{const i=+slot.dataset.slot;if(armed&&!slots[i]){place(armed,i);armed=null}else if(slots[i]){slots[i]=null;renderSlots()}}});const clear=()=>{slots=[null,null];armed=null;renderSlots()};
+  $('#submitEvidence').onclick=()=>{const sel=slots.filter(Boolean);if(sel.length<2){$('#evStatus').textContent='黑板上还缺一项证据。';return}if(q===1){if(sel.includes('花店订单')&&sel.includes('桔梗记录')){q=2;clear();$('#qText').textContent='2. 林屿有没有准备说？';$('#evStatus').textContent='她买了桔梗，也把桔梗留成观察册最后一种。'}else $('#evStatus').textContent='这两项还不能共同证明“她准备说出口”。'}else if(q===2){if(sel.includes('作文残页')&&sel.includes('毕业日期')){q=3;clear();$('#qText').textContent='3. 是什么阻止了他们？';$('#qHint').textContent='证据已经够了。现在只需要给出解释。';$('.evidence-workspace').classList.add('resolved');$('#finalChoices').hidden=false;$('#submitEvidence').hidden=true;$$('.choice').forEach(c=>c.onclick=async()=>{if(c.dataset.c!=='D'){$('#evStatus').textContent='这个解释会引入证据中不存在的新原因。';return}state.puzzles.pz9=true;setCheckpoint('graduationReplay');closeObject();await graduationReplay()})}else $('#evStatus').textContent='再找能同时证明“他准备过”和“时间已经逼近”的两项。'}};renderSlots();
+ });
+}
+
+// SCENE SETUPS
+async function beginPrologue(){state.started=true;state.chapter=0;state.step=0;setCheckpoint('prologue');el.title.classList.remove('active');el.game.hidden=false;renderScene('prologue');el.sceneArt.style.opacity='0';await prologueSoundscape();el.sceneArt.style.opacity='1';await sleep(450);await say([{t:'九年以后，我又回到了这里。'},{t:'门牌还是高三七班。'},{t:'只是里面已经没有高三七班了。'}]);setupPrologue()}
+function setupPrologue(){setCheckpoint('prologue');renderScene('prologue');ambient('room');setHotspots([
+ {id:'blackboard',label:'黑板',x:5,y:10,w:44,h:32,done:()=>inspected('blackboard'),onClick:()=>say([{t:'“距离高考还有——”\n后半已经擦掉。'},{t:'我以前觉得这几个字特别烦。\n现在居然有点想把它补回来。'},{t:'靠近边角还能辨认出：距高考 2 天。'}])},
+ {id:'fan',label:'吊扇',x:39,y:2,w:22,h:23,done:()=>inspected('fan'),onClick:()=>say([{t:'第三档还是会晃。'},{t:'周野以前赌它会在高考前掉下来。'},{t:'它没掉。\n我们先走了。'}])},
+ {id:'water',label:'饮水机',x:78,y:42,w:13,h:26,done:()=>inspected('water'),onClick:()=>say([{t:'咕噜。'},{t:'连声音都没怎么变。'}])},
+ {id:'windowseat',label:'靠窗第三排',x:60,y:53,w:22,h:20,done:()=>inspected('windowseat'),onClick:()=>say([{t:'我的座位不在这里。'}])},
+ {id:'scratch',label:'课桌底部刻痕',x:65,y:66,w:22,h:18,done:()=>inspected('scratch'),onClick:()=>say([{t:'L.Y'},{t:'旁边还有三个字：想得美。'}])},
+ {id:'duty',label:'值日表',x:69,y:18,w:11,h:22,done:()=>inspected('duty'),onClick:()=>say([{t:'值日表停在 6月5日。'}])},
+ {id:'gradphoto',label:'毕业照片标签',x:84,y:15,w:12,h:21,done:()=>inspected('gradphoto'),onClick:()=>say([{t:'墙上的毕业照标签：拍摄于 6月7日。'}])},
+ {label:'储物柜',x:69,y:39,w:20,h:28,onClick:()=>puzzle1()}
+ ])}
+function setupCh1Class(){setCheckpoint('ch1class');renderScene('ch1class',{memory:true});ambient('room');setHotspots([
+ {label:'植物角',x:69,y:43,w:27,h:27,onClick:puzzle2},
+ {id:'teacherdesk',label:'讲台',x:5,y:43,w:26,h:24,done:()=>inspected('teacherdesk'),onClick:()=>say([{t:'讲台边缘有粉笔灰。植物观察作业的分组名单还压在下面。'}])},
+ {id:'zhixia',label:'沈知夏的桌面',x:49,y:54,w:17,h:24,done:()=>inspected('zhixia'),onClick:()=>say([{t:'记录本摊开着。字不大，句尾几乎不用标点。'}])},
+ {id:'zhouye',label:'周野',x:35,y:55,w:14,h:25,done:()=>inspected('zhouye'),onClick:()=>say([{s:'周野',t:'战略统筹正在休息。'},{s:'唐梨',t:'你只是没事干。'}])}
+ ])}
+function setupCafeteria(){setCheckpoint('cafeteria');renderScene('cafeteria');ambient('cafeteria');say([{s:'沈知夏',t:'我忘带饭卡了。'},{s:'林屿',t:'你怎么比周野还不靠谱。'},{s:'周野',t:'为什么突然攻击我？'}]).then(()=>{const hotspots=[{id:'buyFood',label:hasFlag('boughtFoodForZhixia')?'饭卡机':'窗口与饭卡机',x:5,y:12,w:48,h:31,done:()=>hasFlag('boughtFoodForZhixia'),onClick:async()=>{if(hasFlag('boughtFoodForZhixia')){await say([{t:'饭卡机的绿灯已经亮过一次。两份鸡米花，一份在她面前。'}]);return}setFlag('boughtFoodForZhixia');playSfx('tray');await say([{t:'滴。饭卡机亮起绿灯。'},{s:'林屿',t:'两份。'},{s:'沈知夏',t:'我之后还你。'},{s:'周野',t:'请问第三份属于团队经费吗？'},{s:'唐梨',t:'不属于。'}])}},{label:'鸡米花餐盘',x:66,y:50,w:28,h:30,onClick:puzzle3},{id:'bag',label:'沈知夏的书包',x:50,y:58,w:13,h:25,done:()=>inspected('bag'),onClick:async()=>{setFlag('sawZhixiaCard');await say([{t:state.flags.replay?'她那天其实带了。':'侧袋里有一张饭卡。'}])}},{id:'canteenNoise',label:'远处餐盘声',x:7,y:66,w:22,h:18,done:()=>inspected('canteenNoise'),onClick:async()=>{playSfx('tray');await say([{t:'不锈钢餐盘碰到桌沿。食堂里到处都是说话声。'},{s:'周野',t:'这种环境非常适合掩护犯罪。'},{s:'唐梨',t:'你先把嘴里的咽下去。'}])}}];setHotspots(hotspots)})}
+async function setupCafeteriaAfter(){setCheckpoint('cafeteriaAfter');renderScene('cafeteria');ambient('cafeteria');setHotspots([{id:'bag',label:'沈知夏的书包',x:50,y:58,w:13,h:25,done:()=>inspected('bag'),onClick:async()=>{setFlag('sawZhixiaCard');await say([{t:state.flags.replay?'她那天其实带了。':'侧袋里有一张饭卡。'}])}}]);setAction('去操场',sunsetSequence)}
+async function sunsetSequence(){setCheckpoint('sunset');renderScene('sunset',{memory:true,cinematic:true});ambient('outdoor');await showCG('assets/art/group.jpg','四个人挤在一张旧照片里',1050);await say([{s:'周野',t:'我以后发达了，一人请你们一百份鸡米花。'},{s:'林屿',t:'你先还我今天八块。'},{s:'唐梨',t:'你企业还没成立已经负债了。'},{s:'周野',t:'这是融资。'},{s:'沈知夏',t:'五十岁还算吗？'},{s:'周野',t:'算。'},{s:'沈知夏',t:'那五十岁也可以吃。'}]);startChapter2()}
+async function startChapter2(){state.chapter=2;setCheckpoint('chapter2');renderScene('night',{memory:true});ambient('night');await say([{t:'第二章 · 靠窗第三排'},{t:'晚自习的灯管太白，窗外反而像一面暗掉的镜子。'}]);setHotspots([{id:'windowReflection',label:'窗户倒影',x:59,y:8,w:34,h:48,done:()=>inspected('windowReflection'),onClick:async()=>{await showCG('assets/art/window.jpg','窗玻璃中两个人短暂对视的倒影',1650);await say([{t:'她抬头。你们隔着一层玻璃对视。'},{t:'她马上低下头。'}])}},{id:'tubeHum',label:'白色灯管',x:32,y:2,w:27,h:13,done:()=>inspected('tubeHum'),onClick:async()=>{await say([{t:'灯管轻轻嗡了一声。有人翻过一页试卷。'}])}},{label:'校刊室里的作文',x:6,y:50,w:35,h:34,onClick:puzzle4}])}
+function setupSeatPuzzleScene(){setCheckpoint('seat');renderScene('night');ambient('night');setAction('打开旧座位表',puzzle5)}
+function libraryPuzzle(){
+ if(!inspected('shelf')){toast('先看看书架侧面的分类牌。');return}
+ const books=[['QK 47.2','校园树木'],['QK 495.4 / Z17','开花植物图鉴'],['QK 91.3','苔藓与地衣'],['QL 11.8','昆虫观察'],['R 282','常见药用植物'],['QK 73.1','种子图谱']];
+ openObject(`<div class="physical"><h2>图书馆 · 空间检索</h2><div class="library-slip"><strong>借阅记录</strong><br>书架字母：QK<br>分类号：495.4<br>著者号：Z17</div><p>先看借阅记录，再在对应书架里找对书脊。不是所有“植物”标题都属于同一分类。</p><div class="shelf-puzzle">${books.map((b,i)=>`<button class="book-spine ${i%2?'tall':''}" data-code="${b[0]}"><span>${b[0]}</span><small>${b[1]}</small></button>`).join('')}</div><div id="libraryStatus" class="status-line"></div></div>`,()=>{$$('.book-spine').forEach(b=>b.onclick=async()=>{if(b.dataset.code!=='QK 495.4 / Z17'){$('#libraryStatus').textContent='书架字母或分类号对不上。';return}addItem('桔梗记录');save();closeObject();await say([{t:'桔梗。'},{t:'书页旁是一幅完整的植物写生。下面只有很轻的铅笔字：'},{t:'“最后一种？”'}]);await say([{s:'林屿',t:'有笔吗？'},{t:'沈知夏把笔递过来。'},{s:'沈知夏',t:'你右手是什么？'},{t:'我低头。自己正拿着一支笔。'},{s:'周野',t:'……'},{t:'他在远处先笑出声。沈知夏也笑了。'}]);startChapter3()})})
+}
+function setupLibrary(){setCheckpoint('library');renderScene('library');ambient('library');setHotspots([{label:'植物类书架',x:48,y:8,w:48,h:79,onClick:libraryPuzzle},{id:'shelf',label:'书架分类牌',x:4,y:8,w:40,h:78,done:()=>inspected('shelf'),onClick:()=>say([{t:'QK：植物学。QL：动物学。R：医药卫生。'},{t:'沈知夏那本书的借阅记录末尾写着：495.4 / Z17。'}])}])}
+async function startChapter3(){state.chapter=3;setCheckpoint('chapter3');renderScene('festival',{memory:true});ambient('festival');await say([{t:'第三章 · 十八岁的人最擅长说反话'},{s:'沈知夏',t:'挺好的。'},{s:'林屿',t:'什么？'},{s:'沈知夏',t:'没什么。'}]);setHotspots([{id:'festivalDrink',label:'饮料桌',x:12,y:55,w:24,h:22,done:()=>inspected('festivalDrink'),onClick:()=>say([{t:'塑料杯外壁全是水珠。有人把“少冰”写成了“少点冰”，又划掉重写。'},{s:'唐梨',t:'你写字为什么每次都要改。'},{s:'林屿',t:'看不顺眼。'}])},{id:'festivalPhoto',label:'唐梨的相机',x:51,y:52,w:18,h:27,done:()=>inspected('festivalPhoto'),onClick:async()=>{playSfx('shutter');await showCG('assets/art/festival_close.jpg','夕阳艺术节上唐梨举起相机',1500);await say([{s:'唐梨',t:'别动。'},{t:'快门响了一声。她的字贴在相机背面的标签上，小而规整。'}])}},{id:'festivalZhou',label:'周野的节目单',x:69,y:48,w:20,h:28,done:()=>inspected('festivalZhou'),onClick:()=>say([{t:'节目单边上写满感叹号：\n“压轴！！！别忘了！！！五点半！！！”'},{s:'周野',t:'重点就应该醒目。'}])}]);setAction('去广播站',()=>{setCheckpoint('radio');renderScene('radio');ambient('room');setAction('操作磁带机',puzzle6);puzzle6()})}
+async function startChapter4(){state.chapter=4;setCheckpoint('chapter4');renderScene('high3',{memory:true});ambient('room');await say([{t:'第四章 · 我们当时真的以为以后很长'},{t:'黑板上写着：距毕业 48 天。'}]);setHotspots([{label:'四张无署名留言',x:21,y:54,w:41,h:28,onClick:puzzle7},{id:'handwriting',label:'四个人的旧作业',x:6,y:48,w:19,h:32,done:()=>inspected('handwriting'),onClick:()=>say([{t:'林屿的作文有很多划掉重写的地方。'},{t:'沈知夏的记录很少在句尾加标点。'},{t:'周野的草稿边上总有醒目的感叹号。'},{t:'唐梨的字最小，也最规整。'}])},{id:'addressdoc',label:'住址资料',x:65,y:42,w:28,h:22,done:()=>inspected('addressdoc'),onClick:()=>say([{t:'沈知夏父亲的新工作地点、家庭住址变更、搬家日期。'},{t:'不是转学。她会正常毕业，只是毕业后全家搬走。'}])}])}
+async function conflictSequence(){setCheckpoint('conflict');renderScene('conflictcg',{memory:true,cinematic:true});ambient('room');await say([{s:'周野',t:'你毕业以后要走？'},{s:'沈知夏',t:'我本来准备毕业前说。'},{s:'周野',t:'毕业前是哪一天？最后一天？'},{s:'唐梨',t:'这是她自己的事情。'},{s:'周野',t:'我知道。\n但我们不是别人。'},{s:'周野',t:'你一直帮她瞒？'},{s:'唐梨',t:'她让我不要说。那我还能怎么办？'},{s:'周野',t:'不知道。\n但我就是觉得不对。'}]);await sleep(350);renderScene('peacecg',{memory:true,cinematic:true});await say([{t:'第二天。四个人谁也没有先说话。'},{s:'周野',t:'和平谈判物资。'}]);await sleep(650);await say([{t:'他放下四盒鸡米花。十秒里没有人笑。'},{t:'沈知夏拿了一块。林屿拿了一块。唐梨拿了一块。'},{s:'周野',t:'……所以谈判成功？'},{s:'唐梨',t:'闭嘴。'}]);startChapter5()}
+async function startChapter5(){state.chapter=5;setCheckpoint('chapter5');renderScene('notebook',{memory:true});ambient('room');addItem('车票');await say([{t:'第五章 · 毕业之前'},{t:'植物册里夹着一张搬家清单。'},{s:'林屿',t:'你是不是毕业以后要走？'},{s:'沈知夏',t:'嗯。'},{s:'林屿',t:'什么时候知道的？'},{s:'沈知夏',t:'挺早。'},{s:'林屿',t:'唐梨知道？'},{s:'沈知夏',t:'嗯。'},{s:'林屿',t:'周野呢？'},{s:'沈知夏',t:'后来知道的。'},{s:'林屿',t:'就我不知道。'},{s:'沈知夏',t:'我本来准备……'},{s:'林屿',t:'什么时候？'},{s:'沈知夏',t:'毕业前。'},{s:'林屿',t:'还有几天算毕业前？'},{s:'沈知夏',t:'林屿。'},{s:'沈知夏',t:'本来也没什么一定要告诉你的。'},{s:'林屿',t:'也是。'}]);setHotspots([{id:'flowerOrder',label:'夹在册后的花店订单',x:56,y:14,w:33,h:58,done:()=>hasFlag('flowerOrder'),onClick:async()=>{setFlag('flowerOrder');addItem('花店订单');await say([{t:'一张毕业日取花单。品名：桔梗。取花人写的是沈知夏。'}])}},{id:'blankBell',label:'桔梗页的空白',x:50,y:15,w:42,h:65,done:()=>inspected('blankBell'),onClick:async()=>{await say([{t:'“桔梗”下面原本应该有一行观察记录。'},{t:'这一页只有压痕，没有写完。'}])}}]);setAction('检查植物册页码',()=>{if(!hasFlag('flowerOrder')){toast('册子后面似乎还夹着一张纸。');return}puzzle8()})}
+async function returnToPresent(){setCheckpoint('returnPresent');renderScene('prologue');ambient('room');await say([{t:'所有回忆突然停下来。'},{t:'二十七岁的我，又站在这间空教室里。'},{t:'植物册最后一页没有写完。'},{t:'桔梗被压在里面，颜色已经淡了。'}]);state.chapter=6;setCheckpoint('blackboard');renderScene('blackboard');setAction('开始毕业日重构',puzzle9)}
+async function graduationReplay(){setCheckpoint('graduationReplay');renderScene('gradcg',{memory:true,cinematic:true});ambient('outdoor');await say([{t:'毕业日。植物角。'},{t:'沈知夏把桔梗藏在身后。林屿口袋里，是那篇作文。'},{s:'沈知夏',t:'林屿。'},{s:'林屿',t:'嗯。'},{s:'沈知夏',t:'我有件事想跟你说。'},{s:'林屿',t:'你今晚就走？'},{s:'沈知夏',t:'嗯。'},{s:'林屿',t:'几点？'},{s:'沈知夏',t:'六点多。'},{s:'林屿',t:'那我……'},{s:'林屿',t:'一路顺风。'},{s:'沈知夏',t:'嗯。'}]);renderScene('presscg',{memory:true,cinematic:true});await say([{t:'她一个人回教室。'},{t:'拿出一朵桔梗，压进植物册。'},{t:'笔尖停在“桔梗”两个字下面。'},{t:'最后，她把笔放下，合上了册子。'}]);setCheckpoint('chase');startChase()}
+function startChase(){setCheckpoint('chase');renderScene('gate',{memory:true,cinematic:true});ambient('outdoor');openObject(`<div class="physical"><h2>校门追逐</h2><p class="chase-instruction">向前。键盘按 W / D / →，手机按住画面右半侧。</p><div class="chase" id="chase"><div class="chase-track" id="track"></div><div class="chase-motion" aria-hidden="true"></div><div class="chase-progress"><i id="chaseBar"></i></div></div><div id="chaseText" class="status-line">她的车就在前面。</div></div>`,()=>{let p=0,frozen=false,hold=false,raf=0,lastFoot=0;const chase=$('#chase'),track=$('#track');const advance=async amount=>{if(frozen)return;p=Math.min(100,p+amount);$('#chaseBar').style.width=p+'%';const scale=1.02+p*.0048,shift=-2-p*.055;track.style.transform=`scale(${scale}) translate3d(${shift}%,${p*.015}%,0)`;const now=performance.now();if(now-lastFoot>250){playSfx('step');lastFoot=now}if(p>=88){frozen=true;hold=false;cancelAnimationFrame(raf);chase.classList.add('freeze');$('#chaseText').textContent='这段不是我的记忆。';await sleep(650);await say([{s:'成年林屿',t:'这段不是我的记忆。'},{s:'成年林屿',t:'因为那一天……'},{s:'成年林屿',t:'我没有追。'}]);state.endingFlags.chaseDone=true;setCheckpoint('adult');closeObject(true);adultEnding()}};const key=e=>{if(['ArrowRight','KeyD','KeyW'].includes(e.code)){e.preventDefault();advance(2.5)}};addEventListener('keydown',key);const loop=()=>{if(!hold||frozen)return;advance(.9);raf=requestAnimationFrame(loop)};chase.onpointerdown=e=>{const r=chase.getBoundingClientRect();if(e.clientX>r.left+r.width/2){hold=true;chase.setPointerCapture?.(e.pointerId);loop()}};chase.onpointerup=chase.onpointercancel=chase.onpointerleave=()=>{hold=false;cancelAnimationFrame(raf)};return()=>{removeEventListener('keydown',key);hold=false;cancelAnimationFrame(raf)}},false)}
+async function adultEnding(){setCheckpoint('adult');renderScene('road');ambient('road');await say([{t:'九年后。我走出学校，拿出手机。'}]);openObject(`<div class="phone"><div class="phone-screen"><div class="phone-head"><strong>沈知夏</strong><br><small>高中群成员</small></div><div class="msg">植物册找到了。</div><div class="msg">桔梗那页也找到了。</div><div class="typing" id="typing">当年我……</div><button class="send-btn" id="rewrite">删掉，重新写</button><button class="send-btn" id="sendFinal" hidden>发送</button><div id="delivered"></div></div></div>`,()=>{$('#rewrite').onclick=async()=>{$('#typing').textContent='当年我也喜欢你。\n\n不用回答。\n只是这次想把当年没说完的话说完。';$('#rewrite').hidden=true;$('#sendFinal').hidden=false};$('#sendFinal').onclick=async()=>{$('#delivered').innerHTML='<p style="text-align:right;color:#6d746b">已送达</p>';state.endingFlags.sent=true;setCheckpoint('finalRoad');playSfx('click');await sleep(800);closeObject(true);await finalRoad()}},false)}
+async function finalRoad(){setCheckpoint('finalRoad');renderScene('road');ambient('road');await say([{t:'“两份？”'},{t:'“成交。”'},{t:'“你去的话，我也去。”'},{t:'“老班来了！”'},{t:'“合理实验损耗。”'},{t:'“五十岁也可以吃。”'}]);playSfx('phone');await showCG('assets/art/adult_phone.jpg','成年后的手机上出现一条来自沈知夏的消息',1350);openObject(`<div class="physical"><h2>锁屏通知</h2><div class="notification"><strong>沈知夏</strong><br>周野是不是还欠我们……</div><p style="margin-top:22px">通知到这里截断。</p><button class="puzzle-btn" id="walkOn">继续往前走</button></div>`,()=>{$('#walkOn').onclick=()=>{state.endingFlags.notificationSeen=true;setCheckpoint('montage');closeObject(true);memoryMontage()}},false)}
+async function memoryMontage(){setCheckpoint('montage');renderScene('road',{cinematic:true});playEndingMusic();const shots=[['assets/art/group.jpg','四个人挤在一张照片里'],['assets/art/cafeteria.jpg','平凡的日子也会发光'],['assets/art/window.jpg','靠窗第三排'],['assets/art/festival_close.jpg','艺术节的快门声'],['assets/art/radio_girl.jpg','广播站里没有说出口的话'],['assets/art/conflict.jpg','有些话，一说就变了'],['assets/art/graduation.jpg','那天的花，没来得及送出'],['assets/art/chase.jpg','有些路，游戏也不能替你重新走'],['assets/art/page33.jpg','写完又划掉的那一句'],['assets/art/prologue.jpg','后来，教室只剩风声']];openObject(`<div class="memory-montage" id="memoryMontage"><div class="memory-frame"><img id="memoryShot" src="${shots[0][0]}" alt="${shots[0][1]}"><div class="memory-shade"></div><p id="memoryCaption">${shots[0][1]}</p><div class="memory-film" aria-hidden="true"></div></div><div class="memory-progress"><i id="memoryBar"></i></div><button class="montage-skip" id="montageSkip">跳过回忆</button></div>`,()=>{let i=0,done=false,timer=null;const img=$('#memoryShot'),cap=$('#memoryCaption'),bar=$('#memoryBar');const next=()=>{if(done)return;i++;if(i>=shots.length){finish();return}img.classList.add('fade');setTimeout(()=>{img.src=shots[i][0];img.alt=shots[i][1];cap.textContent=shots[i][1];img.classList.remove('fade')},260);bar.style.width=((i+1)/shots.length*100)+'%';timer=setTimeout(next,state.settings.reduceMotion?1400:4300)};const finish=()=>{if(done)return;done=true;clearTimeout(timer);closeObject(true);setCheckpoint('ending');ending()};$('#montageSkip').onclick=finish;bar.style.width=(100/shots.length)+'%';timer=setTimeout(next,state.settings.reduceMotion?1400:4300);return()=>{done=true;clearTimeout(timer)}},false)}
+async function ending(){setCheckpoint('ending');renderScene('road',{cinematic:true});playSfx('bell');await say([{t:'有些话，迟了就是迟了。'},{t:'有些人，也不会永远停在原地等你。'},{t:'可人生不是为了追回所有错过。'},{t:'是为了在明白错过以后，\n不再把下一句话也留给以后。'}]);openObject(`<div class="ending-card"><p class="big">花有四季，人有一生。</p><p class="big">何其有幸，与你相遇。</p><p>趁花正开，趁风温柔，趁路脚下，<br>大胆往前走。</p><p>别怕来不及。</p><p class="big">风会记住我们曾怎样走过这一程……</p><h2>花语</h2><button class="paper-btn" id="endBack">回到封面</button></div>`,()=>{$('#endBack').onclick=()=>{state.completed=true;state.checkpoint='complete';try{localStorage.setItem(META,'1')}catch{}save();stopEndingMusic();stopAmbient();closeObject(true);el.game.hidden=true;el.title.classList.add('active')}},false)}
+
+function resume(){el.title.classList.remove('active');el.game.hidden=false;ensureAudio();const cp=state.checkpoint||legacyCheckpoint();state.checkpoint=cp;save();const routes={prologue:()=>setupPrologue(),transitionPast:()=>transitionToPast(),ch1class:()=>setupCh1Class(),cafeteria:()=>setupCafeteria(),cafeteriaAfter:()=>setupCafeteriaAfter(),sunset:()=>sunsetSequence(),chapter2:()=>startChapter2(),seat:()=>setupSeatPuzzleScene(),library:()=>setupLibrary(),chapter3:()=>startChapter3(),radio:()=>{renderScene('radio');ambient('room');setAction('操作磁带机',puzzle6);puzzle6()},tapeReveal:()=>tapeRevealSequence(),postTape:()=>postTapeSequence(),chapter4:()=>startChapter4(),addressReveal:()=>addressRevealSequence(),conflict:()=>conflictSequence(),chapter5:()=>startChapter5(),page33Reveal:()=>page33RevealSequence(),returnPresent:()=>returnToPresent(),blackboard:()=>{state.chapter=6;renderScene('blackboard');setAction('开始毕业日重构',puzzle9)},graduationReplay:()=>graduationReplay(),chase:()=>startChase(),adult:()=>adultEnding(),finalRoad:()=>finalRoad(),montage:()=>memoryMontage(),ending:()=>ending(),complete:()=>ending()};(routes[cp]||routes[legacyCheckpoint()]||routes.prologue)()}
+$('#startBtn').onclick=()=>{ensureAudio();let replay=false;try{replay=localStorage.getItem(META)==='1'}catch{}const keepSettings={...state.settings};state=clone(defaultState);state.settings={...defaultState.settings,...keepSettings};document.documentElement.classList.toggle('reduce-motion',!!state.settings.reduceMotion);state.started=true;state.flags.replay=replay;state.checkpoint='prologue';save();beginPrologue()};$('#continueBtn').onclick=()=>{ensureAudio();resume()};updateContinue();
+
+// Keyboard handling: Escape closes only closable surfaces; Tab stays inside the active modal.
+addEventListener('keydown',e=>{
+ const active=!el.settings.hidden?el.settings:!el.side.hidden?el.side:!el.object.hidden?el.object:null;
+ if(e.key==='Escape'){if(active===el.settings)el.settings.hidden=true;else if(active===el.side)el.side.hidden=true;else if(active===el.object)closeObject();return}
+ if(e.key==='Tab'&&active){const fs=[...active.querySelectorAll('button:not([hidden]):not([disabled]),input:not([hidden]):not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null);if(fs.length){const first=fs[0],last=fs[fs.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}}
+});
+})();
