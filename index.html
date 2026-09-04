@@ -20,7 +20,7 @@
         <button id="startBtn" class="paper-btn primary">开始</button>
         <button id="continueBtn" class="paper-btn">继续</button>
       </div>
-      <p class="title-note">建议佩戴耳机。进度会自动保存在本机。</p>
+      <p class="title-note">建议佩戴耳机 · 按住 → / D 或手机画面右侧，可以让镜头继续往记忆深处走 · 进度自动保存</p>
     </div>
   </section>
 
@@ -40,9 +40,15 @@
 
     <section id="scene" class="scene" aria-live="polite">
       <img id="sceneArt" class="scene-art" src="assets/art/prologue.jpg" alt="九年后的高三七班旧教室" draggable="false" />
+      <div id="sceneDepth" class="scene-depth" aria-hidden="true">
+        <div class="light-bloom"></div>
+        <div class="shadow-drift"></div>
+        <div class="air-haze"></div>
+      </div>
       <div id="sceneTone" class="scene-tone"></div>
       <div id="hotspotLayer" class="hotspot-layer"></div>
       <div id="memoryVignette" class="memory-vignette" aria-hidden="true"></div>
+      <div id="walkCue" class="walk-cue" hidden aria-hidden="true"><span>向前</span><i>→</i></div>
     </section>
 
     <section id="dialogue" class="dialogue" hidden>
