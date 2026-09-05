@@ -9,7 +9,7 @@ const defaultState={
 let state=load();
 document.documentElement.classList.toggle('reduce-motion',!!state.settings.reduceMotion);
 let dialogueQueue=[], dialogueResolve=null, typingRaf=0, typingState=null;
-let audioCtx=null, masterGain=null, ambientNodes=[], ambienceAudio=null, scoreAudio=null, scoreKey=null, objectCleanup=null, lastFocus=null, cameraAnim=null, hotspotCameraAnim=null, toneAnim=null, focusPushAnim=null, focusDismiss=null, lastFlowerKey=null, shotBusy=false;
+let audioCtx=null, masterGain=null, ambientNodes=[], ambienceAudio=null, scoreAudio=null, scoreKey=null, objectCleanup=null, lastFocus=null, cameraAnim=null, hotspotCameraAnim=null, toneAnim=null, focusPushAnim=null, focusDismiss=null, lastFlowerKey=null, shotBusy=false, supportPromptTimer=0;
 const el={
   title:$('#titleScreen'),game:$('#game'),sceneArt:$('#sceneArt'),hotspots:$('#hotspotLayer'),chapter:$('#chapterLabel'),scene:$('#sceneLabel'),
   dialogue:$('#dialogue'),speaker:$('#speaker'),line:$('#line'),next:$('#dialogueNext'),action:$('#contextAction'),toast:$('#toast'),
@@ -121,9 +121,27 @@ function load(){
 }
 function save(){try{localStorage.setItem(SAVE,JSON.stringify(state))}catch{} updateContinue();}
 function updateContinue(){const b=$('#continueBtn');b.disabled=!state.started;b.style.opacity=state.started?1:.45;}
-function reset(){try{localStorage.removeItem(SAVE);localStorage.removeItem(LEGACY_SAVE);localStorage.removeItem(META)}catch{}state=clone(defaultState);location.reload();}
+function reset(){clearTimeout(supportPromptTimer);supportPromptTimer=0;try{localStorage.removeItem(SAVE);localStorage.removeItem(LEGACY_SAVE);localStorage.removeItem(META)}catch{}state=clone(defaultState);location.reload();}
 function setFlag(k,v=true){state.flags[k]=v;save();}
 function hasFlag(k){return !!state.flags[k]}
+const SUPPORT_CONFIG={qrCode:'https://mike798-cloud.github.io/songtao-grainstation/paycode.png',price:'1元',title:'支持《花语》',studio:'abc studio'};
+function showSupport(){
+ if(!window.Paywall){toast('支持窗口还没有准备好，请稍后再试。');return false}
+ return window.Paywall.show(SUPPORT_CONFIG)
+}
+function supportSurfaceBusy(){return !el.dialogue.hidden||!el.cinematic.hidden||!el.montage.hidden||!el.object.hidden||!el.focus.hidden||!el.side.hidden||!el.settings.hidden||shotBusy}
+function scheduleSupportPrompt(delay=900){
+ if(hasFlag('supportPromptShown')||supportPromptTimer||state.chapter<2||!state.started)return;
+ supportPromptTimer=setTimeout(function waitForQuiet(){
+  supportPromptTimer=0;
+  if(hasFlag('supportPromptShown')||state.chapter<2||!state.started)return;
+  if(!window.Paywall){supportPromptTimer=setTimeout(waitForQuiet,500);return}
+  if(window.Paywall.hasPaid?.()){setFlag('supportPromptShown');return}
+  if(supportSurfaceBusy()){supportPromptTimer=setTimeout(waitForQuiet,520);return}
+  setFlag('supportPromptShown');
+  showSupport();
+ },delay)
+}
 function setCheckpoint(cp){state.checkpoint=cp;save();}
 function addItem(name){if(!state.inventory.includes(name)){state.inventory.push(name);toast('获得物品：'+name);save();}}
 function markInspected(id){if(!state.inspected.includes(id)){state.inspected.push(id);save();}}
@@ -145,7 +163,7 @@ function renderScene(key,opts={}){
  state.scene=key;save();const sc=scenes[key];if(!sc)return;preloadSceneBundle(key);document.body.dataset.scene=key;
  el.sceneArt.src=sc.art;el.sceneArt.alt=sc.alt;el.scene.textContent=sc.title;el.chapter.textContent=chapterNames[Math.min(state.chapter,6)]||'尾声';
  el.hotspots.innerHTML='';el.action.hidden=true;el.memory.classList.toggle('on',!!opts.memory);el.sceneArt.classList.toggle('cinematic',!!opts.cinematic);
- updateFlowerLanguage();configureSceneActors(key);runSceneDirector(key);playScoreForScene(key)
+ updateFlowerLanguage();configureSceneActors(key);runSceneDirector(key);playScoreForScene(key);scheduleSupportPrompt()
 }
 function setAction(label,fn){el.action.textContent=label;el.action.hidden=false;el.action.disabled=false;el.action.onclick=async()=>{if(el.action.dataset.busy==='1')return;el.action.dataset.busy='1';el.action.disabled=true;try{await fn()}finally{el.action.dataset.busy='0';if(!el.action.hidden)el.action.disabled=false}}}
 function sleep(ms){return new Promise(r=>setTimeout(r,isReducedMotion()?Math.min(ms,140):ms))}
@@ -182,6 +200,7 @@ function hint(){const p=state.puzzles;let t='先看一遍场景里有名字的�
 $('#hintBtn').onclick=hint;
 $('#inventoryBtn').onclick=()=>showSide(`<h2>旧帆布笔袋</h2><div class="inventory-list">${state.inventory.length?state.inventory.map(x=>`<div class="inv-item">${x}</div>`).join(''):'<p>现在还是空的。</p>'}</div>`);
 $('#notebookBtn').onclick=()=>showSide(`<h2>植物观察册</h2><img src="assets/art/notebook.webp" alt="植物观察册" style="width:100%;border:1px solid #8e8069"><p>${state.puzzles.pz8?'第33页已经回到册子旁边。桔梗页仍然留着一块空白。':state.puzzles.pz2?'第一页已经完成。后面的页角有许多被翻过的痕迹。':'封面旧得发软，里面还没有重新整理。'}</p>`);
+$('#supportBtn').onclick=()=>showSupport();
 $('#settingsBtn').onclick=()=>{const s=state.settings;$('#musicRange').value=s.music;$('#ambienceRange').value=s.ambience??.58;$('#sfxRange').value=s.sfx;$('#textRange').value=s.textSpeed;$('#motionCheck').checked=s.reduceMotion;el.settings.hidden=false};
 $('#musicRange').oninput=e=>{state.settings.music=+e.target.value;save();updateAudioGain()};
 $('#ambienceRange').oninput=e=>{state.settings.ambience=+e.target.value;save();updateAudioGain()};
