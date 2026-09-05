@@ -1,63 +1,266 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><defs>
-    <filter id="paper" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3" seed="61" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="a"><feFuncA type="table" tableValues="0 .12"/></feComponentTransfer><feBlend in="SourceGraphic" in2="a" mode="multiply"/></filter>
-    <filter id="rough" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="64" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4" xChannelSelector="R" yChannelSelector="G"/></filter>
-    <filter id="soft"><feGaussianBlur stdDeviation="7"/></filter>
-    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0d7ad" stop-opacity=".32"/><stop offset=".55" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#53605d" stop-opacity=".16"/></linearGradient>
-    <linearGradient id="floorWash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad9577"/><stop offset="1" stop-color="#80694f"/></linearGradient>
-    <linearGradient id="windowGlow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dbe7df"/><stop offset="1" stop-color="#90aaa8"/></linearGradient>
-    <radialGradient id="skinShade"><stop offset="0" stop-color="#e0b89b"/><stop offset="1" stop-color="#c28f74"/></radialGradient>
-    </defs><g filter="url(#rough)"><ellipse cx="80" cy="330" rx="34" ry="7" fill="#302b27" opacity=".15"/><g transform="rotate(0.0 68 245)"><path d="M58 235 L76 235 L85 307 L67 310 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M63 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><g transform="rotate(-0.0 93 245)"><path d="M84 235 L103 235 L98 308 L80 308 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M84 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><path d="M42 136 Q80 122 118 136 L110 239 Q80 250 50 239Z" fill="#d8e0df" stroke="#3f3933" stroke-width="3"/><path d="M65 126 L80 150 L96 126" fill="#f1ede4" stroke="#70675d" stroke-width="2"/><g transform="rotate(-25.0 49 150)"><path d="M49 147 Q20 185 35 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="35" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><g transform="rotate(25.0 111 150)"><path d="M111 147 Q140 185 125 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="125" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><rect x="70" y="112" width="20" height="24" rx="7" fill="#d4aa8e"/>
-    <ellipse cx="62.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <ellipse cx="98.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <path d="M 80,65.0 C 67.0,65.0 62.0,76.0 62.0,90.0 C 62.0,103.0 71.0,112.0 80,113.0 C 90.0,112.0 98.0,102.0 98.0,89.0 C 98.0,76.0 93.0,65.0 80,65.0 Z" fill="url(#skinShade)" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 62.0,81.0 Q 67.0,60.0 82.0,62.0 Q 97.0,62.0 99.0,81.0 Q 88.0,75.0 81.0,77.0 Q 72.0,73.0 62.0,81.0 Z" fill="#30261f" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 69.0,84.0 q 4.0,-2.0 8.0,0 M 83.0,84.0 q 4.0,-2.0 8.0,0" fill="none" stroke="#3d352f" stroke-width="1.1"/>
-    <ellipse cx="73.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/><ellipse cx="87.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/>
-    <path d="M 80,90.0 q -1.5,5.0 1.5,7.0" fill="none" stroke="#806453" stroke-width="0.9"/>
-    <path d="M 75.0,103.0 Q 80,104.0 86.0,103.0" fill="none" stroke="#855f57" stroke-width="1.1" stroke-linecap="round"/>
-    <ellipse cx="240" cy="330" rx="34" ry="7" fill="#302b27" opacity=".15"/><g transform="rotate(24.24871130596428 228 245)"><path d="M218 235 L236 235 L245 307 L227 310 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M223 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><g transform="rotate(-29.444863728670914 253 245)"><path d="M244 235 L263 235 L258 308 L240 308 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M244 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><path d="M202 136 Q240 122 278 136 L270 239 Q240 250 210 239Z" fill="#d8e0df" stroke="#3f3933" stroke-width="3"/><path d="M225 126 L240 150 L256 126" fill="#f1ede4" stroke="#70675d" stroke-width="2"/><g transform="rotate(-55.31088913245535 209 150)"><path d="M209 147 Q180 185 195 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="195" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><g transform="rotate(55.31088913245535 271 150)"><path d="M271 147 Q300 185 285 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="285" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><rect x="230" y="112" width="20" height="24" rx="7" fill="#d4aa8e"/>
-    <ellipse cx="222.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <ellipse cx="258.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <path d="M 240,65.0 C 227.0,65.0 222.0,76.0 222.0,90.0 C 222.0,103.0 231.0,112.0 240,113.0 C 250.0,112.0 258.0,102.0 258.0,89.0 C 258.0,76.0 253.0,65.0 240,65.0 Z" fill="url(#skinShade)" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 222.0,81.0 Q 227.0,60.0 242.0,62.0 Q 257.0,62.0 259.0,81.0 Q 248.0,75.0 241.0,77.0 Q 232.0,73.0 222.0,81.0 Z" fill="#30261f" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 229.0,84.0 q 4.0,-2.0 8.0,0 M 243.0,84.0 q 4.0,-2.0 8.0,0" fill="none" stroke="#3d352f" stroke-width="1.1"/>
-    <ellipse cx="233.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/><ellipse cx="247.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/>
-    <path d="M 240,90.0 q -1.5,5.0 1.5,7.0" fill="none" stroke="#806453" stroke-width="0.9"/>
-    <path d="M 235.0,103.0 Q 240,104.0 246.0,103.0" fill="none" stroke="#855f57" stroke-width="1.1" stroke-linecap="round"/>
-    <ellipse cx="400" cy="330" rx="34" ry="7" fill="#302b27" opacity=".15"/><g transform="rotate(24.248711305964285 388 245)"><path d="M378 235 L396 235 L405 307 L387 310 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M383 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><g transform="rotate(-29.444863728670917 413 245)"><path d="M404 235 L423 235 L418 308 L400 308 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M404 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><path d="M362 136 Q400 122 438 136 L430 239 Q400 250 370 239Z" fill="#d8e0df" stroke="#3f3933" stroke-width="3"/><path d="M385 126 L400 150 L416 126" fill="#f1ede4" stroke="#70675d" stroke-width="2"/><g transform="rotate(-55.31088913245536 369 150)"><path d="M369 147 Q340 185 355 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="355" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><g transform="rotate(55.31088913245536 431 150)"><path d="M431 147 Q460 185 445 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="445" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><rect x="390" y="112" width="20" height="24" rx="7" fill="#d4aa8e"/>
-    <ellipse cx="382.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <ellipse cx="418.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <path d="M 400,65.0 C 387.0,65.0 382.0,76.0 382.0,90.0 C 382.0,103.0 391.0,112.0 400,113.0 C 410.0,112.0 418.0,102.0 418.0,89.0 C 418.0,76.0 413.0,65.0 400,65.0 Z" fill="url(#skinShade)" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 382.0,81.0 Q 387.0,60.0 402.0,62.0 Q 417.0,62.0 419.0,81.0 Q 408.0,75.0 401.0,77.0 Q 392.0,73.0 382.0,81.0 Z" fill="#30261f" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 389.0,84.0 q 4.0,-2.0 8.0,0 M 403.0,84.0 q 4.0,-2.0 8.0,0" fill="none" stroke="#3d352f" stroke-width="1.1"/>
-    <ellipse cx="393.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/><ellipse cx="407.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/>
-    <path d="M 400,90.0 q -1.5,5.0 1.5,7.0" fill="none" stroke="#806453" stroke-width="0.9"/>
-    <path d="M 395.0,103.0 Q 400,104.0 406.0,103.0" fill="none" stroke="#855f57" stroke-width="1.1" stroke-linecap="round"/>
-    <ellipse cx="560" cy="330" rx="34" ry="7" fill="#302b27" opacity=".15"/><g transform="rotate(3.429011037612589e-15 548 245)"><path d="M538 235 L556 235 L565 307 L547 310 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M543 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><g transform="rotate(-4.1637991171010006e-15 573 245)"><path d="M564 235 L583 235 L578 308 L560 308 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M564 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><path d="M522 136 Q560 122 598 136 L590 239 Q560 250 530 239Z" fill="#d8e0df" stroke="#3f3933" stroke-width="3"/><path d="M545 126 L560 150 L576 126" fill="#f1ede4" stroke="#70675d" stroke-width="2"/><g transform="rotate(-25.000000000000004 529 150)"><path d="M529 147 Q500 185 515 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="515" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><g transform="rotate(25.000000000000004 591 150)"><path d="M591 147 Q620 185 605 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="605" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><rect x="550" y="112" width="20" height="24" rx="7" fill="#d4aa8e"/>
-    <ellipse cx="542.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <ellipse cx="578.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <path d="M 560,65.0 C 547.0,65.0 542.0,76.0 542.0,90.0 C 542.0,103.0 551.0,112.0 560,113.0 C 570.0,112.0 578.0,102.0 578.0,89.0 C 578.0,76.0 573.0,65.0 560,65.0 Z" fill="url(#skinShade)" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 542.0,81.0 Q 547.0,60.0 562.0,62.0 Q 577.0,62.0 579.0,81.0 Q 568.0,75.0 561.0,77.0 Q 552.0,73.0 542.0,81.0 Z" fill="#30261f" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 549.0,84.0 q 4.0,-2.0 8.0,0 M 563.0,84.0 q 4.0,-2.0 8.0,0" fill="none" stroke="#3d352f" stroke-width="1.1"/>
-    <ellipse cx="553.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/><ellipse cx="567.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/>
-    <path d="M 560,90.0 q -1.5,5.0 1.5,7.0" fill="none" stroke="#806453" stroke-width="0.9"/>
-    <path d="M 555.0,103.0 Q 560,104.0 566.0,103.0" fill="none" stroke="#855f57" stroke-width="1.1" stroke-linecap="round"/>
-    <ellipse cx="720" cy="330" rx="34" ry="7" fill="#302b27" opacity=".15"/><g transform="rotate(-24.248711305964274 708 245)"><path d="M698 235 L716 235 L725 307 L707 310 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M703 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><g transform="rotate(29.444863728670903 733 245)"><path d="M724 235 L743 235 L738 308 L720 308 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M724 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><path d="M682 136 Q720 122 758 136 L750 239 Q720 250 690 239Z" fill="#d8e0df" stroke="#3f3933" stroke-width="3"/><path d="M705 126 L720 150 L736 126" fill="#f1ede4" stroke="#70675d" stroke-width="2"/><g transform="rotate(5.310889132455344 689 150)"><path d="M689 147 Q660 185 675 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="675" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><g transform="rotate(-5.310889132455344 751 150)"><path d="M751 147 Q780 185 765 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="765" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><rect x="710" y="112" width="20" height="24" rx="7" fill="#d4aa8e"/>
-    <ellipse cx="702.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <ellipse cx="738.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <path d="M 720,65.0 C 707.0,65.0 702.0,76.0 702.0,90.0 C 702.0,103.0 711.0,112.0 720,113.0 C 730.0,112.0 738.0,102.0 738.0,89.0 C 738.0,76.0 733.0,65.0 720,65.0 Z" fill="url(#skinShade)" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 702.0,81.0 Q 707.0,60.0 722.0,62.0 Q 737.0,62.0 739.0,81.0 Q 728.0,75.0 721.0,77.0 Q 712.0,73.0 702.0,81.0 Z" fill="#30261f" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 709.0,84.0 q 4.0,-2.0 8.0,0 M 723.0,84.0 q 4.0,-2.0 8.0,0" fill="none" stroke="#3d352f" stroke-width="1.1"/>
-    <ellipse cx="713.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/><ellipse cx="727.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/>
-    <path d="M 720,90.0 q -1.5,5.0 1.5,7.0" fill="none" stroke="#806453" stroke-width="0.9"/>
-    <path d="M 715.0,103.0 Q 720,104.0 726.0,103.0" fill="none" stroke="#855f57" stroke-width="1.1" stroke-linecap="round"/>
-    <ellipse cx="880" cy="330" rx="34" ry="7" fill="#302b27" opacity=".15"/><g transform="rotate(-24.24871130596428 868 245)"><path d="M858 235 L876 235 L885 307 L867 310 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M863 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><g transform="rotate(29.444863728670914 893 245)"><path d="M884 235 L903 235 L898 308 L880 308 Z" fill="#44515a" stroke="#342f2a" stroke-width="2"/><path d="M884 304 q24 2 32 10 q2 10 -10 11 h-32z" fill="#3a332f" stroke="#211d1b" stroke-width="2"/></g><path d="M842 136 Q880 122 918 136 L910 239 Q880 250 850 239Z" fill="#d8e0df" stroke="#3f3933" stroke-width="3"/><path d="M865 126 L880 150 L896 126" fill="#f1ede4" stroke="#70675d" stroke-width="2"/><g transform="rotate(5.310889132455351 849 150)"><path d="M849 147 Q820 185 835 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="835" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><g transform="rotate(-5.310889132455351 911 150)"><path d="M911 147 Q940 185 925 222" fill="none" stroke="#d8e0df" stroke-width="20" stroke-linecap="round"/><ellipse cx="925" cy="223" rx="7" ry="9" fill="#d4aa8e" stroke="#765d4e" stroke-width="1.5"/></g><rect x="870" y="112" width="20" height="24" rx="7" fill="#d4aa8e"/>
-    <ellipse cx="862.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <ellipse cx="898.0" cy="89.0" rx="3.6" ry="5.5" fill="#d4aa8e" stroke="#3d352f" stroke-width="1.0"/>
-    <path d="M 880,65.0 C 867.0,65.0 862.0,76.0 862.0,90.0 C 862.0,103.0 871.0,112.0 880,113.0 C 890.0,112.0 898.0,102.0 898.0,89.0 C 898.0,76.0 893.0,65.0 880,65.0 Z" fill="url(#skinShade)" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 862.0,81.0 Q 867.0,60.0 882.0,62.0 Q 897.0,62.0 899.0,81.0 Q 888.0,75.0 881.0,77.0 Q 872.0,73.0 862.0,81.0 Z" fill="#30261f" stroke="#3d352f" stroke-width="1.5"/>
-    <path d="M 869.0,84.0 q 4.0,-2.0 8.0,0 M 883.0,84.0 q 4.0,-2.0 8.0,0" fill="none" stroke="#3d352f" stroke-width="1.1"/>
-    <ellipse cx="873.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/><ellipse cx="887.0" cy="89.0" rx="1.5" ry="1.8" fill="#3d352f"/>
-    <path d="M 880,90.0 q -1.5,5.0 1.5,7.0" fill="none" stroke="#806453" stroke-width="0.9"/>
-    <path d="M 875.0,103.0 Q 880,104.0 886.0,103.0" fill="none" stroke="#855f57" stroke-width="1.1" stroke-linecap="round"/>
-    </g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420">
+<defs>
+  <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3f0e8"/><stop offset=".6" stop-color="#dedfd9"/><stop offset="1" stop-color="#c9cdc9"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0b69c"/><stop offset=".6" stop-color="#d2a68e"/><stop offset="1" stop-color="#c7947e"/></linearGradient>
+  <linearGradient id="pants" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#56626a"/><stop offset="1" stop-color="#384249"/></linearGradient>
+  <linearGradient id="pantsDark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a565e"/><stop offset="1" stop-color="#303940"/></linearGradient>
+  <linearGradient id="bag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48565a"/><stop offset="1" stop-color="#2f393c"/></linearGradient>
+  <filter id="paperRough" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="17" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale=".45" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs>
+
+    <g filter="url(#paperRough)">
+      <ellipse cx="100" cy="400" rx="56" ry="8" fill="#2a2926" opacity=".12"/>
+      <!-- backpack behind -->
+      <path d="M 123.2 160 Q 154.2 166 156.2 207 L 150.2 257 Q 144.2 277 124.2 269 L 115.2 174 Z" fill="url(#bag)" opacity=".95"/>
+      <path d="M 118.2 159 Q 143.2 170 147.2 209" fill="none" stroke="#32383a" stroke-width="6" opacity=".7"/>
+      <!-- far leg -->
+      <path d="M 94.8 248.0 L 45.8 291.1 Q 55.8 296.1 65.8 291.1 L 114.8 248.0 Z" fill="url(#pantsDark)"/>
+      <path d="M 46.8 291.1 L 22.3 352.2 Q 30.3 359.2 38.3 352.2 L 64.8 291.1 Z" fill="url(#pants)"/>
+      <ellipse cx="33.3" cy="358.2" rx="18" ry="6.5" transform="rotate(-72.0 30.3 354.2)" fill="#252a2c"/>
+      <!-- near leg -->
+      <path d="M 61.8 248.0 L 98.5 302.4 Q 109.5 307.4 120.5 302.4 L 83.8 248.0 Z" fill="url(#pants)"/>
+      <path d="M 100.5 302.4 L 141.5 355.4 Q 149.5 362.4 157.5 355.4 L 118.5 302.4 Z" fill="url(#pantsDark)"/>
+      <ellipse cx="152.5" cy="361.4" rx="18" ry="6.5" transform="rotate(71.0 149.5 357.4)" fill="#252a2c"/>
+      <!-- torso -->
+      <path d="M 64.2 139 Q 95.2 128 126.2 139 L 113.8 237 Q 100.8 257 88.8 260 Q 75.8 257 61.8 238 Z" fill="url(#shirt)" stroke="#77756f" stroke-width="1.2"/>
+      <path d="M 84.2 138 L 95.2 158 L 107.2 138" fill="#f2eee4" stroke="#aaa59a" stroke-width="1"/>
+      <path d="M 95.2 157 Q 86.8 203 88.8 245" fill="none" stroke="#a7a59f" stroke-width="1"/>
+      <path d="M 73.2 171 Q 85.2 193 72.8 220 M 117.2 171 Q 106.2 196 104.8 223" fill="none" stroke="#c5c2ba" stroke-width="1" opacity=".75"/>
+      <!-- far arm -->
+      <polygon points="116.9,156.5 133.5,143.5 165.8,188.1 152.4,198.6" fill="#e6e6df"/>
+      <polygon points="151.9,189.9 166.3,196.8 142.2,243.0 130.5,237.3" fill="url(#skin)"/>
+      <ellipse cx="136.4" cy="240.1" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- near arm -->
+      <polygon points="59.4,140.7 71.0,159.3 23.3,186.8 13.8,171.5" fill="#ecebe4"/>
+      <polygon points="12.0,184.5 25.1,173.7 56.6,215.2 46.6,223.4" fill="url(#skin)"/>
+      <ellipse cx="51.6" cy="219.3" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- neck/head -->
+      <path d="M 87.2 130 L 88.2 112 L 103.2 112 L 104.2 130 Z" fill="#d9b197"/>
+      <ellipse cx="95.2" cy="83" rx="28" ry="35" fill="url(#skin)" stroke="#79655a" stroke-width=".8"/>
+      <ellipse cx="67.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <ellipse cx="123.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <!-- hair -->
+      <path d="M 64.2 78 Q 67.2 45 93.2 42 Q 118.2 42 127.2 70
+               Q 116.2 60 106.2 61 Q 97.2 52 87.2 61 Q 75.2 58 64.2 78 Z" fill="#2f2e2d"/>
+      <path d="M 72.2 54 Q 87.2 43 101.2 48 M 87.2 48 Q 103.2 40 117.2 52" stroke="#494643" stroke-width="1.5" fill="none" opacity=".75"/>
+      <!-- face subdued -->
+      <path d="M 81.2 85 q 5 -3 10 0 M 99.2 85 q 5 -3 10 0" fill="none" stroke="#5d504b" stroke-width="1.3"/>
+      <path d="M 95.2 90 q -1 6 1 8" fill="none" stroke="#8e6f62" stroke-width=".9"/>
+      <path d="M 90.2 106 q 5 1 10 0" fill="none" stroke="#8b6259" stroke-width="1"/>
+      <!-- subtle motion lines -->
+      <path d="M 28 180 Q 5 186 -13 197 M 31 211 Q 8 217 -8 225" fill="none" stroke="#817d74" stroke-width="2" opacity=".14"/>
+    </g>
+    <g filter="url(#paperRough)">
+      <ellipse cx="300" cy="400" rx="56" ry="8" fill="#2a2926" opacity=".12"/>
+      <!-- backpack behind -->
+      <path d="M 325.6 160 Q 356.6 166 358.6 207 L 352.6 257 Q 346.6 277 326.6 269 L 317.6 174 Z" fill="url(#bag)" opacity=".95"/>
+      <path d="M 320.6 159 Q 345.6 170 349.6 209" fill="none" stroke="#32383a" stroke-width="6" opacity=".7"/>
+      <!-- far leg -->
+      <path d="M 300.4 248.0 L 270.4 306.5 Q 280.4 311.5 290.4 306.5 L 320.4 248.0 Z" fill="url(#pantsDark)"/>
+      <path d="M 271.4 306.5 L 262.9 371.8 Q 270.9 378.8 278.9 371.8 L 289.4 306.5 Z" fill="url(#pants)"/>
+      <ellipse cx="273.9" cy="377.8" rx="18" ry="6.5" transform="rotate(-36.0 270.9 373.8)" fill="#252a2c"/>
+      <!-- near leg -->
+      <path d="M 267.4 248.0 L 287.2 310.9 Q 298.2 315.9 309.2 310.9 L 289.4 248.0 Z" fill="url(#pants)"/>
+      <path d="M 289.2 310.9 L 311.2 373.5 Q 319.2 380.5 327.2 373.5 L 307.2 310.9 Z" fill="url(#pantsDark)"/>
+      <ellipse cx="322.2" cy="379.5" rx="18" ry="6.5" transform="rotate(36.0 319.2 375.5)" fill="#252a2c"/>
+      <!-- torso -->
+      <path d="M 266.6 139 Q 297.6 128 328.6 139 L 319.40000000000003 237 Q 306.40000000000003 257 294.40000000000003 260 Q 281.40000000000003 257 267.40000000000003 238 Z" fill="url(#shirt)" stroke="#77756f" stroke-width="1.2"/>
+      <path d="M 286.6 138 L 297.6 158 L 309.6 138" fill="#f2eee4" stroke="#aaa59a" stroke-width="1"/>
+      <path d="M 297.6 157 Q 292.40000000000003 203 294.40000000000003 245" fill="none" stroke="#a7a59f" stroke-width="1"/>
+      <path d="M 275.6 171 Q 287.6 193 278.40000000000003 220 M 319.6 171 Q 308.6 196 310.40000000000003 223" fill="none" stroke="#c5c2ba" stroke-width="1" opacity=".75"/>
+      <!-- far arm -->
+      <polygon points="317.6,153.2 337.6,146.8 352.7,199.7 336.5,204.9" fill="#e6e6df"/>
+      <polygon points="336.8,200.6 352.4,204.0 339.9,254.5 327.2,251.7" fill="url(#skin)"/>
+      <ellipse cx="333.6" cy="253.1" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- near arm -->
+      <polygon points="258.7,143.5 276.5,156.5 242.6,199.8 228.0,189.2" fill="#ecebe4"/>
+      <polygon points="227.5,198.0 243.0,191.0 262.7,239.1 250.9,244.5" fill="url(#skin)"/>
+      <ellipse cx="256.8" cy="241.8" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- neck/head -->
+      <path d="M 289.6 130 L 290.6 112 L 305.6 112 L 306.6 130 Z" fill="#d9b197"/>
+      <ellipse cx="297.6" cy="83" rx="28" ry="35" fill="url(#skin)" stroke="#79655a" stroke-width=".8"/>
+      <ellipse cx="269.6" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <ellipse cx="325.6" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <!-- hair -->
+      <path d="M 266.6 78 Q 269.6 45 295.6 42 Q 320.6 42 329.6 70
+               Q 318.6 60 308.6 61 Q 299.6 52 289.6 61 Q 277.6 58 266.6 78 Z" fill="#2f2e2d"/>
+      <path d="M 274.6 54 Q 289.6 43 303.6 48 M 289.6 48 Q 305.6 40 319.6 52" stroke="#494643" stroke-width="1.5" fill="none" opacity=".75"/>
+      <!-- face subdued -->
+      <path d="M 283.6 85 q 5 -3 10 0 M 301.6 85 q 5 -3 10 0" fill="none" stroke="#5d504b" stroke-width="1.3"/>
+      <path d="M 297.6 90 q -1 6 1 8" fill="none" stroke="#8e6f62" stroke-width=".9"/>
+      <path d="M 292.6 106 q 5 1 10 0" fill="none" stroke="#8b6259" stroke-width="1"/>
+      <!-- subtle motion lines -->
+      <path d="M 228 180 Q 205 186 187 197 M 231 211 Q 208 217 192 225" fill="none" stroke="#817d74" stroke-width="2" opacity=".14"/>
+    </g>
+    <g filter="url(#paperRough)">
+      <ellipse cx="500" cy="400" rx="56" ry="8" fill="#2a2926" opacity=".12"/>
+      <!-- backpack behind -->
+      <path d="M 529.2 160 Q 560.2 166 562.2 207 L 556.2 257 Q 550.2 277 530.2 269 L 521.2 174 Z" fill="url(#bag)" opacity=".95"/>
+      <path d="M 524.2 159 Q 549.2 170 553.2 209" fill="none" stroke="#32383a" stroke-width="6" opacity=".7"/>
+      <!-- far leg -->
+      <path d="M 508.8 248.0 L 522.1 312.6 Q 532.1 317.6 542.1 312.6 L 528.8 248.0 Z" fill="url(#pantsDark)"/>
+      <path d="M 523.1 312.6 L 547.4 374.5 Q 555.4 381.5 563.4 374.5 L 541.1 312.6 Z" fill="url(#pants)"/>
+      <ellipse cx="558.4" cy="380.5" rx="18" ry="6.5" transform="rotate(32.0 555.4 376.5)" fill="#252a2c"/>
+      <!-- near leg -->
+      <path d="M 475.8 248.0 L 466.9 313.4 Q 477.9 318.4 488.9 313.4 L 497.8 248.0 Z" fill="url(#pants)"/>
+      <path d="M 468.9 313.4 L 458.1 378.3 Q 466.1 385.3 474.1 378.3 L 486.9 313.4 Z" fill="url(#pantsDark)"/>
+      <ellipse cx="469.1" cy="384.3" rx="18" ry="6.5" transform="rotate(-18.0 466.1 380.3)" fill="#252a2c"/>
+      <!-- torso -->
+      <path d="M 470.2 139 Q 501.2 128 532.2 139 L 527.8 237 Q 514.8 257 502.8 260 Q 489.8 257 475.8 238 Z" fill="url(#shirt)" stroke="#77756f" stroke-width="1.2"/>
+      <path d="M 490.2 138 L 501.2 158 L 513.2 138" fill="#f2eee4" stroke="#aaa59a" stroke-width="1"/>
+      <path d="M 501.2 157 Q 500.8 203 502.8 245" fill="none" stroke="#a7a59f" stroke-width="1"/>
+      <path d="M 479.2 171 Q 491.2 193 486.8 220 M 523.2 171 Q 512.2 196 518.8 223" fill="none" stroke="#c5c2ba" stroke-width="1" opacity=".75"/>
+      <!-- far arm -->
+      <polygon points="520.8,148.5 541.6,151.5 532.0,205.6 515.1,203.3" fill="#e6e6df"/>
+      <polygon points="515.6,205.2 531.5,203.7 534.9,255.6 522.0,256.8" fill="url(#skin)"/>
+      <ellipse cx="528.5" cy="256.2" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- near arm -->
+      <polygon points="460.4,147.7 482.0,152.3 468.6,205.7 451.0,201.9" fill="#ecebe4"/>
+      <polygon points="451.4,205.0 468.2,202.6 473.6,254.3 460.7,256.2" fill="url(#skin)"/>
+      <ellipse cx="467.1" cy="255.3" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- neck/head -->
+      <path d="M 493.2 130 L 494.2 112 L 509.2 112 L 510.2 130 Z" fill="#d9b197"/>
+      <ellipse cx="501.2" cy="83" rx="28" ry="35" fill="url(#skin)" stroke="#79655a" stroke-width=".8"/>
+      <ellipse cx="473.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <ellipse cx="529.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <!-- hair -->
+      <path d="M 470.2 78 Q 473.2 45 499.2 42 Q 524.2 42 533.2 70
+               Q 522.2 60 512.2 61 Q 503.2 52 493.2 61 Q 481.2 58 470.2 78 Z" fill="#2f2e2d"/>
+      <path d="M 478.2 54 Q 493.2 43 507.2 48 M 493.2 48 Q 509.2 40 523.2 52" stroke="#494643" stroke-width="1.5" fill="none" opacity=".75"/>
+      <!-- face subdued -->
+      <path d="M 487.2 85 q 5 -3 10 0 M 505.2 85 q 5 -3 10 0" fill="none" stroke="#5d504b" stroke-width="1.3"/>
+      <path d="M 501.2 90 q -1 6 1 8" fill="none" stroke="#8e6f62" stroke-width=".9"/>
+      <path d="M 496.2 106 q 5 1 10 0" fill="none" stroke="#8b6259" stroke-width="1"/>
+      <!-- subtle motion lines -->
+      <path d="M 428 180 Q 405 186 387 197 M 431 211 Q 408 217 392 225" fill="none" stroke="#817d74" stroke-width="2" opacity=".14"/>
+    </g>
+    <g filter="url(#paperRough)">
+      <ellipse cx="700" cy="400" rx="56" ry="8" fill="#2a2926" opacity=".12"/>
+      <!-- backpack behind -->
+      <path d="M 732.2 160 Q 763.2 166 765.2 207 L 759.2 257 Q 753.2 277 733.2 269 L 724.2 174 Z" fill="url(#bag)" opacity=".95"/>
+      <path d="M 727.2 159 Q 752.2 170 756.2 209" fill="none" stroke="#32383a" stroke-width="6" opacity=".7"/>
+      <!-- far leg -->
+      <path d="M 715.8 248.0 L 758.6 297.6 Q 768.6 302.6 778.6 297.6 L 735.8 248.0 Z" fill="url(#pantsDark)"/>
+      <path d="M 759.6 297.6 L 781.6 360.2 Q 789.6 367.2 797.6 360.2 L 777.6 297.6 Z" fill="url(#pants)"/>
+      <ellipse cx="792.6" cy="366.2" rx="18" ry="6.5" transform="rotate(60.0 789.6 362.2)" fill="#252a2c"/>
+      <!-- near leg -->
+      <path d="M 682.8 248.0 L 647.0 303.1 Q 658.0 308.1 669.0 303.1 L 704.8 248.0 Z" fill="url(#pants)"/>
+      <path d="M 649.0 303.1 L 614.0 358.7 Q 622.0 365.7 630.0 358.7 L 667.0 303.1 Z" fill="url(#pantsDark)"/>
+      <ellipse cx="625.0" cy="364.7" rx="18" ry="6.5" transform="rotate(-66.0 622.0 360.7)" fill="#252a2c"/>
+      <!-- torso -->
+      <path d="M 673.2 139 Q 704.2 128 735.2 139 L 734.8000000000001 237 Q 721.8000000000001 257 709.8000000000001 260 Q 696.8000000000001 257 682.8000000000001 238 Z" fill="url(#shirt)" stroke="#77756f" stroke-width="1.2"/>
+      <path d="M 693.2 138 L 704.2 158 L 716.2 138" fill="#f2eee4" stroke="#aaa59a" stroke-width="1"/>
+      <path d="M 704.2 157 Q 707.8000000000001 203 709.8000000000001 245" fill="none" stroke="#a7a59f" stroke-width="1"/>
+      <path d="M 682.2 171 Q 694.2 193 693.8000000000001 220 M 726.2 171 Q 715.2 196 725.8000000000001 223" fill="none" stroke="#c5c2ba" stroke-width="1" opacity=".75"/>
+      <!-- far arm -->
+      <polygon points="726.2,143.3 742.2,156.7 705.4,197.6 692.3,186.7" fill="#e6e6df"/>
+      <polygon points="691.7,195.8 706.0,188.5 728.4,235.4 716.8,241.4" fill="url(#skin)"/>
+      <ellipse cx="722.6" cy="238.4" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- near arm -->
+      <polygon points="664.3,154.8 684.1,145.2 706.4,195.5 690.2,203.4" fill="#ecebe4"/>
+      <polygon points="690.2,196.9 706.4,202.0 688.7,251.0 676.3,247.0" fill="url(#skin)"/>
+      <ellipse cx="682.5" cy="249.0" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- neck/head -->
+      <path d="M 696.2 130 L 697.2 112 L 712.2 112 L 713.2 130 Z" fill="#d9b197"/>
+      <ellipse cx="704.2" cy="83" rx="28" ry="35" fill="url(#skin)" stroke="#79655a" stroke-width=".8"/>
+      <ellipse cx="676.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <ellipse cx="732.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <!-- hair -->
+      <path d="M 673.2 78 Q 676.2 45 702.2 42 Q 727.2 42 736.2 70
+               Q 725.2 60 715.2 61 Q 706.2 52 696.2 61 Q 684.2 58 673.2 78 Z" fill="#2f2e2d"/>
+      <path d="M 681.2 54 Q 696.2 43 710.2 48 M 696.2 48 Q 712.2 40 726.2 52" stroke="#494643" stroke-width="1.5" fill="none" opacity=".75"/>
+      <!-- face subdued -->
+      <path d="M 690.2 85 q 5 -3 10 0 M 708.2 85 q 5 -3 10 0" fill="none" stroke="#5d504b" stroke-width="1.3"/>
+      <path d="M 704.2 90 q -1 6 1 8" fill="none" stroke="#8e6f62" stroke-width=".9"/>
+      <path d="M 699.2 106 q 5 1 10 0" fill="none" stroke="#8b6259" stroke-width="1"/>
+      <!-- subtle motion lines -->
+      <path d="M 628 180 Q 605 186 587 197 M 631 211 Q 608 217 592 225" fill="none" stroke="#817d74" stroke-width="2" opacity=".14"/>
+    </g>
+    <g filter="url(#paperRough)">
+      <ellipse cx="900" cy="400" rx="56" ry="8" fill="#2a2926" opacity=".12"/>
+      <!-- backpack behind -->
+      <path d="M 934.0 160 Q 965.0 166 967.0 207 L 961.0 257 Q 955.0 277 935.0 269 L 926.0 174 Z" fill="url(#bag)" opacity=".95"/>
+      <path d="M 929.0 159 Q 954.0 170 958.0 209" fill="none" stroke="#32383a" stroke-width="6" opacity=".7"/>
+      <!-- far leg -->
+      <path d="M 920.0 248.0 L 973.1 285.8 Q 983.1 290.8 993.1 285.8 L 940.0 248.0 Z" fill="url(#pantsDark)"/>
+      <path d="M 974.1 285.8 L 1009.1 342.7 Q 1017.1 349.7 1025.1 342.7 L 992.1 285.8 Z" fill="url(#pants)"/>
+      <ellipse cx="1020.1" cy="348.7" rx="18" ry="6.5" transform="rotate(86.0 1017.1 344.7)" fill="#252a2c"/>
+      <!-- near leg -->
+      <path d="M 887.0 248.0 L 844.2 297.6 Q 855.2 302.6 866.2 297.6 L 909.0 248.0 Z" fill="url(#pants)"/>
+      <path d="M 846.2 297.6 L 799.1 343.6 Q 807.1 350.6 815.1 343.6 L 864.2 297.6 Z" fill="url(#pantsDark)"/>
+      <ellipse cx="810.1" cy="349.6" rx="18" ry="6.5" transform="rotate(-87.0 807.1 345.6)" fill="#252a2c"/>
+      <!-- torso -->
+      <path d="M 875.0 139 Q 906.0 128 937.0 139 L 939.0 237 Q 926.0 257 914.0 260 Q 901.0 257 887.0 238 Z" fill="url(#shirt)" stroke="#77756f" stroke-width="1.2"/>
+      <path d="M 895.0 138 L 906.0 158 L 918.0 138" fill="#f2eee4" stroke="#aaa59a" stroke-width="1"/>
+      <path d="M 906.0 157 Q 912.0 203 914.0 245" fill="none" stroke="#a7a59f" stroke-width="1"/>
+      <path d="M 884.0 171 Q 896.0 193 898.0 220 M 928.0 171 Q 917.0 196 930.0 223" fill="none" stroke="#c5c2ba" stroke-width="1" opacity=".75"/>
+      <!-- far arm -->
+      <polygon points="930.4,141.1 941.6,158.9 893.9,186.4 884.9,171.9" fill="#e6e6df"/>
+      <polygon points="883.2,184.2 895.5,174.1 927.4,215.2 917.4,223.4" fill="url(#skin)"/>
+      <ellipse cx="922.4" cy="219.3" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- near arm -->
+      <polygon points="868.6,158.2 883.4,141.8 922.9,180.1 910.9,193.5" fill="#ecebe4"/>
+      <polygon points="909.7,182.2 924.0,191.4 894.3,234.1 883.4,227.1" fill="url(#skin)"/>
+      <ellipse cx="888.8" cy="230.6" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- neck/head -->
+      <path d="M 898.0 130 L 899.0 112 L 914.0 112 L 915.0 130 Z" fill="#d9b197"/>
+      <ellipse cx="906.0" cy="83" rx="28" ry="35" fill="url(#skin)" stroke="#79655a" stroke-width=".8"/>
+      <ellipse cx="878.0" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <ellipse cx="934.0" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <!-- hair -->
+      <path d="M 875.0 78 Q 878.0 45 904.0 42 Q 929.0 42 938.0 70
+               Q 927.0 60 917.0 61 Q 908.0 52 898.0 61 Q 886.0 58 875.0 78 Z" fill="#2f2e2d"/>
+      <path d="M 883.0 54 Q 898.0 43 912.0 48 M 898.0 48 Q 914.0 40 928.0 52" stroke="#494643" stroke-width="1.5" fill="none" opacity=".75"/>
+      <!-- face subdued -->
+      <path d="M 892.0 85 q 5 -3 10 0 M 910.0 85 q 5 -3 10 0" fill="none" stroke="#5d504b" stroke-width="1.3"/>
+      <path d="M 906.0 90 q -1 6 1 8" fill="none" stroke="#8e6f62" stroke-width=".9"/>
+      <path d="M 901.0 106 q 5 1 10 0" fill="none" stroke="#8b6259" stroke-width="1"/>
+      <!-- subtle motion lines -->
+      <path d="M 828 180 Q 805 186 787 197 M 831 211 Q 808 217 792 225" fill="none" stroke="#817d74" stroke-width="2" opacity=".14"/>
+    </g>
+    <g filter="url(#paperRough)">
+      <ellipse cx="1100" cy="400" rx="56" ry="8" fill="#2a2926" opacity=".12"/>
+      <!-- backpack behind -->
+      <path d="M 1129.2 160 Q 1160.2 166 1162.2 207 L 1156.2 257 Q 1150.2 277 1130.2 269 L 1121.2 174 Z" fill="url(#bag)" opacity=".95"/>
+      <path d="M 1124.2 159 Q 1149.2 170 1153.2 209" fill="none" stroke="#32383a" stroke-width="6" opacity=".7"/>
+      <!-- far leg -->
+      <path d="M 1108.8 248.0 L 1132.8 309.3 Q 1142.8 314.3 1152.8 309.3 L 1128.8 248.0 Z" fill="url(#pantsDark)"/>
+      <path d="M 1133.8 309.3 L 1144.2 374.7 Q 1152.2 381.7 1160.2 374.7 L 1151.8 309.3 Z" fill="url(#pants)"/>
+      <ellipse cx="1155.2" cy="380.7" rx="18" ry="6.5" transform="rotate(30.0 1152.2 376.7)" fill="#252a2c"/>
+      <!-- near leg -->
+      <path d="M 1075.8 248.0 L 1058.2 311.5 Q 1069.2 316.5 1080.2 311.5 L 1097.8 248.0 Z" fill="url(#pants)"/>
+      <path d="M 1060.2 311.5 L 1044.7 375.5 Q 1052.7 382.5 1060.7 375.5 L 1078.2 311.5 Z" fill="url(#pantsDark)"/>
+      <ellipse cx="1055.7" cy="381.5" rx="18" ry="6.5" transform="rotate(-30.0 1052.7 377.5)" fill="#252a2c"/>
+      <!-- torso -->
+      <path d="M 1070.2 139 Q 1101.2 128 1132.2 139 L 1127.8 237 Q 1114.8 257 1102.8 260 Q 1089.8 257 1075.8 238 Z" fill="url(#shirt)" stroke="#77756f" stroke-width="1.2"/>
+      <path d="M 1090.2 138 L 1101.2 158 L 1113.2 138" fill="#f2eee4" stroke="#aaa59a" stroke-width="1"/>
+      <path d="M 1101.2 157 Q 1100.8 203 1102.8 245" fill="none" stroke="#a7a59f" stroke-width="1"/>
+      <path d="M 1079.2 171 Q 1091.2 193 1086.8 220 M 1123.2 171 Q 1112.2 196 1118.8 223" fill="none" stroke="#c5c2ba" stroke-width="1" opacity=".75"/>
+      <!-- far arm -->
+      <polygon points="1121.2,146.8 1141.2,153.2 1122.3,204.9 1106.1,199.7" fill="#e6e6df"/>
+      <polygon points="1106.4,204.0 1122.0,200.6 1131.6,251.7 1118.9,254.5" fill="url(#skin)"/>
+      <ellipse cx="1125.2" cy="253.1" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- near arm -->
+      <polygon points="1060.4,151.9 1082.0,148.1 1089.6,202.6 1071.9,205.7" fill="#ecebe4"/>
+      <polygon points="1072.3,203.2 1089.2,205.2 1081.0,256.6 1068.1,255.0" fill="url(#skin)"/>
+      <ellipse cx="1074.6" cy="255.8" rx="7" ry="8" fill="#d6ac92"/>
+      <!-- neck/head -->
+      <path d="M 1093.2 130 L 1094.2 112 L 1109.2 112 L 1110.2 130 Z" fill="#d9b197"/>
+      <ellipse cx="1101.2" cy="83" rx="28" ry="35" fill="url(#skin)" stroke="#79655a" stroke-width=".8"/>
+      <ellipse cx="1073.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <ellipse cx="1129.2" cy="85" rx="4.8" ry="7.5" fill="#d6aa90"/>
+      <!-- hair -->
+      <path d="M 1070.2 78 Q 1073.2 45 1099.2 42 Q 1124.2 42 1133.2 70
+               Q 1122.2 60 1112.2 61 Q 1103.2 52 1093.2 61 Q 1081.2 58 1070.2 78 Z" fill="#2f2e2d"/>
+      <path d="M 1078.2 54 Q 1093.2 43 1107.2 48 M 1093.2 48 Q 1109.2 40 1123.2 52" stroke="#494643" stroke-width="1.5" fill="none" opacity=".75"/>
+      <!-- face subdued -->
+      <path d="M 1087.2 85 q 5 -3 10 0 M 1105.2 85 q 5 -3 10 0" fill="none" stroke="#5d504b" stroke-width="1.3"/>
+      <path d="M 1101.2 90 q -1 6 1 8" fill="none" stroke="#8e6f62" stroke-width=".9"/>
+      <path d="M 1096.2 106 q 5 1 10 0" fill="none" stroke="#8b6259" stroke-width="1"/>
+      <!-- subtle motion lines -->
+      <path d="M 1028 180 Q 1005 186 987 197 M 1031 211 Q 1008 217 992 225" fill="none" stroke="#817d74" stroke-width="2" opacity=".14"/>
+    </g>
+</svg>

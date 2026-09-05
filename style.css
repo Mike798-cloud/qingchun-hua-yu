@@ -23,7 +23,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.11;z-
 .radio-console{background:#4e4b44;color:#e7dcc4;border:12px solid #302e2a;padding:25px}.radio-display{font:48px monospace;letter-spacing:.06em;background:#151d1c;color:#b6c5a6;padding:18px;text-align:center;border:5px inset #606158}.transport{display:flex;justify-content:center;gap:10px;margin:18px}.channel-row{display:flex;justify-content:center;gap:10px}.channel{padding:12px 32px;border:2px solid #7c7467;background:#343733;color:#dbd3bf}.channel.active{background:#877c66;color:#201f1c}.tape-slider{width:100%}.transcript{margin-top:18px;min-height:120px;background:#dcd2bc;color:#443c33;padding:16px;border-left:4px solid #8f8068;line-height:1.8}
 .note-match{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.note-card{background:#e5dcc8;border:1px solid #8b7c66;padding:18px;box-shadow:3px 4px 0 rgba(71,58,43,.22)}.note-card select{margin-top:12px;width:100%;padding:8px;background:#d7cbb2}.sample-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.sample{min-height:160px;background:#e8dfc9;border:1px solid #857863;padding:14px;cursor:pointer;transition:.2s}.sample.examined{opacity:.55;text-decoration:line-through}.book-search{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}.book{height:130px;border:5px solid #5e5446;background:#786b58;color:#f0e5cd;display:grid;place-items:center}.book:hover{transform:translateY(-3px)}
 .evidence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.evidence{background:#e1d7c0;border:1px solid #80735e;padding:12px;min-height:88px;cursor:pointer;box-shadow:2px 3px 0 rgba(70,58,42,.2)}.evidence.selected{outline:4px solid rgba(111,105,131,.6);transform:rotate(-1deg)}.question-box{margin-top:20px;padding:18px;border-top:1px solid #8d7f68}.choice-grid{display:grid;gap:9px;margin-top:10px}.choice{border:1px solid #776b58;background:#cfc2a5;padding:11px;text-align:left}.choice:hover{background:#d9cfb8}
-.chase{position:relative;width:100%;height:530px;overflow:hidden;background:#b9b1a0;border:12px solid #51483c}.chase-track{position:absolute;inset:0;background:url('assets/school_gate.svg') center/cover;transform:scale(1.05);transition:transform .2s}.runner-card{position:absolute;left:15%;bottom:28px;width:112px;height:210px;background-image:url('assets/runner_strip.svg');background-size:600% 100%;background-position:0 0;filter:saturate(.82) contrast(.94);transition:left .08s linear;animation:runFrames .55s steps(6) infinite}@keyframes runFrames{from{background-position:0 0}to{background-position:-600% 0}}.chase-progress{position:absolute;left:5%;right:5%;bottom:12px;height:7px;background:rgba(38,38,34,.4)}.chase-progress i{display:block;height:100%;width:0;background:#d9cba9}.freeze{filter:grayscale(.8) contrast(.8)}
+.chase{position:relative;width:100%;height:530px;overflow:hidden;background:#b9b1a0;border:12px solid #51483c}.chase-track{position:absolute;inset:0;background:url('assets/art/school_gate.webp') center/cover;transform:scale(1.05);transition:transform .2s}.runner-card{position:absolute;left:15%;bottom:28px;width:112px;height:210px;background-image:url('assets/runner_strip.svg');background-size:600% 100%;background-position:0 0;filter:saturate(.82) contrast(.94);transition:left .08s linear;animation:runFrames .55s steps(6) infinite}@keyframes runFrames{from{background-position:0 0}to{background-position:-600% 0}}.chase-progress{position:absolute;left:5%;right:5%;bottom:12px;height:7px;background:rgba(38,38,34,.4)}.chase-progress i{display:block;height:100%;width:0;background:#d9cba9}.freeze{filter:grayscale(.8) contrast(.8)}
 .phone{width:min(390px,90vw);height:660px;background:#1e2425;border:14px solid #292b2b;border-radius:42px;padding:38px 18px 22px;color:#eee;box-shadow:0 15px 45px rgba(0,0,0,.45)}.phone-screen{height:100%;background:#e7e3da;color:#292a27;padding:18px;overflow:auto}.phone-head{border-bottom:1px solid #aaa;padding-bottom:12px;margin-bottom:15px}.msg{background:#cfd8cc;padding:10px 12px;border-radius:8px;margin:8px 0 8px auto;width:max-content;max-width:88%}.typing{margin-top:18px;border:1px solid #aaa;background:#f2efe8;padding:12px;min-height:70px}.send-btn{width:100%;margin-top:12px;padding:11px;background:#4c5b55;color:#fff;border:0}.notification{background:#f2eee5;border:1px solid #9a9080;padding:12px;margin-top:14px}.ending-card{max-width:760px;text-align:center;color:#e8dfca;background:rgba(25,30,30,.88);padding:42px;border:1px solid rgba(225,211,177,.34);line-height:2}.ending-card h2{font-size:48px;letter-spacing:.24em}.ending-card .big{font-size:22px;font-weight:bold}.ending-card button{margin-top:22px}
 .panel-overlay{z-index:90}.side-card{position:relative;width:min(760px,92vw);max-height:82vh;overflow:auto;background:#dfd5be;border:1px solid #82745e;padding:35px;box-shadow:var(--shadow)}.side-card h2{font-size:28px}.inventory-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.inv-item{background:#cfc2a5;border:1px solid #8a7b64;padding:13px;min-height:72px}.settings-card label{display:flex;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #b0a58f}.settings-card input[type=range]{width:55%}.settings-card .check{justify-content:flex-start}.danger-btn{margin-top:25px;border:1px solid #81554d;background:#a56b60;color:#fff;padding:9px 15px}
 @media(max-width:760px){.hud{height:58px;padding:0 8px}.hud-left{max-width:43%}.scene-label{display:none}.hud-right{gap:4px}.icon-btn{padding:7px 8px;font-size:12px}.dialogue{width:94vw;bottom:14px;min-height:128px;padding:18px 72px 17px 20px}.line{font-size:16px}.dialogue-next{right:15px;bottom:20px}.context-action{right:14px;bottom:18px}.object-shell{width:100%;height:93vh}.object-content{padding:50px 14px 25px}.physical{padding:15px;border-width:6px}.clue-board{grid-template-columns:1fr}.plant-board,.food-stage{grid-template-columns:1fr}.plant-visual{min-height:350px}.note-match,.sample-grid,.evidence-grid{grid-template-columns:1fr 1fr}.seat-grid{grid-template-columns:55px repeat(5,1fr);font-size:12px}.radio-display{font-size:32px}.title-paper{padding:38px 28px}.title-paper h1{font-size:68px}.title-actions{flex-direction:column}.paper-btn{width:100%}.scene-art{object-position:center}.chase{height:430px}.side-card{padding:28px 18px}.close-btn{margin:7px}}
@@ -96,7 +96,7 @@ body[data-scene="gradcg"] .scene-art,body[data-scene="presscg"] .scene-art,body[
 .runner-card{z-index:5;width:98px;height:221px;bottom:24px;background-size:600% 100%;background-position:0 0;filter:drop-shadow(0 6px 5px rgba(0,0,0,.22)) saturate(.86);animation:runFrames .54s linear infinite;will-change:left,background-position}
 @keyframes runFrames{0%,16%{background-position:0% 0}17%,32%{background-position:20% 0}33%,48%{background-position:40% 0}49%,64%{background-position:60% 0}65%,80%{background-position:80% 0}81%,100%{background-position:100% 0}}
 .chase-progress{z-index:8;height:5px;background:rgba(33,31,27,.48);border:1px solid rgba(230,218,187,.18)}.chase-progress i{background:#d7c79f;box-shadow:0 0 8px rgba(215,199,159,.25)}
-.freeze .runner-card{animation-play-state:paused}.freeze:after{content:"";position:absolute;inset:0;z-index:9;background:rgba(210,207,194,.12);backdrop-filter:grayscale(1) contrast(.8);-webkit-backdrop-filter:grayscale(1) contrast(.8);pointer-events:none}
+.freeze .runner-card{animation-play-state:paused}.freeze:after{content:"";position:absolute;inset:0;z-index:9;background:rgba(188,188,178,.18);pointer-events:none}
 
 /* Phone is in-world hardware and stays usable in narrow portrait view. */
 .phone{max-height:82vh;height:min(660px,82vh);padding-top:34px}.phone-screen{border-radius:15px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16)}.send-btn{border-radius:4px;min-height:44px}.notification{box-shadow:0 4px 12px rgba(0,0,0,.08)}
@@ -304,28 +304,12 @@ body[data-scene="festival"] .scene-art{animation:cameraDrift 13s ease-in-out inf
 @media(max-width:760px){.dialogue[data-thought="1"]{left:5vw;bottom:max(4vh,env(safe-area-inset-bottom))}.focus-depth-front{filter:blur(7px)}}
 .reduce-motion .focus-depth,.reduce-motion .focus-breath,.reduce-motion .line.typing:after{animation:none!important}
 
-/* ===== 2026-09 · 9.5 cinematic continuity pass ===== */
-/* Continuous scene actors: frame animation is independent from the camera track. */
+/* ===== 2026-09 · cinematic continuity pass ===== */
+/* Only environmental light moves independently from the camera. Character motion is kept inside finished CGs; no simplified overlay people. */
 .scene-actors{position:absolute;inset:0;z-index:6;overflow:hidden;pointer-events:none;isolation:isolate}
-.actor-sprite{position:absolute;display:block;background-repeat:no-repeat;background-position:0 0;filter:saturate(.78) contrast(.96) drop-shadow(0 8px 8px rgba(0,0,0,.18));opacity:.72;will-change:transform,background-position,opacity}
-.actor-walk{width:clamp(54px,6.2vw,108px);aspect-ratio:3/4;background-image:url('assets/actors/student_walk_strip.svg');background-size:800% 100%;animation:actorFrames .72s steps(7,end) infinite,actorCross 18s linear infinite;left:-12%;bottom:8%}
-.actor-walk.alt{animation-duration:.76s,23s;animation-delay:-.2s,-9s;transform:scale(.82);opacity:.44;bottom:17%}
-.actor-turn{width:clamp(68px,8vw,128px);aspect-ratio:3/4;background-image:url('assets/actors/zhixia_turn_strip.svg');background-size:800% 100%;animation:actorFrames 7.8s steps(7,end) infinite;right:24%;bottom:16%;opacity:.36;mix-blend-mode:multiply}
-.actor-flower-lower{width:clamp(64px,7.2vw,118px);aspect-ratio:3/4;background-image:url('assets/actors/flower_lower_strip.svg');background-size:600% 100%;animation:actorFrames6 6.8s steps(5,end) infinite;right:20%;bottom:11%;opacity:.76}
-.actor-paper{right:19%;bottom:24%;width:9%;height:8%;border-radius:2px;background:rgba(239,228,204,.65);box-shadow:0 4px 8px rgba(0,0,0,.12);transform:rotate(-3deg);animation:actorPaper 4.6s ease-in-out infinite alternate;opacity:.42}
-.actor-lightband{left:-12%;top:4%;width:36%;height:112%;background:linear-gradient(90deg,transparent,rgba(255,228,172,.13),transparent);transform:skewX(-16deg);mix-blend-mode:screen;animation:actorLightband 15s ease-in-out infinite alternate}
-.actor-far-shadow{position:absolute;width:5%;height:30%;left:15%;bottom:11%;border-radius:45% 45% 14% 14%;background:rgba(30,36,34,.22);filter:blur(1.2px);animation:actorFarCross 21s linear infinite}
-@keyframes actorFrames{to{background-position:100% 0}}
-@keyframes actorFrames6{to{background-position:100% 0}}
-@keyframes actorCross{0%{transform:translateX(0) scale(.78);opacity:0}8%{opacity:.46}90%{opacity:.46}100%{transform:translateX(126vw) scale(.9);opacity:0}}
-@keyframes actorFarCross{0%{transform:translateX(-20vw);opacity:0}12%{opacity:.28}88%{opacity:.28}100%{transform:translateX(92vw);opacity:0}}
-@keyframes actorPaper{to{transform:translate3d(-4px,-9px,0) rotate(2deg)}}
+.actor-lightband{position:absolute;left:-12%;top:4%;width:36%;height:112%;background:linear-gradient(90deg,transparent,rgba(255,228,172,.13),transparent);transform:skewX(-16deg);mix-blend-mode:screen;animation:actorLightband 15s ease-in-out infinite alternate}
 @keyframes actorLightband{to{transform:translate3d(82vw,0,0) skewX(-16deg);opacity:.45}}
-body[data-scene="cafeteria"] .actor-walk{bottom:9%;opacity:.34;filter:blur(.3px) saturate(.7)}
-body[data-scene="festival"] .actor-walk{bottom:6%;opacity:.48}
-body[data-scene="night"] .actor-turn{opacity:.28}
-body[data-scene="high3"] .actor-paper{opacity:.6}
-body[data-scene="gradcg"] .actor-flower-lower{opacity:.7}
+.reduce-motion .actor-lightband{animation:none!important}
 
 /* Full-screen cinematic cutaways. The SVG itself carries local continuous movement. */
 .cinematic-shot{position:fixed;inset:0;z-index:98;background:#111716;overflow:hidden;opacity:0;transition:opacity .46s ease;pointer-events:none}
@@ -660,3 +644,54 @@ body[data-flower="forget"] .scene-art{filter:saturate(.92) contrast(1.035) brigh
   .scene-art,.cinematic-shot img,.focus-art,.montage-image{backface-visibility:hidden}
   .focus-art{transform:scale(1.018)!important}.focus-scene.ready .focus-art{transform:scale(1.038)!important}
 }
+
+
+/* ===== GPT-6 execution-sheet completion: object UI, drag onboarding, final ending ===== */
+.hud-right .icon-btn{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:6px 10px;background:rgba(30,36,36,.60);backdrop-filter:none;-webkit-backdrop-filter:none}
+.hud-icon{width:25px;height:25px;display:block;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28));flex:0 0 auto}
+.hud-right .icon-btn span{white-space:nowrap}
+.support-btn .hud-icon{width:23px;height:23px}
+
+/* First drag lesson is carried by the object itself, never by a tutorial person. */
+.chip,.fragment,.evidence{cursor:grab}
+.chip:active,.fragment:active,.evidence:active,.chip.dragging{cursor:grabbing}
+.drag-onboarding .chip:first-child{animation:dragObjectFloat 1.45s ease-in-out infinite;box-shadow:0 8px 16px rgba(68,55,39,.17)}
+.drag-onboarding .slot{box-shadow:inset 0 -5px 10px rgba(81,64,43,.07)}
+.drag-onboarding .slot:first-child{animation:dragTargetBreath 1.8s ease-in-out infinite}
+@keyframes dragObjectFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes dragTargetBreath{0%,100%{box-shadow:inset 0 -4px 9px rgba(81,64,43,.06)}50%{box-shadow:inset 0 -8px 15px rgba(81,64,43,.13)}}
+
+.ending-sequence{position:fixed;inset:0;z-index:220;background:rgba(12,15,15,.08);display:grid;place-items:center;pointer-events:auto;transition:background 1.4s ease,opacity .9s ease;color:#eee6d6}
+.ending-sequence.black{background:#080a0a}
+.ending-words{width:min(900px,84vw);min-height:190px;display:grid;place-items:center;text-align:center;padding:24px;font-family:"Noto Serif SC","Songti SC","STSong",serif;font-size:clamp(20px,2.2vw,34px);line-height:1.95;letter-spacing:.05em;text-shadow:0 2px 8px rgba(0,0,0,.42);opacity:1;transition:opacity .55s ease,transform .55s ease}
+.ending-words.out{opacity:0;transform:translateY(7px)}
+.ending-words strong{font-size:1.12em;font-weight:600;letter-spacing:.08em}
+.ending-logo{display:grid;place-items:center;gap:9px;opacity:0;transform:translateY(8px);transition:opacity 1.7s ease,transform 1.7s ease}
+.ending-logo.show{opacity:1;transform:none}
+.ending-logo-mark{font-family:"Noto Serif SC","FangSong","STKaiti",serif;font-size:clamp(66px,10vw,140px);font-weight:500;letter-spacing:.28em;margin-left:.28em;color:#ece4d3;text-shadow:0 1px 0 rgba(255,255,255,.13)}
+.ending-logo small{font:12px/1.2 Georgia,serif;letter-spacing:.62em;margin-left:.62em;color:#a7a092}
+.ending-back{position:absolute;bottom:max(30px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:0;border-bottom:1px solid rgba(224,213,190,.44);background:transparent;color:#cfc6b5;padding:9px 3px;font-size:13px;letter-spacing:.12em;opacity:0;transition:opacity 1s ease}
+.ending-back.show{opacity:.82}
+.ending-sequence[hidden]{display:none!important}
+body.ending-mode .hud,body.ending-mode .context-action,body.ending-mode .hotspot-layer,body.ending-mode .dialogue{opacity:0!important;pointer-events:none!important}
+body.ending-mode #petals{z-index:221}
+body.ending-black #petals{opacity:.15;transition:opacity 1.2s ease}
+
+@media(max-width:760px){
+ .hud-right .icon-btn{padding:5px 6px;gap:4px;min-height:39px}.hud-icon{width:21px;height:21px}.hud-right .icon-btn span{font-size:11px}.support-price{display:none}
+ .ending-words{width:91vw;font-size:19px;line-height:1.85;padding:18px}.ending-logo-mark{font-size:72px}
+}
+@media(max-width:470px){.hud-right .icon-btn span{display:none}.hud-right .icon-btn{width:38px;justify-content:center}.hud-right .icon-btn .hud-icon{width:24px;height:24px}}
+@media(prefers-reduced-motion:reduce){.drag-onboarding .chip:first-child,.drag-onboarding .slot:first-child{animation:none!important}.ending-words,.ending-logo,.ending-back{transition:none!important}}
+
+/* GPT-6 final-road timing and ending cleanup */
+.dialogue.memory-echo{pointer-events:none;min-height:92px;padding-right:28px;transition:opacity .18s ease,transform .18s ease}
+.dialogue.memory-echo .speaker,.dialogue.memory-echo .dialogue-next{display:none!important}
+.dialogue.memory-echo.echo-out{opacity:0;transform:translateX(-50%) translateY(5px)}
+.lockscreen-only{height:min(260px,48vh);padding:28px 12px 14px}
+.lockscreen-only .phone-screen{display:grid;align-content:start;padding-top:18px;background:linear-gradient(180deg,#dfe2dc,#cfd4cc)}
+.lockscreen-only .notification{margin:0 8px;padding:16px 18px;border-radius:13px;background:rgba(247,248,244,.86);font-size:16px;line-height:1.65;box-shadow:0 8px 22px rgba(40,44,40,.12)}
+body.ending-black #petals{opacity:0!important;transition:opacity .8s ease}
+.ending-logo{z-index:2}
+.ending-logo-mark{letter-spacing:.34em;margin-left:.34em}
+@media(max-width:760px){.dialogue.memory-echo{min-height:80px;padding-right:20px}.lockscreen-only{height:min(220px,42dvh)}}
