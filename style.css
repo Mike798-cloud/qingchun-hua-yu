@@ -181,7 +181,6 @@ body[data-scene="festival"] .scene-art{animation:cameraDrift 13s ease-in-out inf
 .montage-scene.cut .montage-image{opacity:1;transform:scale(1.015) translate3d(.3%,-.2%,0)}
 .montage-scene.out .montage-image{opacity:0;filter:saturate(.55) brightness(1.15)}
 .montage-flash{position:absolute;inset:0;background:#f4e8cc;opacity:0;pointer-events:none}.montage-scene.flash .montage-flash{animation:memoryFlash .24s ease-out}@keyframes memoryFlash{0%{opacity:.72}100%{opacity:0}}
-.montage-caption{position:absolute;left:7vw;bottom:8vh;max-width:min(720px,82vw);font:clamp(20px,2.4vw,34px)/1.7 var(--subtitle-font);letter-spacing:.07em;color:#f4eddd;text-shadow:0 2px 11px #000;opacity:0;transform:translateY(8px);transition:.4s}.montage-scene.cut .montage-caption{opacity:.92;transform:none}
 .montage-scene:after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 160px rgba(0,0,0,.5);pointer-events:none}
 .reduce-motion .montage-image{transition-duration:.08s!important;transform:none!important}
 .focus-object-label{position:absolute;left:7%;bottom:5%;z-index:3;padding:6px 10px;background:rgba(240,230,207,.82);color:#4b4338;font:17px var(--subtitle-font);letter-spacing:.06em;box-shadow:0 3px 9px rgba(0,0,0,.16);transform:rotate(-1deg)}
@@ -337,23 +336,7 @@ body[data-scene="gradcg"] .actor-flower-lower{opacity:.7}
 .cinematic-letterbox{position:absolute;left:0;right:0;height:5.4vh;z-index:4;background:#0b0e0e;transition:transform .58s cubic-bezier(.2,.7,.2,1)}
 .cinematic-letterbox-top{top:0;transform:translateY(-100%)}.cinematic-letterbox-bottom{bottom:0;transform:translateY(100%)}
 .cinematic-shot.show .cinematic-letterbox{transform:none}
-.cinematic-shot-caption{position:absolute;z-index:5;left:7vw;bottom:8.4vh;max-width:min(720px,80vw);font:clamp(19px,2vw,29px)/1.75 var(--subtitle-font);letter-spacing:.06em;color:#f2ead8;text-shadow:0 3px 18px rgba(0,0,0,.8);opacity:0;transform:translateY(8px);transition:.52s .32s ease}
-.cinematic-shot.show .cinematic-shot-caption{opacity:.92;transform:none}
 
-/* Focus shots gain material-specific micro movement instead of one generic zoom. */
-.focus-micro{position:absolute;pointer-events:none;z-index:3}
-.micro-paper-corner{right:7%;bottom:7%;width:20%;height:15%;background:linear-gradient(135deg,rgba(255,252,239,.04) 47%,rgba(87,73,54,.13) 49%,rgba(244,235,215,.24) 54%,transparent 56%);transform-origin:100% 100%;animation:microPaper 3.8s ease-in-out infinite alternate}
-.micro-pen{left:47%;bottom:18%;width:22%;height:2.2%;border-radius:30px;background:#345d7a;box-shadow:0 2px 4px rgba(0,0,0,.3);animation:microPen 5.6s ease-in-out infinite}
-.micro-window-glint{inset:-20%;background:linear-gradient(102deg,transparent 35%,rgba(224,240,238,.14) 49%,transparent 61%);transform:translateX(-38%);animation:microGlint 8s ease-in-out infinite}
-.micro-person-blink{right:36%;top:28%;width:7%;height:1.2%;border-radius:50%;background:rgba(45,40,36,.22);transform-origin:center;animation:microBlink 5.2s steps(1,end) infinite}
-.micro-plant-leaf{left:46%;top:23%;width:17%;height:33%;border-radius:90% 10% 90% 10%;background:rgba(78,106,76,.15);transform-origin:50% 100%;animation:microLeaf 4.4s ease-in-out infinite alternate}
-.micro-steam{left:42%;top:20%;width:18%;height:38%;border-left:3px solid rgba(245,238,216,.13);border-radius:50%;filter:blur(1px);animation:microSteam 3.6s ease-out infinite}
-@keyframes microPaper{to{transform:rotateX(14deg) rotateZ(-1.2deg)}}
-@keyframes microPen{0%,22%,100%{transform:translateX(0) rotate(-1deg)}48%,65%{transform:translateX(12px) rotate(2deg)}}
-@keyframes microGlint{50%,100%{transform:translateX(38%)}}
-@keyframes microBlink{0%,91%,100%{transform:scaleY(1)}92%,95%{transform:scaleY(.08)}}
-@keyframes microLeaf{to{transform:rotate(4deg) translateX(4px)}}
-@keyframes microSteam{0%{opacity:0;transform:translateY(15px)}45%{opacity:.58}100%{opacity:0;transform:translateY(-65px)}}
 
 /* Radio puzzle now presents a real audio timeline. */
 .tape-waveform{height:68px;margin:14px 0 4px;display:flex;align-items:center;gap:3px;padding:0 10px;background:#342f2a;border:5px solid #625440;overflow:hidden;box-shadow:inset 0 0 18px rgba(0,0,0,.45)}
@@ -377,11 +360,11 @@ body[data-scene="gradcg"] .actor-flower-lower{opacity:.7}
 
 @media(max-width:760px){
  .actor-walk{width:70px}.actor-turn{width:78px;right:19%;bottom:23%}.actor-flower-lower{width:74px;right:15%}
- .cinematic-shot-caption{left:6vw;bottom:9.5vh;max-width:86vw;font-size:18px}.cinematic-letterbox{height:4.2vh}
+ .cinematic-letterbox{height:4.2vh}
  .tape-waveform{height:54px;gap:2px;padding:0 5px}
 }
-@media(prefers-reduced-motion:reduce){.scene-actors *,.cinematic-shot img,.focus-micro{animation:none!important}.cinematic-shot img{transform:none!important}.cinematic-letterbox{display:none}}
-.reduce-motion .scene-actors *,.reduce-motion .focus-micro{animation:none!important}.reduce-motion .cinematic-shot img{transform:none!important}.reduce-motion .cinematic-letterbox{display:none}
+@media(prefers-reduced-motion:reduce){.scene-actors *,.cinematic-shot img{animation:none!important}.cinematic-shot img{transform:none!important}.cinematic-letterbox{display:none}}
+.reduce-motion .scene-actors *{animation:none!important}.reduce-motion .cinematic-shot img{transform:none!important}.reduce-motion .cinematic-letterbox{display:none}
 
 /* Accessibility + narrow landscape pass */
 button:focus-visible,input:focus-visible{outline:2px solid rgba(250,235,194,.92);outline-offset:3px}
@@ -390,7 +373,7 @@ button:focus-visible,input:focus-visible{outline:2px solid rgba(250,235,194,.92)
  .hud{height:50px;padding-top:env(safe-area-inset-top)}.flower-label{display:none}.scene-label{font-size:13px}.icon-btn{padding:6px 9px;min-height:38px}
  .dialogue{min-height:92px;bottom:max(12px,env(safe-area-inset-bottom));padding:14px 86px 13px 20px}.line{font-size:16px;line-height:1.6}.speaker{font-size:11px;margin-bottom:3px}.dialogue-next{right:18px;bottom:18px}
  .focus-frame{grid-template-columns:minmax(0,1.75fr) minmax(250px,.55fr);padding:4vh 5vw 7vh;gap:22px}.focus-visual{height:78vh}.focus-copy{padding-bottom:5vh}.focus-copy h2{font-size:28px}.focus-copy p{font-size:16px;line-height:1.55}.focus-actions{bottom:2.8vh;right:5vw}
- .cinematic-shot-caption{font-size:16px;bottom:8vh}.cinematic-letterbox{height:3.5vh}
+ .cinematic-letterbox{height:3.5vh}
 }
 
 
@@ -452,8 +435,7 @@ body[data-flower="forget"] .scene-art{filter:saturate(.92) contrast(1.035) brigh
 /* cinematic inserts share the same image language as gameplay */
 .cinematic-shot{background:#0b1011}
 .cinematic-shot img{filter:saturate(1.04) contrast(1.055) brightness(.99);object-fit:cover}
-.cinematic-shot-caption,.montage-caption{font-family:var(--subtitle-font);letter-spacing:.06em;text-shadow:0 2px 15px rgba(0,0,0,.88)}
-.cinematic-letterbox{background:#0a0e0f}
+.cinematic-shot-caption,.cinematic-letterbox{background:#0a0e0f}
 
 /* hotspots should not announce themselves like puzzle UI */
 .hotspot:hover,.hotspot:focus-visible{border-color:rgba(251,236,198,.3);background:rgba(255,242,205,.025);box-shadow:0 0 30px rgba(255,234,184,.045)}
@@ -491,7 +473,6 @@ body[data-flower="forget"] .scene-art{filter:saturate(.92) contrast(1.035) brigh
 
 /* === Final dialogue/UI correction: remove white subtitle-style overlays and restore consistent black-text dialogue === */
 .cinematic-shot-caption,
-.montage-caption{display:none!important}
 
 .dialogue,
 .dialogue[data-thought="1"]{
@@ -624,3 +605,58 @@ body[data-flower="forget"] .scene-art{filter:saturate(.92) contrast(1.035) brigh
   .hotspot::after{transition:none!important}
 }
 .hotspot-layer.focus-transition .hotspot::after{opacity:0!important}
+
+
+/* === FINAL PERFORMANCE / PRESENTATION CLEANUP === */
+.focus-copy{display:none!important}
+.scene-art{
+  filter:none!important;
+  transition:opacity .36s ease,transform .92s cubic-bezier(.2,.7,.2,1)!important;
+  will-change:transform,opacity;
+  backface-visibility:hidden;
+  transform:translateZ(0);
+}
+.scene-art.cinematic{filter:none!important}
+.cinematic-shot img{
+  filter:none!important;
+  transition:transform 3.8s cubic-bezier(.2,.64,.2,1)!important;
+  will-change:transform;
+  backface-visibility:hidden;
+}
+.focus-frame{
+  filter:none!important;
+  transition:opacity .34s ease,transform .52s cubic-bezier(.18,.72,.12,1)!important;
+  will-change:transform,opacity;
+}
+.focus-art{
+  filter:none!important;
+  animation:none!important;
+  transform:scale(1.028)!important;
+  transition:transform 2.7s cubic-bezier(.2,.68,.2,1)!important;
+  will-change:transform;
+}
+.focus-scene.ready .focus-art{transform:scale(1.055)!important}
+.focus-depth,.focus-lens,.focus-breath,.focus-micro{display:none!important}
+.montage-image{
+  filter:none!important;
+  transition:opacity .36s ease,transform 1.18s ease!important;
+  will-change:transform,opacity;
+}
+.montage-scene.out .montage-image{filter:none!important}
+.montage-scene.fast .montage-image{transition-duration:.25s,.72s!important}
+.hud,.icon-btn,.overlay,.focus-btn,.paper-btn,.close-btn,.hotspot:after,.title-actions .paper-btn{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.overlay{background:rgba(8,13,14,.78)!important}
+.icon-btn{background:rgba(28,35,35,.72)!important}
+.focus-btn{background:rgba(18,24,24,.72)!important}
+.hotspot:after{background:rgba(20,25,25,.78)!important}
+#petals{pointer-events:none;contain:strict;transform:translateZ(0);will-change:contents}
+.speaker:empty{display:none!important}
+.speaker{font-weight:600!important;letter-spacing:.1em!important}
+.line{contain:layout style}
+@media(max-width:760px){
+  .scene-art,.cinematic-shot img,.focus-art,.montage-image{backface-visibility:hidden}
+  .focus-art{transform:scale(1.018)!important}.focus-scene.ready .focus-art{transform:scale(1.038)!important}
+}
