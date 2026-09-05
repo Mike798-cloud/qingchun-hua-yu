@@ -309,10 +309,10 @@ body[data-scene="festival"] .scene-art{animation:cameraDrift 13s ease-in-out inf
 /* Continuous scene actors: frame animation is independent from the camera track. */
 .scene-actors{position:absolute;inset:0;z-index:6;overflow:hidden;pointer-events:none;isolation:isolate}
 .actor-sprite{position:absolute;display:block;background-repeat:no-repeat;background-position:0 0;filter:saturate(.78) contrast(.96) drop-shadow(0 8px 8px rgba(0,0,0,.18));opacity:.72;will-change:transform,background-position,opacity}
-.actor-walk{width:clamp(54px,6.2vw,108px);aspect-ratio:3/4;background-image:url('assets/art/actors/student_walk_strip.webp');background-size:800% 100%;animation:actorFrames .72s steps(7,end) infinite,actorCross 18s linear infinite;left:-12%;bottom:8%}
+.actor-walk{width:clamp(54px,6.2vw,108px);aspect-ratio:3/4;background-image:url('assets/actors/student_walk_strip.svg');background-size:800% 100%;animation:actorFrames .72s steps(7,end) infinite,actorCross 18s linear infinite;left:-12%;bottom:8%}
 .actor-walk.alt{animation-duration:.76s,23s;animation-delay:-.2s,-9s;transform:scale(.82);opacity:.44;bottom:17%}
-.actor-turn{width:clamp(68px,8vw,128px);aspect-ratio:3/4;background-image:url('assets/art/actors/zhixia_turn_strip.webp');background-size:800% 100%;animation:actorFrames 7.8s steps(7,end) infinite;right:24%;bottom:16%;opacity:.36;mix-blend-mode:multiply}
-.actor-flower-lower{width:clamp(64px,7.2vw,118px);aspect-ratio:3/4;background-image:url('assets/art/actors/flower_lower_strip.webp');background-size:600% 100%;animation:actorFrames6 6.8s steps(5,end) infinite;right:20%;bottom:11%;opacity:.76}
+.actor-turn{width:clamp(68px,8vw,128px);aspect-ratio:3/4;background-image:url('assets/actors/zhixia_turn_strip.svg');background-size:800% 100%;animation:actorFrames 7.8s steps(7,end) infinite;right:24%;bottom:16%;opacity:.36;mix-blend-mode:multiply}
+.actor-flower-lower{width:clamp(64px,7.2vw,118px);aspect-ratio:3/4;background-image:url('assets/actors/flower_lower_strip.svg');background-size:600% 100%;animation:actorFrames6 6.8s steps(5,end) infinite;right:20%;bottom:11%;opacity:.76}
 .actor-paper{right:19%;bottom:24%;width:9%;height:8%;border-radius:2px;background:rgba(239,228,204,.65);box-shadow:0 4px 8px rgba(0,0,0,.12);transform:rotate(-3deg);animation:actorPaper 4.6s ease-in-out infinite alternate;opacity:.42}
 .actor-lightband{left:-12%;top:4%;width:36%;height:112%;background:linear-gradient(90deg,transparent,rgba(255,228,172,.13),transparent);transform:skewX(-16deg);mix-blend-mode:screen;animation:actorLightband 15s ease-in-out infinite alternate}
 .actor-far-shadow{position:absolute;width:5%;height:30%;left:15%;bottom:11%;border-radius:45% 45% 14% 14%;background:rgba(30,36,34,.22);filter:blur(1.2px);animation:actorFarCross 21s linear infinite}
@@ -566,3 +566,61 @@ body[data-flower="forget"] .scene-art{filter:saturate(.92) contrast(1.035) brigh
   .dialogue[data-thought="1"] .speaker{font-size:11px!important;margin-bottom:5px!important}
   .dialogue-next{right:15px!important;bottom:20px!important}
 }
+
+/* === Permanent scene hotspot markers: small circle only, hitbox stays invisible === */
+.hotspot{
+  --marker-x:50%;
+  --marker-y:50%;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  outline:none!important;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.hotspot:hover,
+.hotspot:focus-visible{
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+.hotspot::before{content:none!important}
+.hotspot::after{
+  content:""!important;
+  position:absolute!important;
+  left:var(--marker-x)!important;
+  top:var(--marker-y)!important;
+  width:14px!important;
+  height:14px!important;
+  border:2px solid rgba(235,218,174,.95)!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle at 50% 50%,rgba(242,236,216,.86) 0 24%,rgba(91,86,76,.30) 27% 47%,rgba(58,55,50,.12) 50% 100%)!important;
+  box-shadow:0 0 0 2px rgba(77,70,57,.22),0 1px 6px rgba(20,18,15,.36),0 0 9px rgba(235,218,174,.18)!important;
+  opacity:.9!important;
+  transform:translate(-50%,-50%)!important;
+  transition:opacity .18s ease,transform .18s ease,box-shadow .18s ease!important;
+  pointer-events:none!important;
+  backdrop-filter:none!important;
+}
+.hotspot:hover::after,
+.hotspot:focus-visible::after{
+  opacity:1!important;
+  transform:translate(-50%,-50%) scale(1.16)!important;
+  box-shadow:0 0 0 3px rgba(235,218,174,.16),0 1px 7px rgba(20,18,15,.42),0 0 13px rgba(235,218,174,.30)!important;
+}
+.hotspot.done::after{
+  opacity:.48!important;
+  background:radial-gradient(circle at 50% 50%,rgba(217,218,198,.62) 0 27%,rgba(86,91,78,.23) 30% 48%,rgba(54,58,49,.10) 51% 100%)!important;
+  border-color:rgba(198,201,177,.72)!important;
+}
+.hotspot.done:hover::after,
+.hotspot.done:focus-visible::after{opacity:.8!important}
+@media(max-width:760px), (pointer:coarse){
+  .hotspot::after{width:15px!important;height:15px!important;border-width:2px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .hotspot::after{transition:none!important}
+}
+.hotspot-layer.focus-transition .hotspot::after{opacity:0!important}
