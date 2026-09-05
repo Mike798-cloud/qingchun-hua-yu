@@ -487,3 +487,82 @@ body[data-flower="forget"] .scene-art{filter:saturate(.92) contrast(1.035) brigh
 .object-shell:before,.side-card:before{opacity:.035}
 .close-btn{border:0;border-radius:999px;background:rgba(31,39,38,.72);color:#f0e7d5;backdrop-filter:blur(7px)}
 @media(max-width:760px){.title-paper{margin-left:7vw;width:86vw;padding-right:0}.title-paper h1{font-size:72px}.title-actions{flex-wrap:wrap}}
+
+
+/* === Final dialogue/UI correction: remove white subtitle-style overlays and restore consistent black-text dialogue === */
+.cinematic-shot-caption,
+.montage-caption{display:none!important}
+
+.dialogue,
+.dialogue[data-thought="1"]{
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
+  width:min(920px,86vw)!important;
+  max-width:min(920px,86vw)!important;
+  min-height:118px!important;
+  bottom:max(28px,env(safe-area-inset-bottom))!important;
+  padding:22px 104px 20px 28px!important;
+  background:linear-gradient(100deg,rgba(229,220,199,.98),rgba(210,198,173,.96))!important;
+  border:1px solid #5f5546!important;
+  box-shadow:0 18px 60px rgba(0,0,0,.28)!important;
+  color:#37332c!important;
+  text-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.dialogue:before,
+.dialogue[data-thought="1"]:before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:7px!important;
+  border:1px solid rgba(78,67,51,.18)!important;
+  pointer-events:none!important;
+}
+.speaker,
+.dialogue[data-thought="1"] .speaker{
+  display:block!important;
+  margin:0 0 7px 0!important;
+  font:13px/1.4 var(--subtitle-font)!important;
+  letter-spacing:.12em!important;
+  color:#6d6252!important;
+  text-shadow:none!important;
+}
+.line,
+.dialogue[data-thought="1"] .line{
+  margin-left:0!important;
+  max-width:none!important;
+  font:19px/1.8 var(--subtitle-font)!important;
+  letter-spacing:.035em!important;
+  color:#2d2a25!important;
+  text-shadow:none!important;
+}
+.dialogue-next{
+  right:26px!important;
+  bottom:28px!important;
+  color:#5c5448!important;
+  border:0!important;
+  border-bottom:1px solid #7a6d5b!important;
+  font-family:var(--subtitle-font)!important;
+  text-shadow:none!important;
+  opacity:1!important;
+}
+.dialogue-next:after{content:none!important}
+.dialogue[data-thought="1"] .speaker:empty{display:none!important}
+
+@media(max-width:760px){
+  .dialogue,
+  .dialogue[data-thought="1"]{
+    width:94vw!important;
+    max-width:94vw!important;
+    min-height:110px!important;
+    bottom:max(14px,env(safe-area-inset-bottom))!important;
+    padding:18px 72px 17px 20px!important;
+  }
+  .line,
+  .dialogue[data-thought="1"] .line{font-size:16px!important;line-height:1.68!important}
+  .speaker,
+  .dialogue[data-thought="1"] .speaker{font-size:11px!important;margin-bottom:5px!important}
+  .dialogue-next{right:15px!important;bottom:20px!important}
+}

@@ -32,10 +32,10 @@ const scenes={
  plant:{title:'毕业日 · 植物角',art:'assets/art/plant_corner.webp',alt:'毕业日植物角与桔梗'},
  gate:{title:'校门',art:'assets/art/school_gate.webp',alt:'傍晚学校大门'},
  road:{title:'九年后 · 校门外',art:'assets/art/ending_road.webp',alt:'九年后的校门外道路'},
- windowcg:{title:'靠窗第三排',art:'assets/art/cg_window.webp',alt:'夜色窗玻璃中的两名高中生倒影'},
+ windowcg:{title:'靠窗第三排',art:'assets/art/cg_window.webp',alt:'傍晚教室里，沈知夏抬头时与林屿隔着课桌安静对望'},
  peacecg:{title:'和平谈判物资',art:'assets/art/cg_peace.webp',alt:'四盒鸡米花放在课桌上的和解场面'},
- gradcg:{title:'毕业日 · 没说出口的话',art:'assets/art/cg_graduation.webp',alt:'毕业日两名高中生与藏在身后的桔梗花束'},
- presscg:{title:'最后一页',art:'assets/art/cg_pressflower.webp',alt:'桔梗被压进植物观察册最后一页'}
+ gradcg:{title:'毕业日 · 没说出口的话',art:'assets/art/cg_graduation.webp',alt:'毕业日的植物角前，沈知夏把桔梗藏在身后，林屿手里攥着作文纸'},
+ presscg:{title:'最后一页',art:'assets/art/cg_pressflower.webp',alt:'沈知夏独自把桔梗压进植物观察册的最后一页'}
 };
 
 const FLOWERS={
@@ -78,11 +78,11 @@ function runSceneDirector(key){
 }
 function updateFlowerLanguage(){const f=flowerNow();document.body.dataset.flower=f.key;if(el.flower)el.flower.textContent=`${f.name} · ${f.meaning}`;if(lastFlowerKey!==f.key){lastFlowerKey=f.key;if(el.flower){el.flower.classList.remove('bloom');void el.flower.offsetWidth;el.flower.classList.add('bloom')}seedPetals()}}
 const SCENE_ACTOR_PROFILES={
- ch1class:['walk','walk-alt','light'],cafeteria:['walk','walk-alt'],sunset:['walk-alt','light'],night:['turn'],library:['shadow','light'],festival:['walk','walk-alt','light'],radio:['paper'],high3:['paper','shadow'],plant:['flower'],gradcg:['flower'],gate:['walk','walk-alt'],road:['walk-alt']
+ ch1class:['light','paper'],cafeteria:['light','shadow'],sunset:['light','shadow'],night:['paper','shadow'],library:['light','shadow'],festival:['light','paper'],radio:['paper','shadow'],high3:['paper','shadow'],plant:['light'],gradcg:['light'],gate:['light','shadow'],road:['shadow']
 };
 function configureSceneActors(key){if(!el.actors)return;const a=SCENE_ACTOR_PROFILES[key]||[];el.actors.innerHTML=a.map(k=>k==='walk'?'<i class="actor-sprite actor-walk"></i>':k==='walk-alt'?'<i class="actor-sprite actor-walk alt"></i>':k==='turn'?'<i class="actor-sprite actor-turn"></i>':k==='flower'?'<i class="actor-sprite actor-flower-lower"></i>':k==='paper'?'<i class="actor-paper"></i>':k==='light'?'<i class="actor-lightband"></i>':'<i class="actor-far-shadow"></i>').join('')}
 const CINEMATIC_SHOTS={
- corridor:['assets/art/shots/corridor_spring.webp','走廊很长。那时候谁都不急着走完。'],cafeteria:['assets/art/shots/cafeteria_shared.webp','四个人抢一盒鸡米花的时候，谁都觉得毕业还远。'],window:['assets/art/shots/window_evening.webp','她抬头的时候，我刚好也在看窗户。'],festival:['assets/art/shots/festival_backstage.webp','唐梨说“别动”的时候，快门总比人反应得快。'],countdown:['assets/art/shots/countdown_48.webp','48天。那时候听起来还挺久。'],bellflower:['assets/art/shots/bellflower_hands.webp','“那我……”  然后他只说了，一路顺风。'],empty:['assets/art/shots/empty_classroom.webp','课桌还在。只是那一排再也不会有人抬头了。'],walk:['assets/art/shots/walk_home.webp','放学路其实没什么特别的。只是那三年，我们总从这里走。']
+ corridor:['assets/art/shots/corridor_spring.webp','走廊很长。那时候谁都不急着走完。'],cafeteria:['assets/art/shots/cafeteria_shared.webp','四个人抢一盒鸡米花的时候，谁都觉得毕业还远。'],window:['assets/art/shots/window_evening.webp','她抬头的时候，我刚好也在看窗户。'],festival:['assets/art/shots/festival_backstage.webp','唐梨说“别动”的时候，快门总比人反应得快。'],countdown:['assets/art/shots/countdown_48.webp','48天。那时候听起来还挺久。'],bellflower:['assets/art/shots/bellflower_hands.webp','“那我……”  然后他只说了，一路顺风。'],empty:['assets/art/shots/empty_classroom.webp','课桌还在。只是那一排再也不会有人抬头了。'],walk:['assets/art/shots/walk_home.webp','放学路其实没什么特别的。只是那三年，我们总从这里走。'],zhixiaIntro:['assets/art/focus/zhixia-desk.webp',''],zhouyeIntro:['assets/art/focus/zhouye.webp','']
 };
 async function playCinematicShot(key,ms=2600){if(shotBusy||!el.cinematic)return;const cfg=CINEMATIC_SHOTS[key];if(!cfg)return;shotBusy=true;const [src,caption]=cfg;el.cinematicImage.src=src;el.cinematicImage.alt=caption;el.cinematicCaption.textContent=caption;el.cinematic.hidden=false;playSfx('transition');await new Promise(r=>{if(el.cinematicImage.complete)r();else{const done=()=>r();el.cinematicImage.addEventListener('load',done,{once:true});el.cinematicImage.addEventListener('error',done,{once:true});setTimeout(done,700)}});requestAnimationFrame(()=>requestAnimationFrame(()=>el.cinematic.classList.add('show')));await sleep(isReducedMotion()?240:ms);el.cinematic.classList.remove('show');await sleep(isReducedMotion()?60:460);el.cinematic.hidden=true;el.cinematicImage.removeAttribute('src');shotBusy=false}
 
@@ -219,10 +219,37 @@ function memoryShotPool(){
  return Object.entries(map).filter(([id])=>seen.has(id)).map(([,v])=>[`assets/art/focus/${v[1]}`,v[0]])
 }
 async function playMemoryMontage(){
- const personal=memoryShotPool().slice(0,6).map(([src,name])=>[src,`我那时候真的停下来，看过${name}。`]);const fixed=[['assets/art/group_photo.webp','那时候拍照，总有人闭眼。'],['assets/art/shots/corridor_spring.webp','下课铃一响，走廊一下子就满了。'],['assets/art/shots/cafeteria_shared.webp','“两份。”'],['assets/art/shots/window_evening.webp','我不是故意看她。大概。'],['assets/art/shots/festival_backstage.webp','唐梨的相机里，大家从来没有准备好。'],['assets/art/cg_peace.webp','四盒鸡米花。谁也没先笑。'],['assets/art/shots/countdown_48.webp','48天。真的很快。'],['assets/art/shots/bellflower_hands.webp','“那我……”'],['assets/art/cg_pressflower.webp','最后一行，没有写。'],['assets/art/shots/empty_classroom.webp','后来教室真的空了。']];const shots=[...personal,...fixed];
- el.montage.hidden=false;el.montage.classList.remove('cut','out','flash','fast');for(let i=0;i<shots.length;i++){const [src,caption]=shots[i];el.montage.classList.toggle('fast',i>Math.floor(shots.length*.55));el.montage.classList.remove('cut','out');el.montageImage.src=src;el.montageImage.alt='青春回忆 '+(i+1);el.montageCaption.textContent=caption;if(i>0){el.montage.classList.remove('flash');void el.montage.offsetWidth;el.montage.classList.add('flash')}await sleep(isReducedMotion()?80:110);el.montage.classList.add('cut');await sleep(isReducedMotion()?170:Math.max(430,1250-i*62));el.montage.classList.add('out');await sleep(isReducedMotion()?70:150)}el.montage.classList.remove('cut','fast');await sleep(isReducedMotion()?60:500);el.montage.hidden=true
+ const personal=memoryShotPool().slice(0,7).map(([src,name],i)=>[src,[`我那时候真的停下来，看过${name}。`,`后来想起来，最先回来的也是${name}。`,`那时没有觉得特别。后来才知道，它其实一直留在我心里。`][i%3]]);
+ const fixed=[
+  ['assets/art/group_photo.webp','那时候拍照，总有人来不及站好。'],
+  ['assets/art/shots/corridor_spring.webp','下课铃一响，走廊一下子就满了。'],
+  ['assets/art/shots/cafeteria_shared.webp','“两份。” 然后谁也没有认真算过是谁欠谁。'],
+  ['assets/art/shots/window_evening.webp','她抬头的时候，窗外的光也刚好落下来。'],
+  ['assets/art/shots/festival_backstage.webp','唐梨的相机里，我们总比记忆先一步长大。'],
+  ['assets/art/cg_peace.webp','四盒鸡米花。谁也没先笑，可谁都已经不生气了。'],
+  ['assets/art/shots/countdown_48.webp','48天。那时候还觉得，够我们把很多话慢慢说完。'],
+  ['assets/art/shots/bellflower_hands.webp','“那我……”  后半句，被风吹散了。'],
+  ['assets/art/cg_graduation.webp','她把桔梗藏在身后，我把那张纸捏得很皱。'],
+  ['assets/art/cg_pressflower.webp','最后一页合上以后，有些话就真的只剩花了。'],
+  ['assets/art/shots/empty_classroom.webp','后来教室真的空了。只剩回忆还坐在原位。']
+ ];
+ const shots=[...personal,...fixed];
+ el.montage.hidden=false;el.montage.classList.remove('cut','out','flash','fast');
+ for(let i=0;i<shots.length;i++){
+   const [src,caption]=shots[i];
+   el.montage.classList.toggle('fast',i>Math.floor(shots.length*.62));
+   el.montage.classList.remove('cut','out');
+   el.montageImage.src=src;el.montageImage.alt='青春回忆 '+(i+1);el.montageCaption.textContent=caption;
+   if(i>0){el.montage.classList.remove('flash');void el.montage.offsetWidth;el.montage.classList.add('flash')}
+   await sleep(isReducedMotion()?90:120);
+   el.montage.classList.add('cut');
+   await sleep(isReducedMotion()?185:Math.max(500,1400-i*58));
+   el.montage.classList.add('out');
+   await sleep(isReducedMotion()?80:165)
+ }
+ el.montage.classList.remove('cut','fast');await sleep(isReducedMotion()?80:650);el.montage.hidden=true
 }
-function setHotspots(items){el.hotspots.innerHTML='';items.forEach(h=>{const b=document.createElement('button');b.className='hotspot'+(h.done?.()?' done':'');b.dataset.label=h.label;b.dataset.kind=focusKind(h.label);b.setAttribute('aria-label',h.label);Object.assign(b.style,{left:h.x+'%',top:h.y+'%',width:h.w+'%',height:h.h+'%'});const preload=new Image();preload.src='assets/art/focus/'+(focusAssets[h.label]||'generic.webp');b.onclick=async()=>{if(b.dataset.busy==='1')return;b.dataset.busy='1';const go=await openFocusScene(h.label,b);if(go){await h.onClick(b);if(h.id)markInspected(h.id);if(h.done?.())b.classList.add('done')}b.dataset.busy='0'};el.hotspots.appendChild(b)})}
+function setHotspots(items){el.hotspots.innerHTML='';items.forEach(h=>{const b=document.createElement('button');b.className='hotspot'+(h.done?.()?' done':'');b.dataset.label=h.label;b.dataset.kind=focusKind(h.label);b.setAttribute('aria-label',h.label);Object.assign(b.style,{left:h.x+'%',top:h.y+'%',width:h.w+'%',height:h.h+'%'});const preload=new Image();preload.src='assets/art/focus/'+(focusAssets[h.label]||'generic.webp');b.onclick=async()=>{if(b.dataset.busy==='1')return;if(!el.dialogue.hidden||!el.cinematic.hidden||!el.montage.hidden||!el.object.hidden||!el.focus.hidden){if(!el.dialogue.hidden)toast('先把当前文字看完。');return}b.dataset.busy='1';const go=await openFocusScene(h.label,b);if(go){await h.onClick(b);if(h.id)markInspected(h.id);if(h.done?.())b.classList.add('done')}b.dataset.busy='0'};el.hotspots.appendChild(b)})}
 
 // PETALS
 const cv=$('#petals'),ctx=cv.getContext('2d');let petals=[];
@@ -267,7 +294,7 @@ function puzzle1(){
   $('#tryLock').onclick=async()=>{const okClues=['blackboard','duty','gradphoto'].every(inspected);const code=$$('.wheel').map(w=>w.dataset.v||'0').join('');const st=$('#lockStatus');if(!okClues){st.className='status-line error';st.textContent='把手没有动。你还没有足够证据确定这个日期。';return}if(code!=='0607'){fails++;st.className='status-line error';st.textContent=fails>=2?'值日表是6月5日；黑板写“距高考2天”，毕业照也标着6月7日。所以锁码是 0607。':'金属锁舌没有弹开。三个日期线索应该指向同一天。';return}st.className='status-line success';st.textContent='咔哒。';state.puzzles.pz1=true;addItem('植物观察册');addItem('四人照片');addItem('旧课本');addItem('毕业日期');addItem('毕业照');setCheckpoint('transitionPast');playSfx('bell');await sleep(500);closeObject();await transitionToPast()}
  });
 }
-async function transitionToPast(){setCheckpoint('transitionPast');renderScene('photo',{memory:true,cinematic:true});await say([{t:'照片有点糊。可那天下午好像真的很亮。'},{s:'周野',t:'快点快点，再拍一张！'},{s:'唐梨',t:'你已经拍十六张了。'},{s:'沈知夏',t:'林屿你不要每次都闭眼。'}]);await playCinematicShot('corridor',2800);state.chapter=1;setCheckpoint('ch1class');renderScene('ch1class',{memory:true});ambient('room');await say([{t:'第一章 · 向日葵｜鸡米花应该算一道菜吗'},{s:'老师',t:'四人一组。沈知夏记录，唐梨拍照，林屿整理文字。'},{s:'周野',t:'我可以负责战略统筹。'},{s:'老师',t:'你负责搬花盆。'},{s:'唐梨',t:'……挺适合你的。'}]);setupCh1Class();}
+async function transitionToPast(){setCheckpoint('transitionPast');renderScene('photo',{memory:true,cinematic:true});await say([{t:'照片有点糊。可那天下午好像真的很亮。'},{s:'周野',t:'快点快点，再拍一张！'},{s:'唐梨',t:'你已经拍十六张了。'},{s:'沈知夏',t:'林屿你不要每次都闭眼。'}]);await playCinematicShot('corridor',2500);state.chapter=1;setCheckpoint('ch1class');renderScene('ch1class',{memory:true});ambient('room');await say([{t:'第一章 · 向日葵｜鸡米花应该算一道菜吗'},{s:'老师',t:'四人一组。沈知夏记录，唐梨拍照，林屿整理文字。'}]);await playCinematicShot('zhixiaIntro',1050);await say([{s:'沈知夏',t:'好。'}]);await playCinematicShot('zhouyeIntro',900);await say([{s:'周野',t:'我可以负责战略统筹。'},{s:'老师',t:'你负责搬花盆。'},{s:'唐梨',t:'……挺适合你的。'}]);setupCh1Class();}
 function puzzle2(){
  const pts=[['花瓣',45,20],['叶片',28,43],['茎',49,53],['光照方向',75,18],['花盆标签',52,79]];
  openObject(`<div class="physical plant-board"><div class="plant-visual"><svg viewBox="0 0 520 440" aria-label="植物观察对象"><rect width="520" height="440" fill="#bcc9bd"/><rect y="350" width="520" height="90" fill="#9b8569"/><path d="M260 360 C250 300 270 250 258 175 C245 120 270 75 250 38" stroke="#53745a" stroke-width="12" fill="none"/><path d="M254 210 C200 180 170 180 132 145 C195 145 238 165 260 195 M260 275 C315 245 350 230 388 195 C330 195 290 215 260 250" stroke="#628164" stroke-width="15" fill="none"/><path d="M250 45 c-45 -35 -85 10 -62 52 c-49 7 -44 64 2 73 c-17 47 40 70 68 31 c34 35 84 4 69 -38 c49 -10 45 -65 -3 -74 c12 -46 -39 -74 -74 -44z" fill="#b6a565" stroke="#625c42" stroke-width="7"/><rect x="190" y="330" width="140" height="70" fill="#8c6f55" stroke="#5e4939" stroke-width="6"/><rect x="225" y="357" width="70" height="28" fill="#d9ccb1"/><text x="238" y="378" font-size="18" fill="#5a5144">B-17</text><path d="M380 60 L480 20" stroke="#e6d5a1" stroke-width="35" opacity=".32"/></svg>${pts.map(([n,x,y])=>`<button class="plant-point" data-name="${n}" style="left:${x}%;top:${y}%" aria-label="观察${n}"></button>`).join('')}</div><div class="plant-notes"><h2>植物观察</h2><p id="observeCount">已观察 0 / 5</p><div class="slots"><div class="slot" data-answer="5枚花瓣">花瓣：<span></span></div><div class="slot" data-answer="披针形">叶片：<span></span></div><div class="slot" data-answer="直立">茎：<span></span></div><div class="slot" data-answer="右上方">光照：<span></span></div><div class="slot" data-answer="B-17">标签：<span></span></div><div class="slot" data-answer="6月12日">日期：<span></span></div></div><div class="chips">${['右上方','B-17','披针形','5枚花瓣','直立','6月12日'].map(x=>`<div class="chip" draggable="true">${x}</div>`).join('')}</div><button class="puzzle-btn" id="finishPlant">完成第一页</button><div id="plantStatus" class="status-line"></div></div></div>`,()=>{
@@ -302,6 +329,7 @@ function puzzle4(){
    document.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==pid||f.classList.contains('locked'))return;if(Math.hypot(e.clientX-sx,e.clientY-sy)>5)moved=true;if(!moved)return;const r=board.getBoundingClientRect();f.style.left=((e.clientX-r.left-ox)/r.width*100)+'%';f.style.top=((e.clientY-r.top-oy)/r.height*100)+'%'},{signal:ctrl.signal});
    const up=e=>{if(!drag||e.pointerId!==pid)return;drag=false;const i=+f.dataset.i;if(!moved){arm(f);return}const r=board.getBoundingClientRect(),fr=f.getBoundingClientRect(),cx=(fr.left-r.left)/r.width*100,cy=(fr.top-r.top)/r.height*100,slt=slots[i];if(Math.abs(cx-slt.x)<7&&Math.abs(cy-slt.y)<7)snap(f,i);else setStatus('这块纸接在这里不顺。可以拖回去，也可以点它再选空位。')};
    document.addEventListener('pointerup',up,{signal:ctrl.signal});document.addEventListener('pointercancel',up,{signal:ctrl.signal});
+   f.onclick=()=>{if(!moved&&!f.classList.contains('locked'))arm(f)};
    f.onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&!f.classList.contains('locked')){e.preventDefault();arm(f)}};
   });
   $$('.paper-slot').forEach(slot=>{slot.onclick=()=>{if(!armed){setStatus('先选一块纸。');return}const target=+slot.dataset.slot,actual=+armed.dataset.i;if(target!==actual){setStatus('断句和纸片大小对不上。换一个空位试试。');playSfx('click');return}snap(armed,target)}});
