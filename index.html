@@ -20,7 +20,7 @@
         <button id="startBtn" class="paper-btn primary">开始</button>
         <button id="continueBtn" class="paper-btn">继续</button>
       </div>
-      <p class="title-note">建议佩戴耳机 · 按住 → / D 或手机画面右侧，可以让镜头继续往记忆深处走 · 进度自动保存</p>
+      <p class="title-note">建议佩戴耳机。进度会自动保存在本机。</p>
     </div>
   </section>
 
@@ -29,6 +29,7 @@
       <div class="hud-left">
         <span id="chapterLabel" class="chapter-label">序章</span>
         <span id="sceneLabel" class="scene-label">九年后的高三七班</span>
+        <span id="flowerLabel" class="flower-label" aria-hidden="true"></span>
       </div>
       <div class="hud-right">
         <button id="notebookBtn" class="icon-btn" aria-label="植物册">植物册</button>
@@ -39,19 +40,47 @@
     </header>
 
     <section id="scene" class="scene" aria-live="polite">
-      <img id="sceneArt" class="scene-art" src="assets/art/prologue.jpg" alt="九年后的高三七班旧教室" draggable="false" />
-      <div id="sceneDepth" class="scene-depth" aria-hidden="true">
-        <div class="light-bloom"></div>
-        <div class="shadow-drift"></div>
-        <div class="air-haze"></div>
-      </div>
+      <img id="sceneArt" class="scene-art" src="assets/classroom_old.svg" alt="旧高中教室" draggable="false" />
       <div id="sceneTone" class="scene-tone"></div>
       <div id="hotspotLayer" class="hotspot-layer"></div>
       <div id="memoryVignette" class="memory-vignette" aria-hidden="true"></div>
-      <div id="walkCue" class="walk-cue" hidden aria-hidden="true"><span>向前</span><i>→</i></div>
+      <div id="cameraShade" class="camera-shade" aria-hidden="true"></div>
+      <div id="sceneFx" class="scene-fx" aria-hidden="true">
+        <i class="fx-light"></i><i class="fx-curtain"></i><i class="fx-shadow"></i><i class="fx-dust"></i><i class="fx-rain"></i>
+      </div>
+      <div id="sceneActors" class="scene-actors" aria-hidden="true"></div>
     </section>
 
-    <section id="dialogue" class="dialogue" hidden>
+    <section id="focusScene" class="focus-scene" role="dialog" aria-modal="true" aria-live="polite" aria-label="物件特写" hidden>
+      <div class="focus-backdrop"></div>
+      <div id="focusFrame" class="focus-frame">
+        <div id="focusVisual" class="focus-visual" aria-live="off"></div>
+        <div class="focus-copy">
+          <div id="focusKicker" class="focus-kicker">记忆细节</div>
+          <h2 id="focusTitle"></h2>
+          <p id="focusCaption"></p>
+        </div>
+        <div class="focus-actions">
+          <button id="focusBack" class="focus-btn ghost">退回原处</button>
+          <button id="focusInspect" class="focus-btn">看看这里</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="cinematicShot" class="cinematic-shot" aria-live="polite" aria-label="电影镜头" hidden>
+      <img id="cinematicShotImage" alt="" />
+      <div class="cinematic-letterbox cinematic-letterbox-top"></div>
+      <div class="cinematic-letterbox cinematic-letterbox-bottom"></div>
+      <div id="cinematicShotCaption" class="cinematic-shot-caption"></div>
+    </section>
+
+    <section id="montageScene" class="montage-scene" aria-label="青春回忆蒙太奇" hidden>
+      <img id="montageImage" class="montage-image" alt="回忆画面" />
+      <div class="montage-flash"></div>
+      <div id="montageCaption" class="montage-caption"></div>
+    </section>
+
+    <section id="dialogue" class="dialogue" aria-live="polite" aria-atomic="true" hidden>
       <div class="speaker" id="speaker"></div>
       <div class="line" id="line"></div>
       <button id="dialogueNext" class="dialogue-next" aria-label="继续">继续</button>
@@ -79,7 +108,8 @@
     <div class="side-card settings-card">
       <button id="settingsClose" class="close-btn" aria-label="关闭设置">关闭</button>
       <h2>设置</h2>
-      <label>环境声 <input id="musicRange" type="range" min="0" max="1" step="0.05"></label>
+      <label>音乐 <input id="musicRange" type="range" min="0" max="1" step="0.05"></label>
+      <label>环境声 <input id="ambienceRange" type="range" min="0" max="1" step="0.05"></label>
       <label>音效 <input id="sfxRange" type="range" min="0" max="1" step="0.05"></label>
       <label>文字速度 <input id="textRange" type="range" min="0.6" max="1.6" step="0.1"></label>
       <label class="check"><input id="motionCheck" type="checkbox"> 减少动态效果</label>
