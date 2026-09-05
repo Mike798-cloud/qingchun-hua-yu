@@ -17,25 +17,25 @@ const el={
 };
 const chapterNames=['序章','第一章','第二章','第三章','第四章','第五章','终章'];
 const scenes={
- prologue:{title:'九年后的高三七班',art:'assets/classroom_old.svg',alt:'九年后的高三七班旧教室'},
- photo:{title:'四人照片',art:'assets/group_photo.svg',alt:'四名高中生的旧照片'},
- ch1class:{title:'高二教室',art:'assets/classroom_warm.svg',alt:'六月阳光下的高二教室'},
- cafeteria:{title:'学校食堂',art:'assets/cafeteria.svg',alt:'学校食堂与鸡米花餐盘'},
- sunset:{title:'操场夕阳',art:'assets/sunset.svg',alt:'傍晚校园活动场地'},
- night:{title:'晚自习',art:'assets/night_classroom.svg',alt:'灯光下的晚自习教室'},
- library:{title:'图书馆',art:'assets/library.svg',alt:'学校图书馆植物分类书架'},
- festival:{title:'校园艺术节',art:'assets/festival.svg',alt:'校园艺术节场景'},
- radio:{title:'广播站',art:'assets/radio.svg',alt:'校内广播站磁带设备'},
- high3:{title:'高三教室',art:'assets/high3.svg',alt:'距离毕业48天的高三教室'},
- notebook:{title:'植物观察册',art:'assets/notebook.svg',alt:'植物观察册与桔梗页'},
- blackboard:{title:'毕业日重构',art:'assets/blackboard.svg',alt:'贴满证据的黑板'},
- plant:{title:'毕业日 · 植物角',art:'assets/plant_corner.svg',alt:'毕业日植物角与桔梗'},
- gate:{title:'校门',art:'assets/school_gate.svg',alt:'傍晚学校大门'},
- road:{title:'九年后 · 校门外',art:'assets/ending_road.svg',alt:'九年后的校门外道路'},
- windowcg:{title:'靠窗第三排',art:'assets/cg_window.svg',alt:'夜色窗玻璃中的两名高中生倒影'},
- peacecg:{title:'和平谈判物资',art:'assets/cg_peace.svg',alt:'四盒鸡米花放在课桌上的和解场面'},
- gradcg:{title:'毕业日 · 没说出口的话',art:'assets/cg_graduation.svg',alt:'毕业日两名高中生与藏在身后的桔梗花束'},
- presscg:{title:'最后一页',art:'assets/cg_pressflower.svg',alt:'桔梗被压进植物观察册最后一页'}
+ prologue:{title:'九年后的高三七班',art:'assets/art/classroom_old.webp',alt:'九年后的高三七班旧教室'},
+ photo:{title:'四人照片',art:'assets/art/group_photo.webp',alt:'四名高中生的旧照片'},
+ ch1class:{title:'高二教室',art:'assets/art/classroom_warm.webp',alt:'六月阳光下的高二教室'},
+ cafeteria:{title:'学校食堂',art:'assets/art/cafeteria.webp',alt:'学校食堂与鸡米花餐盘'},
+ sunset:{title:'操场夕阳',art:'assets/art/sunset.webp',alt:'傍晚校园活动场地'},
+ night:{title:'晚自习',art:'assets/art/night_classroom.webp',alt:'灯光下的晚自习教室'},
+ library:{title:'图书馆',art:'assets/art/library.webp',alt:'学校图书馆植物分类书架'},
+ festival:{title:'校园艺术节',art:'assets/art/festival.webp',alt:'校园艺术节场景'},
+ radio:{title:'广播站',art:'assets/art/radio.webp',alt:'校内广播站磁带设备'},
+ high3:{title:'高三教室',art:'assets/art/high3.webp',alt:'距离毕业48天的高三教室'},
+ notebook:{title:'植物观察册',art:'assets/art/notebook.webp',alt:'植物观察册与桔梗页'},
+ blackboard:{title:'毕业日重构',art:'assets/art/blackboard.webp',alt:'贴满证据的黑板'},
+ plant:{title:'毕业日 · 植物角',art:'assets/art/plant_corner.webp',alt:'毕业日植物角与桔梗'},
+ gate:{title:'校门',art:'assets/art/school_gate.webp',alt:'傍晚学校大门'},
+ road:{title:'九年后 · 校门外',art:'assets/art/ending_road.webp',alt:'九年后的校门外道路'},
+ windowcg:{title:'靠窗第三排',art:'assets/art/cg_window.webp',alt:'夜色窗玻璃中的两名高中生倒影'},
+ peacecg:{title:'和平谈判物资',art:'assets/art/cg_peace.webp',alt:'四盒鸡米花放在课桌上的和解场面'},
+ gradcg:{title:'毕业日 · 没说出口的话',art:'assets/art/cg_graduation.webp',alt:'毕业日两名高中生与藏在身后的桔梗花束'},
+ presscg:{title:'最后一页',art:'assets/art/cg_pressflower.webp',alt:'桔梗被压进植物观察册最后一页'}
 };
 
 const FLOWERS={
@@ -82,7 +82,7 @@ const SCENE_ACTOR_PROFILES={
 };
 function configureSceneActors(key){if(!el.actors)return;const a=SCENE_ACTOR_PROFILES[key]||[];el.actors.innerHTML=a.map(k=>k==='walk'?'<i class="actor-sprite actor-walk"></i>':k==='walk-alt'?'<i class="actor-sprite actor-walk alt"></i>':k==='turn'?'<i class="actor-sprite actor-turn"></i>':k==='flower'?'<i class="actor-sprite actor-flower-lower"></i>':k==='paper'?'<i class="actor-paper"></i>':k==='light'?'<i class="actor-lightband"></i>':'<i class="actor-far-shadow"></i>').join('')}
 const CINEMATIC_SHOTS={
- corridor:['assets/shots/corridor_spring.svg','走廊很长。那时候谁都不急着走完。'],cafeteria:['assets/shots/cafeteria_shared.svg','四个人抢一盒鸡米花的时候，谁都觉得毕业还远。'],window:['assets/shots/window_evening.svg','她抬头的时候，我刚好也在看窗户。'],festival:['assets/shots/festival_backstage.svg','唐梨说“别动”的时候，快门总比人反应得快。'],countdown:['assets/shots/countdown_48.svg','48天。那时候听起来还挺久。'],bellflower:['assets/shots/bellflower_hands.svg','“那我……”  然后他只说了，一路顺风。'],empty:['assets/shots/empty_classroom.svg','课桌还在。只是那一排再也不会有人抬头了。'],walk:['assets/shots/walk_home.svg','放学路其实没什么特别的。只是那三年，我们总从这里走。']
+ corridor:['assets/art/shots/corridor_spring.webp','走廊很长。那时候谁都不急着走完。'],cafeteria:['assets/art/shots/cafeteria_shared.webp','四个人抢一盒鸡米花的时候，谁都觉得毕业还远。'],window:['assets/art/shots/window_evening.webp','她抬头的时候，我刚好也在看窗户。'],festival:['assets/art/shots/festival_backstage.webp','唐梨说“别动”的时候，快门总比人反应得快。'],countdown:['assets/art/shots/countdown_48.webp','48天。那时候听起来还挺久。'],bellflower:['assets/art/shots/bellflower_hands.webp','“那我……”  然后他只说了，一路顺风。'],empty:['assets/art/shots/empty_classroom.webp','课桌还在。只是那一排再也不会有人抬头了。'],walk:['assets/art/shots/walk_home.webp','放学路其实没什么特别的。只是那三年，我们总从这里走。']
 };
 async function playCinematicShot(key,ms=2600){if(shotBusy||!el.cinematic)return;const cfg=CINEMATIC_SHOTS[key];if(!cfg)return;shotBusy=true;const [src,caption]=cfg;el.cinematicImage.src=src;el.cinematicImage.alt=caption;el.cinematicCaption.textContent=caption;el.cinematic.hidden=false;playSfx('transition');await new Promise(r=>{if(el.cinematicImage.complete)r();else{const done=()=>r();el.cinematicImage.addEventListener('load',done,{once:true});el.cinematicImage.addEventListener('error',done,{once:true});setTimeout(done,700)}});requestAnimationFrame(()=>requestAnimationFrame(()=>el.cinematic.classList.add('show')));await sleep(isReducedMotion()?240:ms);el.cinematic.classList.remove('show');await sleep(isReducedMotion()?60:460);el.cinematic.hidden=true;el.cinematicImage.removeAttribute('src');shotBusy=false}
 
@@ -152,7 +152,7 @@ function hint(){const p=state.puzzles;let t='先看一遍场景里有名字的�
  showSide(`<h2>一片花瓣</h2><p>${t}</p><p style="color:#706657;font-size:13px">提示不会替你自动完成谜题。</p>`)}
 $('#hintBtn').onclick=hint;
 $('#inventoryBtn').onclick=()=>showSide(`<h2>旧帆布笔袋</h2><div class="inventory-list">${state.inventory.length?state.inventory.map(x=>`<div class="inv-item">${x}</div>`).join(''):'<p>现在还是空的。</p>'}</div>`);
-$('#notebookBtn').onclick=()=>showSide(`<h2>植物观察册</h2><img src="assets/notebook.svg" alt="植物观察册" style="width:100%;border:1px solid #8e8069"><p>${state.puzzles.pz8?'第33页已经回到册子旁边。桔梗页仍然留着一块空白。':state.puzzles.pz2?'第一页已经完成。后面的页角有许多被翻过的痕迹。':'封面旧得发软，里面还没有重新整理。'}</p>`);
+$('#notebookBtn').onclick=()=>showSide(`<h2>植物观察册</h2><img src="assets/art/notebook.webp" alt="植物观察册" style="width:100%;border:1px solid #8e8069"><p>${state.puzzles.pz8?'第33页已经回到册子旁边。桔梗页仍然留着一块空白。':state.puzzles.pz2?'第一页已经完成。后面的页角有许多被翻过的痕迹。':'封面旧得发软，里面还没有重新整理。'}</p>`);
 $('#settingsBtn').onclick=()=>{const s=state.settings;$('#musicRange').value=s.music;$('#ambienceRange').value=s.ambience??.58;$('#sfxRange').value=s.sfx;$('#textRange').value=s.textSpeed;$('#motionCheck').checked=s.reduceMotion;el.settings.hidden=false};
 $('#musicRange').oninput=e=>{state.settings.music=+e.target.value;save();updateAudioGain()};
 $('#ambienceRange').oninput=e=>{state.settings.ambience=+e.target.value;save();updateAudioGain()};
@@ -187,13 +187,13 @@ function focusKind(label=''){
  if(/周野/.test(label))return 'person';if(/黑板/.test(label))return 'board';if(/吊扇/.test(label))return 'fan';if(/饮水/.test(label))return 'water';if(/桌面|课桌|讲台|作业/.test(label))return 'desk';if(/值日表|作文|节目单|留言|住址|订单|空白/.test(label))return 'paper';if(/储物柜/.test(label))return 'locker';if(/植物角/.test(label))return 'plant';if(/书包/.test(label))return 'bag';if(/饮料桌/.test(label))return 'cup';if(/餐盘|鸡米花|饭卡机|窗口/.test(label))return 'tray';if(/窗户|靠窗/.test(label))return 'window';if(/灯管/.test(label))return 'light';if(/相机/.test(label))return 'camera';if(/毕业照片/.test(label))return 'photo';if(/书架|分类牌/.test(label))return 'label';if(/桔梗/.test(label))return 'flower';return 'generic'
 }
 const focusAssets={
- '黑板':'blackboard.svg','吊扇':'fan.svg','饮水机':'water.svg','靠窗第三排':'window-seat.svg','课桌底部刻痕':'desk-scratch.svg','值日表':'duty-roster.svg','毕业照片标签':'grad-photo.svg','储物柜':'locker.svg','植物角':'plant-corner.svg','讲台':'podium.svg','沈知夏的桌面':'zhixia-desk.svg','周野':'zhouye.svg','窗口与饭卡机':'card-machine.svg','饭卡机':'card-machine.svg','鸡米花餐盘':'chicken-tray.svg','沈知夏的书包':'zhixia-bag.svg','远处餐盘声':'cafeteria-rhythm.svg','窗户倒影':'window-reflection.svg','白色灯管':'tube-light.svg','校刊室里的作文':'essay.svg','植物类书架':'library-shelf.svg','书架分类牌':'shelf-label.svg','饮料桌':'drinks-table.svg','唐梨的相机':'tangli-camera.svg','周野的节目单':'zhou-program.svg','四张无署名留言':'four-notes.svg','四个人的旧作业':'old-homework.svg','住址资料':'address-doc.svg','夹在册后的花店订单':'flower-order.svg','桔梗页的空白':'bellflower-blank.svg'
+ '黑板':'blackboard.webp','吊扇':'fan.webp','饮水机':'water.webp','靠窗第三排':'window-seat.webp','课桌底部刻痕':'desk-scratch.webp','值日表':'duty-roster.webp','毕业照片标签':'grad-photo.webp','储物柜':'locker.webp','植物角':'plant-corner.webp','讲台':'podium.webp','沈知夏的桌面':'zhixia-desk.webp','周野':'zhouye.webp','窗口与饭卡机':'card-machine.webp','饭卡机':'card-machine.webp','鸡米花餐盘':'chicken-tray.webp','沈知夏的书包':'zhixia-bag.webp','远处餐盘声':'cafeteria-rhythm.webp','窗户倒影':'window-reflection.webp','白色灯管':'tube-light.webp','校刊室里的作文':'essay.webp','植物类书架':'library-shelf.webp','书架分类牌':'shelf-label.webp','饮料桌':'drinks-table.webp','唐梨的相机':'tangli-camera.webp','周野的节目单':'zhou-program.webp','四张无署名留言':'four-notes.webp','四个人的旧作业':'old-homework.webp','住址资料':'address-doc.webp','夹在册后的花店订单':'flower-order.webp','桔梗页的空白':'bellflower-blank.webp'
 };
 const focusCaptionsReplay={'靠窗第三排':'第一次看见这里的时候，我只觉得她坐得离窗很近。再来一次以后，好像更早就知道自己为什么会记住。','沈知夏的桌面':'纸还是那张纸。只是第二次看，连她压住页角的小习惯都能想起来。','窗户倒影':'第一次我说只是刚好。第二次再看，还是很难相信那真的是刚好。','夹在册后的花店订单':'第一次看到“桔梗”时我还在找证据。现在只觉得她那天一定犹豫了很久。','桔梗页的空白':'第二次走到这里，空白比字更明显。'};
 const focusCaptions={
  '黑板':'“还有两天。”以前看到这句话只觉得烦。','吊扇':'第三档又在晃。周野说它迟早会掉，我们居然认真讨论了半节课。','饮水机':'咕噜一声。谁在排队，谁在催，反正下课总是不够用。','靠窗第三排':'不是我的座位。我怎么每次一进教室还是先看这里。','课桌底部刻痕':'原来这么浅。我以前还担心会被老师发现。','值日表':'6月5日。再过两天拍毕业照。那时候谁会把这两个日期连起来。','毕业照片标签':'6月7日。有人闭眼，有人笑得太用力。','储物柜':'门还是有点卡。里面塞过试卷、零食，还有一些不想让老师看见的东西。','植物角':'她说先看叶子。我其实先看了她写字。','讲台':'粉笔、胶带、分组名单。老师每次说“就占你们两分钟”，都不止两分钟。','沈知夏的桌面':'她的字怎么能写这么小。借她笔记的时候我每次都要凑很近。','周野':'他绝对没睡。真的睡着的人不会一听见零食袋就抬头。','窗口与饭卡机':'两份。说完以后我才想起来，好像根本没问她要不要。','饭卡机':'绿灯已经亮过一次。她说以后还我，我当时还真信她会专门记着八块钱。','鸡米花餐盘':'十七块。周野嘴里那一块不算“合理损耗”。','沈知夏的书包':'……她明明带饭卡了。那刚才为什么说没带。','远处餐盘声':'叮、当、叮。听久了居然有节拍。','窗户倒影':'刚才是不是对视了？应该没有。她只是刚好抬头。嗯，肯定是。','白色灯管':'亮得有点过分。晚自习最奇怪的地方是，明明困得要死，又觉得今晚还很长。','校刊室里的作文':'我怎么会写“如果有一天离开这里”。写得像马上要毕业一样。','植物类书架':'这么多本。她到底怎么一眼就找到自己要的。','书架分类牌':'QK、QL、R。以前觉得麻烦，现在居然还能背出来。','饮料桌':'“少冰”改成“少点冰”，又划掉。唐梨说我写字像在跟自己吵架。','唐梨的相机':'她总说“别动”。可她后来留下最好看的照片，好像都没人准备好。','周野的节目单':'三个感叹号起步。除了周野没人会这样写。','四张无署名留言':'怎么都写这么短。是不是写长了就会显得太认真。','四个人的旧作业':'同一张作业纸，居然一眼就能看出是谁的。','住址资料':'毕业以后就搬走。不是今天，也不是明天。所以我那一秒还觉得——好像来得及。','夹在册后的花店订单':'桔梗。毕业那天取。她为什么要订这个。','桔梗页的空白':'这里明明压过笔。她最后还是没写。'
 };
-function focusMarkup(label){const file=focusAssets[label]||'generic.svg',kind=focusKind(label);const micro=kind==='paper'||kind==='board'?'<i class="focus-micro micro-paper-corner"></i><i class="focus-micro micro-pen"></i>':kind==='window'?'<i class="focus-micro micro-window-glint"></i>':kind==='person'?'<i class="focus-micro micro-person-blink"></i>':kind==='plant'||kind==='flower'?'<i class="focus-micro micro-plant-leaf"></i>':kind==='tray'||kind==='cup'?'<i class="focus-micro micro-steam"></i>':'';return `<figure class="focus-art-wrap" data-kind="${kind}"><img class="focus-art" src="assets/focus/${file}" alt="${label}的独立重构特写"><span class="focus-depth focus-depth-back" aria-hidden="true"></span><span class="focus-depth focus-depth-front" aria-hidden="true"></span><span class="focus-lens" aria-hidden="true"></span><span class="focus-breath" aria-hidden="true"></span>${micro}</figure>`}
+function focusMarkup(label){const file=focusAssets[label]||'generic.webp',kind=focusKind(label);const micro=kind==='paper'||kind==='board'?'<i class="focus-micro micro-paper-corner"></i><i class="focus-micro micro-pen"></i>':kind==='window'?'<i class="focus-micro micro-window-glint"></i>':kind==='person'?'<i class="focus-micro micro-person-blink"></i>':kind==='plant'||kind==='flower'?'<i class="focus-micro micro-plant-leaf"></i>':kind==='tray'||kind==='cup'?'<i class="focus-micro micro-steam"></i>':'';return `<figure class="focus-art-wrap" data-kind="${kind}"><img class="focus-art" src="assets/art/focus/${file}" alt="${label}的独立重构特写"><span class="focus-depth focus-depth-back" aria-hidden="true"></span><span class="focus-depth focus-depth-front" aria-hidden="true"></span><span class="focus-lens" aria-hidden="true"></span><span class="focus-breath" aria-hidden="true"></span>${micro}</figure>`}
 function playFocusCue(kind,label){const cue=(kind==='paper'||kind==='board')?'focusPaper':kind==='window'?'focusWindow':kind==='person'?'focusPerson':(kind==='plant'||kind==='flower')?'focusFlower':state.flags.replay&&focusCaptionsReplay[label]?'focusMemory':'focus';playSfx(cue)}
 function focusPushIn(sourceButton){
  if(isReducedMotion()||!el.sceneArt.animate)return Promise.resolve();
@@ -201,7 +201,7 @@ function focusPushIn(sourceButton){
  const r=sourceButton?.getBoundingClientRect?.();if(!r)return Promise.resolve();
  const cx=r.left+r.width/2,cy=r.top+r.height/2,dx=(innerWidth/2-cx)*.11,dy=(innerHeight/2-cy)*.11;
  el.hotspots.style.pointerEvents='none';el.shade.classList.add('focus-push');
- focusPushAnim=el.sceneArt.animate([{transform:getComputedStyle(el.sceneArt).transform==='none'?'scale(1.02)':getComputedStyle(el.sceneArt).transform,filter:'brightness(1)'},{transform:`translate3d(${dx}px,${dy}px,0) scale(1.16)`,filter:'brightness(.88) saturate(.9)'}],{duration:430,easing:'cubic-bezier(.2,.72,.12,1)',fill:'forwards'});
+ focusPushAnim=el.sceneArt.animate([{transform:getComputedStyle(el.sceneArt).transform==='none'?'scale(1.02)':getComputedStyle(el.sceneArt).transform,filter:'brightness(1)'},{transform:`translate3d(${dx}px,${dy}px,0) scale(1.205)`,filter:'brightness(.88) saturate(.9)'}],{duration:560,easing:'cubic-bezier(.2,.72,.12,1)',fill:'forwards'});
  return focusPushAnim.finished.catch(()=>{});
 }
 function focusPullOut(){try{focusPushAnim?.cancel()}catch{}focusPushAnim=null;el.sceneArt.style.transform='';el.sceneArt.style.filter='';el.shade.classList.remove('focus-push');el.hotspots.style.pointerEvents='';runSceneDirector(state.scene)}
@@ -210,29 +210,54 @@ function openFocusScene(label,sourceButton){return new Promise(async resolve=>{
  el.shade.style.setProperty('--focus-x',x+'px');el.shade.style.setProperty('--focus-y',y+'px');
  await focusPushIn(sourceButton);duckMix(true);
  el.focus.style.setProperty('--focus-x',x+'px');el.focus.style.setProperty('--focus-y',y+'px');el.focus.dataset.kind=focusKind(label);el.focusVisual.innerHTML=focusMarkup(label);el.focusTitle.textContent=label;el.focusCaption.textContent=(state.flags.replay&&focusCaptionsReplay[label])||focusCaptions[label]||'凑近一点以后，才发现这里原来有这么多小地方。';el.focusKicker.textContent=`${flowerNow().name} · ${state.chapter>=5?'毕业以前':'那时候'}`;el.focus.hidden=false;el.focus.classList.remove('ready','leaving');el.focus.classList.add('entering');playFocusCue(focusKind(label),label);
- const img=el.focusVisual.querySelector('img');img?.addEventListener('error',()=>{img.src='assets/focus/generic.svg'},{once:true});requestAnimationFrame(()=>requestAnimationFrame(()=>{el.focus.classList.add('ready');el.focus.classList.remove('entering')}));
+ const img=el.focusVisual.querySelector('img');img?.addEventListener('error',()=>{img.src='assets/art/focus/generic.webp'},{once:true});requestAnimationFrame(()=>requestAnimationFrame(()=>{el.focus.classList.add('ready');el.focus.classList.remove('entering')}));
  let done=false;const finish=(go)=>{if(done)return;done=true;focusDismiss=null;el.focus.classList.add('leaving');el.focus.classList.remove('ready');setTimeout(()=>{el.focus.hidden=true;el.focus.classList.remove('leaving','entering');$('#focusInspect').onclick=null;$('#focusBack').onclick=null;focusPullOut();duckMix(false);sourceButton?.focus?.({preventScroll:true});resolve(go)},isReducedMotion()?50:390)};
  focusDismiss=()=>finish(false);$('#focusInspect').onclick=()=>finish(true);$('#focusBack').onclick=()=>finish(false);setTimeout(()=>$('#focusInspect')?.focus({preventScroll:true}),isReducedMotion()?60:720)
 })}
 function memoryShotPool(){
- const seen=new Set(state.inspected||[]),map={blackboard:['黑板','blackboard.svg'],fan:['吊扇','fan.svg'],water:['饮水机','water.svg'],windowseat:['靠窗第三排','window-seat.svg'],scratch:['课桌底部刻痕','desk-scratch.svg'],duty:['值日表','duty-roster.svg'],gradphoto:['毕业照片标签','grad-photo.svg'],plant:['植物角','plant-corner.svg'],zhixia:['沈知夏的桌面','zhixia-desk.svg'],zhouye:['周野','zhouye.svg'],bag:['沈知夏的书包','zhixia-bag.svg'],canteenNoise:['远处餐盘声','cafeteria-rhythm.svg'],windowReflection:['窗户倒影','window-reflection.svg'],tubeHum:['白色灯管','tube-light.svg'],shelf:['书架分类牌','shelf-label.svg'],festivalDrink:['饮料桌','drinks-table.svg'],festivalPhoto:['唐梨的相机','tangli-camera.svg'],festivalZhou:['周野的节目单','zhou-program.svg'],handwriting:['四个人的旧作业','old-homework.svg'],addressdoc:['住址资料','address-doc.svg'],blankBell:['桔梗页的空白','bellflower-blank.svg']};
- return Object.entries(map).filter(([id])=>seen.has(id)).map(([,v])=>[`assets/focus/${v[1]}`,v[0]])
+ const seen=new Set(state.inspected||[]),map={blackboard:['黑板','blackboard.webp'],fan:['吊扇','fan.webp'],water:['饮水机','water.webp'],windowseat:['靠窗第三排','window-seat.webp'],scratch:['课桌底部刻痕','desk-scratch.webp'],duty:['值日表','duty-roster.webp'],gradphoto:['毕业照片标签','grad-photo.webp'],plant:['植物角','plant-corner.webp'],zhixia:['沈知夏的桌面','zhixia-desk.webp'],zhouye:['周野','zhouye.webp'],bag:['沈知夏的书包','zhixia-bag.webp'],canteenNoise:['远处餐盘声','cafeteria-rhythm.webp'],windowReflection:['窗户倒影','window-reflection.webp'],tubeHum:['白色灯管','tube-light.webp'],shelf:['书架分类牌','shelf-label.webp'],festivalDrink:['饮料桌','drinks-table.webp'],festivalPhoto:['唐梨的相机','tangli-camera.webp'],festivalZhou:['周野的节目单','zhou-program.webp'],handwriting:['四个人的旧作业','old-homework.webp'],addressdoc:['住址资料','address-doc.webp'],blankBell:['桔梗页的空白','bellflower-blank.webp']};
+ return Object.entries(map).filter(([id])=>seen.has(id)).map(([,v])=>[`assets/art/focus/${v[1]}`,v[0]])
 }
 async function playMemoryMontage(){
- const personal=memoryShotPool().slice(0,6).map(([src,name])=>[src,`我那时候真的停下来，看过${name}。`]);const fixed=[['assets/group_photo.svg','那时候拍照，总有人闭眼。'],['assets/shots/corridor_spring.svg','下课铃一响，走廊一下子就满了。'],['assets/shots/cafeteria_shared.svg','“两份。”'],['assets/shots/window_evening.svg','我不是故意看她。大概。'],['assets/shots/festival_backstage.svg','唐梨的相机里，大家从来没有准备好。'],['assets/cg_peace.svg','四盒鸡米花。谁也没先笑。'],['assets/shots/countdown_48.svg','48天。真的很快。'],['assets/shots/bellflower_hands.svg','“那我……”'],['assets/cg_pressflower.svg','最后一行，没有写。'],['assets/shots/empty_classroom.svg','后来教室真的空了。']];const shots=[...personal,...fixed];
+ const personal=memoryShotPool().slice(0,6).map(([src,name])=>[src,`我那时候真的停下来，看过${name}。`]);const fixed=[['assets/art/group_photo.webp','那时候拍照，总有人闭眼。'],['assets/art/shots/corridor_spring.webp','下课铃一响，走廊一下子就满了。'],['assets/art/shots/cafeteria_shared.webp','“两份。”'],['assets/art/shots/window_evening.webp','我不是故意看她。大概。'],['assets/art/shots/festival_backstage.webp','唐梨的相机里，大家从来没有准备好。'],['assets/art/cg_peace.webp','四盒鸡米花。谁也没先笑。'],['assets/art/shots/countdown_48.webp','48天。真的很快。'],['assets/art/shots/bellflower_hands.webp','“那我……”'],['assets/art/cg_pressflower.webp','最后一行，没有写。'],['assets/art/shots/empty_classroom.webp','后来教室真的空了。']];const shots=[...personal,...fixed];
  el.montage.hidden=false;el.montage.classList.remove('cut','out','flash','fast');for(let i=0;i<shots.length;i++){const [src,caption]=shots[i];el.montage.classList.toggle('fast',i>Math.floor(shots.length*.55));el.montage.classList.remove('cut','out');el.montageImage.src=src;el.montageImage.alt='青春回忆 '+(i+1);el.montageCaption.textContent=caption;if(i>0){el.montage.classList.remove('flash');void el.montage.offsetWidth;el.montage.classList.add('flash')}await sleep(isReducedMotion()?80:110);el.montage.classList.add('cut');await sleep(isReducedMotion()?170:Math.max(430,1250-i*62));el.montage.classList.add('out');await sleep(isReducedMotion()?70:150)}el.montage.classList.remove('cut','fast');await sleep(isReducedMotion()?60:500);el.montage.hidden=true
 }
-function setHotspots(items){el.hotspots.innerHTML='';items.forEach(h=>{const b=document.createElement('button');b.className='hotspot'+(h.done?.()?' done':'');b.dataset.label=h.label;b.dataset.kind=focusKind(h.label);b.setAttribute('aria-label',h.label);Object.assign(b.style,{left:h.x+'%',top:h.y+'%',width:h.w+'%',height:h.h+'%'});const preload=new Image();preload.src='assets/focus/'+(focusAssets[h.label]||'generic.svg');b.onclick=async()=>{if(b.dataset.busy==='1')return;b.dataset.busy='1';const go=await openFocusScene(h.label,b);if(go){await h.onClick(b);if(h.id)markInspected(h.id);if(h.done?.())b.classList.add('done')}b.dataset.busy='0'};el.hotspots.appendChild(b)})}
+function setHotspots(items){el.hotspots.innerHTML='';items.forEach(h=>{const b=document.createElement('button');b.className='hotspot'+(h.done?.()?' done':'');b.dataset.label=h.label;b.dataset.kind=focusKind(h.label);b.setAttribute('aria-label',h.label);Object.assign(b.style,{left:h.x+'%',top:h.y+'%',width:h.w+'%',height:h.h+'%'});const preload=new Image();preload.src='assets/art/focus/'+(focusAssets[h.label]||'generic.webp');b.onclick=async()=>{if(b.dataset.busy==='1')return;b.dataset.busy='1';const go=await openFocusScene(h.label,b);if(go){await h.onClick(b);if(h.id)markInspected(h.id);if(h.done?.())b.classList.add('done')}b.dataset.busy='0'};el.hotspots.appendChild(b)})}
 
 // PETALS
 const cv=$('#petals'),ctx=cv.getContext('2d');let petals=[];
 function resize(){const dpr=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);seedPetals()}
 addEventListener('resize',resize);
 function pick(arr){return arr[(Math.random()*arr.length)|0]}
-function seedPetals(){const f=flowerNow(),mobile=innerWidth<760,n=Math.round(f.density*(mobile?.68:1));const types=f.key==='mixed'?['daisy','sunflower','gardenia','jacaranda','forget']: [f.key];petals=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,s:f.size[0]+Math.random()*(f.size[1]-f.size[0]),v:f.speed*(.55+Math.random()*.9),w:f.wind*(.5+Math.random()),a:Math.random()*6.28,r:(Math.random()-.5)*.025,color:pick(f.color),depth:.55+Math.random()*.8,type:pick(types),phase:Math.random()*6.28}))}
-function paintPetal(p){ctx.fillStyle=p.color;ctx.beginPath();if(p.type==='daisy'){ctx.ellipse(0,0,p.s*.42,p.s*1.15,0,0,Math.PI*2)}else if(p.type==='sunflower'){ctx.moveTo(0,-p.s*1.05);ctx.bezierCurveTo(p.s*.9,-p.s*.4,p.s*.62,p.s*.65,0,p.s);ctx.bezierCurveTo(-p.s*.42,p.s*.55,-p.s*.62,-p.s*.3,0,-p.s*1.05)}else if(p.type==='gardenia'){ctx.moveTo(0,-p.s);ctx.bezierCurveTo(p.s*.95,-p.s*.65,p.s*.82,p.s*.68,0,p.s*.92);ctx.bezierCurveTo(-p.s*.82,p.s*.68,-p.s*.95,-p.s*.65,0,-p.s)}else if(p.type==='jacaranda'){for(let i=0;i<5;i++){const a=i*Math.PI*2/5-Math.PI/2,r1=p.s*.32,r2=p.s*.95;const x1=Math.cos(a-.34)*r1,y1=Math.sin(a-.34)*r1,x2=Math.cos(a)*r2,y2=Math.sin(a)*r2,x3=Math.cos(a+.34)*r1,y3=Math.sin(a+.34)*r1;if(i===0)ctx.moveTo(x1,y1);ctx.quadraticCurveTo(x2,y2,x3,y3)}ctx.closePath()}else{for(let i=0;i<5;i++){const a=i*Math.PI*2/5;ctx.moveTo(0,0);ctx.ellipse(Math.cos(a)*p.s*.48,Math.sin(a)*p.s*.48,p.s*.34,p.s*.2,a,0,Math.PI*2)}}ctx.fill()}
+function seedPetals(){const f=flowerNow(),mobile=innerWidth<760,n=Math.round(f.density*(mobile?.68:1));const types=f.key==='mixed'?['daisy','sunflower','gardenia','jacaranda','forget']: [f.key];petals=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,s:f.size[0]+Math.random()*(f.size[1]-f.size[0]),v:f.speed*(.55+Math.random()*.9),w:f.wind*(.5+Math.random()),a:Math.random()*6.28,r:(Math.random()-.5)*.025,color:pick(f.color),depth:.45+Math.random()*1.25,type:pick(types),phase:Math.random()*6.28,blur:Math.random()}))}
+function paintPetal(p){
+ const s=p.s,dep=p.depth||1;
+ ctx.save();
+ // near/far petals gain photographic depth instead of flat CSS-particle look
+ ctx.shadowColor='rgba(35,28,22,.22)';ctx.shadowBlur=dep>1.15?2.8:1.2;ctx.shadowOffsetY=dep>1.15?1.2:.5;
+ const g=ctx.createLinearGradient(-s,-s,s,s);
+ const base=p.color;g.addColorStop(0,'rgba(255,255,255,.90)');g.addColorStop(.28,base);g.addColorStop(.72,base);g.addColorStop(1,'rgba(84,70,62,.48)');ctx.fillStyle=g;
+ ctx.strokeStyle='rgba(92,76,65,.22)';ctx.lineWidth=Math.max(.35,s*.055);
+ ctx.beginPath();
+ if(p.type==='daisy'){
+   ctx.moveTo(0,-s*1.18);ctx.bezierCurveTo(s*.55,-s*.92,s*.5,s*.44,0,s*1.06);ctx.bezierCurveTo(-s*.5,s*.44,-s*.55,-s*.92,0,-s*1.18);ctx.closePath();
+ }else if(p.type==='sunflower'){
+   ctx.moveTo(0,-s*1.22);ctx.bezierCurveTo(s*.92,-s*.68,s*.68,s*.68,0,s*1.05);ctx.bezierCurveTo(-s*.5,s*.68,-s*.8,-s*.52,0,-s*1.22);ctx.closePath();
+ }else if(p.type==='gardenia'){
+   ctx.moveTo(0,-s*1.04);ctx.bezierCurveTo(s*1.04,-s*.77,s*.9,s*.72,0,s*.98);ctx.bezierCurveTo(-s*.88,s*.72,-s*1.05,-s*.7,0,-s*1.04);ctx.closePath();
+ }else if(p.type==='jacaranda'){
+   for(let i=0;i<5;i++){const a=i*Math.PI*2/5-Math.PI/2,r1=s*.34,r2=s*.98;const x1=Math.cos(a-.36)*r1,y1=Math.sin(a-.36)*r1,x2=Math.cos(a)*r2,y2=Math.sin(a)*r2,x3=Math.cos(a+.36)*r1,y3=Math.sin(a+.36)*r1;if(i===0)ctx.moveTo(x1,y1);ctx.quadraticCurveTo(x2,y2,x3,y3)}ctx.closePath();
+ }else{
+   for(let i=0;i<5;i++){const a=i*Math.PI*2/5-Math.PI/2;const cx=Math.cos(a)*s*.45,cy=Math.sin(a)*s*.45;ctx.moveTo(0,0);ctx.quadraticCurveTo(cx*1.45,cy*1.45,cx,cy);ctx.quadraticCurveTo(cx*.55,cy*.55,0,0)}
+ }
+ ctx.fill();ctx.stroke();
+ // subtle vein catches light: makes each petal read as a physical object
+ ctx.globalAlpha=.28;ctx.strokeStyle='rgba(255,248,228,.9)';ctx.lineWidth=Math.max(.3,s*.035);ctx.beginPath();ctx.moveTo(0,-s*.74);ctx.quadraticCurveTo(s*.08,0,0,s*.72);ctx.stroke();
+ if(p.type==='forget'){ctx.globalAlpha=.45;ctx.fillStyle='rgba(235,207,91,.85)';ctx.beginPath();ctx.arc(0,0,s*.11,0,Math.PI*2);ctx.fill()}
+ ctx.restore();
+}
 resize();
-(function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);if(!isReducedMotion()){petals.forEach(p=>{p.phase+=p.type==='jacaranda'?.034:.018;const fall=p.type==='jacaranda'?1.55:p.type==='sunflower'?1.2:p.type==='gardenia'?.78:p.type==='forget'?.62:.88;p.y+=p.v*p.depth*fall;const gust=p.type==='jacaranda'?(Math.random()-.5)*.42:p.type==='sunflower'?Math.sin(p.phase*1.7)*p.w*.72:Math.sin(p.phase)*p.w;p.x+=gust*p.depth+(p.type==='gardenia'?Math.sin(p.phase*.55)*.08:0);p.a+=p.r*(p.type==='sunflower'?2.1:p.type==='forget'?.45:1);if(p.y>innerHeight+28||p.x<-40||p.x>innerWidth+40){p.y=-28;p.x=Math.random()*innerWidth}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.globalAlpha=(p.type==='forget'?.3:.36)+.28*p.depth;paintPetal(p);ctx.restore()})}requestAnimationFrame(draw)})();
+(function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);if(!isReducedMotion()){petals.forEach(p=>{p.phase+=p.type==='jacaranda'?.034:.018;const fall=p.type==='jacaranda'?1.55:p.type==='sunflower'?1.2:p.type==='gardenia'?.78:p.type==='forget'?.62:.88;p.y+=p.v*p.depth*fall;const gust=p.type==='jacaranda'?(Math.random()-.5)*.42:p.type==='sunflower'?Math.sin(p.phase*1.7)*p.w*.72:Math.sin(p.phase)*p.w;p.x+=gust*p.depth+(p.type==='gardenia'?Math.sin(p.phase*.55)*.08:0);p.a+=p.r*(p.type==='sunflower'?2.1:p.type==='forget'?.45:1);if(p.y>innerHeight+28||p.x<-40||p.x>innerWidth+40){p.y=-28;p.x=Math.random()*innerWidth}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.globalAlpha=Math.min(.78,(p.type==='forget'?.34:.40)+.22*p.depth);ctx.filter=p.depth>1.42?'blur(1.4px)':p.depth<.65?'blur(.55px)':'none';paintPetal(p);ctx.restore()})}requestAnimationFrame(draw)})();
 
 // PUZZLES
 function puzzle1(){
