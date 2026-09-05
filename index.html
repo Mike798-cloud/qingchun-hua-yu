@@ -33,16 +33,16 @@
         <span id="flowerLabel" class="flower-label" aria-hidden="true"></span>
       </div>
       <div class="hud-right">
-        <button id="notebookBtn" class="icon-btn" aria-label="植物册"><img class="hud-icon" src="assets/ui/notebook.svg" alt=""><span>植物册</span></button>
-        <button id="inventoryBtn" class="icon-btn" aria-label="物品栏"><img class="hud-icon" src="assets/ui/inventory.svg" alt=""><span>物品</span></button>
-        <button id="hintBtn" class="icon-btn" aria-label="提示"><img class="hud-icon" src="assets/ui/hint.svg" alt=""><span>提示</span></button>
-        <button id="supportBtn" class="icon-btn support-btn" aria-label="支持作者 1元"><img class="hud-icon" src="assets/ui/support.svg" alt=""><span>支持<span class="support-price"> 1元</span></span></button>
-        <button id="settingsBtn" class="icon-btn" aria-label="设置"><img class="hud-icon" src="assets/ui/settings.svg" alt=""><span>设置</span></button>
+        <button id="notebookBtn" class="icon-btn" aria-label="植物册">植物册</button>
+        <button id="inventoryBtn" class="icon-btn" aria-label="物品栏">物品</button>
+        <button id="hintBtn" class="icon-btn" aria-label="提示">花瓣提示</button>
+        <button id="supportBtn" class="icon-btn support-btn" aria-label="支持作者 1元">♡ 支持<span class="support-price"> 1元</span></button>
+        <button id="settingsBtn" class="icon-btn" aria-label="设置">设置</button>
       </div>
     </header>
 
     <section id="scene" class="scene" aria-live="polite">
-      <img id="sceneArt" class="scene-art" src="assets/art/classroom_old.webp" alt="旧高中教室" draggable="false" />
+      <div id="sceneStage" class="scene-stage"><img id="sceneArt" class="scene-art" src="assets/art/classroom_old.png" alt="旧高中教室" draggable="false" />
       <div id="sceneTone" class="scene-tone"></div>
       <div id="hotspotLayer" class="hotspot-layer"></div>
       <div id="memoryVignette" class="memory-vignette" aria-hidden="true"></div>
@@ -50,15 +50,17 @@
       <div id="sceneFx" class="scene-fx" aria-hidden="true">
         <i class="fx-light"></i><i class="fx-curtain"></i><i class="fx-shadow"></i><i class="fx-dust"></i><i class="fx-rain"></i>
       </div>
-      <div id="sceneActors" class="scene-actors" aria-hidden="true"></div>
+      <div id="sceneActors" class="scene-actors" aria-hidden="true"></div></div>
     </section>
+
+    <div class="scene-view-controls"><button id="sceneZoom" class="focus-btn" aria-pressed="false">放大场景</button><span id="sceneZoomHint" hidden>左右滑动查看</span></div>
 
     <section id="focusScene" class="focus-scene" role="dialog" aria-modal="true" aria-live="polite" aria-label="物件特写" hidden>
       <div class="focus-backdrop"></div>
       <div id="focusFrame" class="focus-frame">
         <div id="focusVisual" class="focus-visual" aria-live="off"></div>
         <div class="focus-actions">
-          <button id="focusBack" class="focus-btn ghost">← 回去</button>
+          <button id="focusBack" class="focus-btn ghost">回去</button>
           <button id="focusInspect" class="focus-btn">继续观察</button>
         </div>
       </div>
@@ -85,32 +87,23 @@
     <div id="toast" class="toast" role="status"></div>
   </main>
 
-
-  <section id="endingSequence" class="ending-sequence" aria-live="polite" hidden>
-    <div id="endingWords" class="ending-words"></div>
-    <div id="endingLogo" class="ending-logo" hidden>
-      <span class="ending-logo-mark">花语</span>
-    </div>
-    <button id="endingBack" class="ending-back" hidden>回到封面</button>
-  </section>
-
   <div id="objectOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="游戏交互物件" hidden>
     <div class="object-shell">
-      <button id="objectClose" class="close-btn" aria-label="关闭">← 返回场景</button>
+      <button id="objectClose" class="close-btn" aria-label="关闭">返回场景</button>
       <div id="objectContent" class="object-content"></div>
     </div>
   </div>
 
   <div id="sidePanel" class="overlay panel-overlay" role="dialog" aria-modal="true" aria-label="信息面板" hidden>
     <div class="side-card">
-      <button id="sideClose" class="close-btn" aria-label="关闭信息面板">← 返回</button>
+      <button id="sideClose" class="close-btn" aria-label="关闭信息面板">关闭</button>
       <div id="sideContent"></div>
     </div>
   </div>
 
   <div id="settingsPanel" class="overlay panel-overlay" role="dialog" aria-modal="true" aria-label="游戏设置" hidden>
     <div class="side-card settings-card">
-      <button id="settingsClose" class="close-btn" aria-label="关闭设置">← 返回</button>
+      <button id="settingsClose" class="close-btn" aria-label="关闭设置">关闭</button>
       <h2>设置</h2>
       <label>音乐 <input id="musicRange" type="range" min="0" max="1" step="0.05"></label>
       <label>环境声 <input id="ambienceRange" type="range" min="0" max="1" step="0.05"></label>
